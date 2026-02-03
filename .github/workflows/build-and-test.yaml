@@ -1,0 +1,88 @@
+#  Copyright 2026 CNM Ingenuity, Inc.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+name: "Build and run included tests (if any)"
+
+on:
+
+  push:
+    paths:
+      - '.github/**'
+      - 'gradle/**'
+      - 'src/**'
+      - '*.gradle'
+      - '*.gradle.kts'
+      - 'gradle.properties'
+
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    name: "Build and run tests (if any)"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 5
+
+    steps:
+
+      # Setup
+
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Extract Java version
+        id: version_extractor
+        working-directory: ${{ github.workspace }}
+        run: |
+          JAVA_VERSION=$(sed -n -r 's/^ *java *= *\"([^\"]*)\".*$/\1/p' gradle/libs.versions.toml)
+          echo "java_version=${JAVA_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: ${{ steps.version_extractor.outputs.java_version}}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Make gradlew executable
+        run: "chmod +x ${{ github.workspace }}/gradlew"
+
+      # Clean, build, and test
+
+      - name: Run tests
+        working-directory: ${{ github.workspace }}
+        run: "./gradlew clean test"
+
+      # Upload test report
+
+      - name: Upload submitted tests report
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: test-report
+          path: ${{ github.workspace }}/build/reports/tests/test/**
+          if-no-files-found: ignore
+
+      # Upload test coverage report
+
+      - name: Upload submitted tests coverage report
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: test-coverage-report
+          path: ${{ github.workspace }}/build/reports/jacoco/test/**
+          if-no-files-found: ignore

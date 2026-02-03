@@ -1,0 +1,242 @@
+[versions]
+
+# Java and Kotlin compilers and standard libraries
+java = "25"
+kotlin = "2.3.0"
+
+# Core Android plugins and libraries
+android-gradle = "8.13.2"
+app-compat = "1.7.1"
+activity = "1.12.2"
+lifecycle = "2.10.0"
+navigation = "2.9.6"
+constraint-layout = "2.2.1"
+recycler-view = "1.4.0"
+fragment = "1.8.9"
+preference = "1.2.1"
+view-pager = "1.1.0"
+
+# Other standard and Google Android libraries
+room = "2.8.4"
+hilt = "2.59"
+material = "1.13.0"
+play-services-auth = "21.5.0"
+
+# JavaFX plugins and libraries
+openjfx-plugin = "0.1.0"
+openjfx-library = "25.0.2"
+
+# Spring ecosystem plugins and libraries
+spring-boot = "4.0.2"
+spring-dependency = "1.1.7"
+asciidoctor-convert = "4.0.5"
+
+# ReactiveX libraries
+rx-java = "3.1.12"
+rx-android = "3.0.2"
+rx-javafx = "3.0.3"
+
+# Square libraries
+retrofit = "3.0.0"
+okhttp = "5.3.2"
+okio = "3.16.4"
+logging-interceptor = "5.3.2"
+picasso = "2.8"
+
+# Google libraries
+gson = "2.13.2"
+dagger = "2.59"
+
+# Apache commons libraries
+commons-cli = "1.11.0"
+commons-collections4 = "4.5.0"
+commons-compress = "1.28.0"
+commons-configuration2 = "2.13.0"
+commons-csv = "1.14.1"
+commons-io = "2.21.0"
+commons-lang3 = "3.20.0"
+commons-math3 = "3.6.1"
+commons-pool2 = "2.13.1"
+commons-rng = "1.6"
+commons-text = "1.15.0"
+
+# Other third-party libraries and plugins
+modularity = "2.0.0"
+badass-jlink = "3.2.1"
+shadow = "9.3.1"
+schema-parser = "1.0.0"
+jansi = "2.4.2"
+jline = "3.30.6"
+picocli-core = "4.7.7"
+picocli-jline3 = "4.7.7"
+jackson-databind = "3.0.4"
+jackson-yaml = "3.0.4"
+jackson-xml = "3.0.4"
+jackson-jsr310 = "2.20.1"
+json-schema-validator = "3.0.0"
+commonmark = "0.27.0"
+gradle-versions = "0.53.0"
+
+# Test plugin & library versions
+junit = "6.0.2"
+junit-platform = "6.0.2"
+junit-plugin = "2.0.1"
+android-test-runner = "1.7.0"
+junit-android = "1.9.0"
+instant-task-executor = "1.0.0"
+espresso = "3.7.0"
+xmlunit = "2.11.0"
+
+
+[libraries]
+
+# Kotlin standard library delegates
+kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
+kotlin-jdk7 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk7", version.ref = "kotlin" }
+kotlin-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
+
+# Basic Android components
+app-compat = { group = "androidx.appcompat", name = "appcompat", version.ref = "app-compat" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+constraint-layout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraint-layout" }
+recycler-view = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recycler-view" }
+view-pager = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "view-pager" }
+
+# Fragment & navigation framework libraries
+fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
+navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigation" }
+navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigation" }
+
+# Lifecycle (LiveData and ViewModel) libraries
+lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "lifecycle" }
+lifecycle-livedata = { group = "androidx.lifecycle", name = "lifecycle-livedata", version.ref = "lifecycle" }
+
+# Preferences/settings components
+preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
+
+# Material Design components
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# ReactiveX libraries
+rx-java = { group = "io.reactivex.rxjava3", name = "rxjava", version.ref = "rx-java" }
+rx-android = { group = "io.reactivex.rxjava3", name = "rxandroid", version.ref = "rx-android" }
+rx-javafx = { group = "org.pdfsam.rxjava3", name = "rxjavafx", version.ref = "rx-javafx" }
+
+# Room annotation processor, runtime library, and ReactiveX integration
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-rx-java = { group = "androidx.room", name = "room-rxjava3", version.ref = "room" }
+
+# Gson (Google JSON parser) library
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+
+# Google Sign-in library
+play-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-services-auth" }
+
+# Retrofit (REST client) with ReactiveX & Gson integration
+retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+retrofit-adapter-rx-java = { group = "com.squareup.retrofit2", name = "adapter-rxjava3", version.ref = "retrofit" }
+
+# Square libraries
+logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okio = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
+picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
+
+# Dagger/Hilt dependency-injection libraries and annotation processors
+hilt-android-core = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+dagger-core = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
+dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
+
+# Spring ecosystem libraries
+spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
+spring-boot-starter-hateoas = { group = "org.springframework.boot", name = "spring-boot-starter-hateoas" }
+spring-boot-oauth2-resource-server = { group = "org.springframework.boot", name = "spring-boot-starter-oauth2-resource-server" }
+spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
+spring-boot-starter-thymeleaf = { group = "org.springframework.boot", name = "spring-boot-starter-thymeleaf" }
+spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+thymeleaf-spring-security = { group = "org.thymeleaf.extras", name = "thymeleaf-extras-springsecurity6" }
+h2 = { group = "com.h2database", name = "h2" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+spring-boot-configuration-processor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
+spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+spring-restdocs-mockmvc = { group = "org.springframework.restdocs", name = "spring-restdocs-mockmvc" }
+spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }
+
+# Apache Commons libraries
+commons-cli = { group = "commons-cli", name = "commons-cli", version.ref = "commons-cli" }
+commons-collections4 = { group = "org.apache.commons", name = "commons-collections4", version.ref = "commons-collections4" }
+commons-compress = { group = "org.apache.commons", name = "commons-compress", version.ref = "commons-compress" }
+commons-configuration2 = { group = "org.apache.commons", name = "commons-configuration2", version.ref = "commons-configuration2" }
+commons-csv = { group = "org.apache.commons", name = "commons-csv", version.ref = "commons-csv" }
+commons-io = { group = "commons-io", name = "commons-io", version.ref = "commons-io" }
+commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version.ref = "commons-lang3" }
+commons-math3 = { group = "org.apache.commons", name = "commons-math3", version.ref = "commons-math3" }
+commons-pool2 = { group = "org.apache.commons", name = "commons-pool2", version.ref = "commons-pool2" }
+commons-rng-client-api = { group = "org.apache.commons", name = "commons-rng-client-api", version.ref = "commons-rng" }
+commons-rng-core = { group = "org.apache.commons", name = "commons-rng-core", version.ref = "commons-rng" }
+commons-rng-simple = { group = "org.apache.commons", name = "commons-rng-simple", version.ref = "commons-rng" }
+commons-rng-sampling = { group = "org.apache.commons", name = "commons-rng-sampling", version.ref = "commons-rng" }
+commons-text = { group = "org.apache.commons", name = "commons-text", version.ref = "commons-text" }
+
+# Other third-party libraries
+jansi = { group = "org.fusesource.jansi", name = "jansi", version.ref = "jansi" }
+jline = { group = "org.jline", name = "jline", version.ref = "jline" }
+picocli-core = { group = "info.picocli", name = "picocli", version.ref = "picocli-core" }
+picocli-jline3 = { group = "info.picocli", name = "picocli-shell-jline3", version.ref = "picocli-jline3" }
+jackson-databind = { group = "tools.jackson.core", name = "jackson-databind", version.ref = "jackson-databind" }
+jackson-yaml = { group = "tools.jackson.dataformat", name = "jackson-dataformat-yaml", version.ref = "jackson-yaml" }
+jackson-xml = { group = "tools.jackson.dataformat", name = "jackson-dataformat-xml", version.ref = "jackson-xml" }
+jackson-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310", version.ref = "jackson-jsr310" }
+json-schema-validator = { group = "com.networknt", name = "json-schema-validator", version.ref = "json-schema-validator" }
+commonmark = { group = "org.commonmark", name = "commonmark", version.ref = "commonmark" }
+
+# Libraries for JVM-based testing
+junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
+junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
+junit-aggregator = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit" }
+junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+junit-platform = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junit-platform" }
+
+# Libraries for instrumented (run in Android) testing
+test-runner = { group = "androidx.test", name = "runner", version.ref = "android-test-runner" }
+test-rules = { group = "androidx.test", name = "rules", version.ref = "android-test-runner" }
+junit-android-core = { group = "de.mannodermaus.junit5", name = "android-test-core", version.ref = "junit-android" }
+junit-android-runner = { group = "de.mannodermaus.junit5", name = "android-test-runner", version.ref = "junit-android" }
+instant-task-executor = { group = "io.github.neboskreb", name = "instant-task-executor-extension", version.ref = "instant-task-executor" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+xmlunit-core = { group = "org.xmlunit", name = "xmlunit-core", version.ref = "xmlunit" }
+xmlunit-assertj = { group = "org.xmlunit", name = "xmlunit-assertj", version.ref = "xmlunit" }
+hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+
+
+[bundles]
+
+
+[plugins]
+
+# Android plugins
+android-application = { id = "com.android.application", version.ref = "android-gradle" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigation" }
+schema-parser = { id = "com.nickbenn.room-schema-parser", version.ref = "schema-parser" }
+junit = { id = "de.mannodermaus.android-junit5", version.ref = "junit-plugin" }
+
+# JavaFX plugin
+openjfx = { id = "org.openjfx.javafxplugin", version.ref = "openjfx-plugin" }
+
+# Spring ecosystem plugins
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency = { id = "io.spring.dependency-management", version.ref = "spring-dependency" }
+asciidoctor-convert = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor-convert" }
+
+# Java modularization & packaging plugins
+modularity = { id = "org.javamodularity.moduleplugin", version.ref = "modularity" }
+badass-jlink = { id = "org.beryx.jlink", version.ref = "badass-jlink" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+
+# Other plugins
+gradle-versions = { id = "com.github.ben-manes.versions", version.ref = "gradle-versions" }
