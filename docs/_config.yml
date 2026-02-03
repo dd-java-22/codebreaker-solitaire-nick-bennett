@@ -1,0 +1,21 @@
+remote_theme: ddc-java/ddc-day-book
+
+title: "Codebreaker Solitaire"
+description: "The classic Bulls and Cows game."
+version: 22.0.0
+
+author:
+  name: '{Replace with your name}'
+  email: '{Replace with your e-mail address}'
+
+repository_link:
+  enabled: false
+page_navigator:
+  enabled: true
+titles_from_headings:
+  enabled: false
+prev_next_navigation:
+  - bottom
+
+# kramdown:
+#   toc_levels: 2..3

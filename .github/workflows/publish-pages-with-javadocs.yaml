@@ -1,0 +1,112 @@
+#  Copyright 2026 CNM Ingenuity, Inc.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+name: "Build and deploy GitHub Pages site"
+
+on:
+
+  push:
+    branches:
+      - docs
+    paths:
+      - '.github/**'
+      - 'docs/**'
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+
+  build:
+    name: "Use Javadoc and Jekyll to generate HTML content"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+
+      # Setup
+
+      - name: Checkout docs
+        uses: actions/checkout@v6
+
+      - name: Checkout Java source
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          path: java
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Extract Java version
+        id: version_extractor
+        working-directory: ${{ github.workspace }}
+        run: |
+          JAVA_VERSION=$(sed -n -r 's/^ *java *= *\"([^\"]*)\".*$/\1/p' java/gradle/libs.versions.toml)
+          echo "java_version=${JAVA_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: ${{ steps.version_extractor.outputs.java_version}}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Make gradlew executable
+        working-directory: ${{ github.workspace }}/java
+        run: "chmod +x gradlew"
+
+      # Clean, compile, and generate Javadoc
+
+      - name: Generate Javadoc HTML
+        working-directory: ${{ github.workspace }}/java
+        run: "./gradlew clean javadoc"
+
+      - name: Move Javadoc output
+        run: "mv ${{ github.workspace }}/java/build/docs/javadoc ${{ github.workspace }}/docs/api"
+
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./docs
+          destination: ./_site
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+
+  deploy:
+    name: "Deploy generated site"
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    timeout-minutes: 5
+
+    steps:
+
+      # Deploy
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
