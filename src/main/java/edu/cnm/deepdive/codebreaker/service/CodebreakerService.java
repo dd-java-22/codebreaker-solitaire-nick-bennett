@@ -37,6 +37,10 @@ enum CodebreakerService implements AbstractCodebreakerService {
     api = buildApi(properties, gson, client);
   }
 
+  static CodebreakerService getInstance() {
+    return INSTANCE;
+  }
+  
   @Override
   public CompletableFuture<Game> startGame(Game game) {
     throw new UnsupportedOperationException("Not yet implemented.");
