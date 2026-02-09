@@ -603,7 +603,7 @@ For a project moving to Android, **Retrofit2** provides the best long-term suppo
 
 1. **Code Reuse:** You can share the exact same Service Interface and Domain Models (Records/POJOs) across all platforms.
 2. **Android Integration:** Retrofit is built by Square, the same team that maintains OkHttp. It is the de-facto standard in the Android community, ensuring years of community support and performance updates.
-3. **Future-Proofing:** Retrofit handles the complexities of asynchronous execution, which is a requirement for Android’s "No Network on Main Thread" policy.
+3. **Future-Proofing:** Retrofit handles the complexities of asynchronous execution, which is a requirement for Android’s "No Network on edu.cnm.deepdive.codebreaker.Main Thread" policy.
 
 ---
 
@@ -1050,7 +1050,7 @@ To maintain **Separation of Concerns**, Retrofit splits the work across two dist
 2. **Parsing/Deserialization (Background):** Once the server responds, the raw bytes are processed by the `Converter.Factory` (like **Moshi** or **Jackson**). This transformation from JSON to your `Game` or `Guess` record also happens on the **background thread**.
 3. **The Callback (Platform Dependent):** This is where it gets interesting for our migration goals:
 * **In standard Java (Console/JavaFX):** The `onResponse` or `onFailure` callback is usually executed on the **same background thread** that performed the network work.
-* **In Android:** Retrofit is "platform-aware." By default, it uses a `MainThreadExecutor` to wrap the callback, automatically "jumping" the result back to the **Android Main Thread** so you can safely update UI components.
+* **In Android:** Retrofit is "platform-aware." By default, it uses a `MainThreadExecutor` to wrap the callback, automatically "jumping" the result back to the **Android edu.cnm.deepdive.codebreaker.Main Thread** so you can safely update UI components.
 
 
 
@@ -1067,7 +1067,7 @@ To maintain **Separation of Concerns**, Retrofit splits the work across two dist
 
 ### 4. Architect's Warning: The "Platform Leak"
 
-Since we are designing for both Desktop and Android, we must be careful. If we rely on Retrofit’s default behavior, our JavaFX code will receive callbacks on a background thread (requiring `Platform.runLater()`), while our Android code will receive them on the Main thread.
+Since we are designing for both Desktop and Android, we must be careful. If we rely on Retrofit’s default behavior, our JavaFX code will receive callbacks on a background thread (requiring `Platform.runLater()`), while our Android code will receive them on the edu.cnm.deepdive.codebreaker.Main thread.
 
 **The Design Solution:**
 We should wrap the Retrofit `Call` into the `CompletableFuture` pattern we discussed earlier. This allows our **Service Adapter** to normalize the behavior across all platforms.
@@ -1192,7 +1192,7 @@ public class GameViewModel {
 The console simply prints when the state changes.
 
 ```java
-// Inside your Main loop
+// Inside your edu.cnm.deepdive.codebreaker.Main loop
 viewModel.subscribeToState(game -> {
     System.out.println("Game Status: " + (game.solved() ? "SOLVED" : "IN PROGRESS"));
     game.guesses().forEach(g -> System.out.println(g.text() + " -> " + g.exactMatches()));

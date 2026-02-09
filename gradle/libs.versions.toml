@@ -47,6 +47,10 @@ picasso = "2.8"
 gson = "2.13.2"
 dagger = "2.59"
 
+# Jakarta libraries
+jakarta-annotation = "3.0.0"
+jakarta-validation = "3.1.1"
+
 # Apache commons libraries
 commons-cli = "1.11.0"
 commons-collections4 = "4.5.0"
@@ -61,6 +65,7 @@ commons-rng = "1.6"
 commons-text = "1.15.0"
 
 # Other third-party libraries and plugins
+openapi = "7.19.0"
 modularity = "2.0.0"
 badass-jlink = "3.2.1"
 shadow = "9.3.1"
@@ -165,6 +170,10 @@ spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-
 spring-restdocs-mockmvc = { group = "org.springframework.restdocs", name = "spring-restdocs-mockmvc" }
 spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }
 
+# Jakarta libraries
+jakarta-annotation = { group = "jakarta.annotation", name = "jakarta.annotation-api", version.ref = "jakarta-annotation" }
+jakarta-validation = { group = "jakarta.validation", name = "jakarta.validation-api", version.ref = "jakarta-validation" }
+
 # Apache Commons libraries
 commons-cli = { group = "commons-cli", name = "commons-cli", version.ref = "commons-cli" }
 commons-collections4 = { group = "org.apache.commons", name = "commons-collections4", version.ref = "commons-collections4" }
@@ -240,3 +249,4 @@ shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 
 # Other plugins
 gradle-versions = { id = "com.github.ben-manes.versions", version.ref = "gradle-versions" }
+openapi = { id = "org.openapi.generator", version.ref = "openapi" }

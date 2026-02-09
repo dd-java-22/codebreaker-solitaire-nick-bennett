@@ -1,0 +1,9 @@
+src/main/java/**/auth/**/*
+
+src/main/java/**/ApiClient.java
+src/main/java/**/JSON.java
+src/main/java/**/ServerConfiguration.java
+src/main/java/**/ServerVariable.java
+
+src/main/java/**/GsonCustomConverterFactory.java
+src/main/java/**/GsonResponseBodyConverterToString.java

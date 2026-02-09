@@ -808,7 +808,7 @@ dependencies {
 
 openApiGenerate {
     // Path to the spec file created in the previous step
-    inputSpec.set("$projectDir/src/main/resources/openapi.yaml")
+    inputSpec.set("$projectDir/src/main/resources/codebreaker.yaml")
     
     // Specifies the generator to use
     generatorName.set("java")
@@ -1359,7 +1359,7 @@ dependencies {
 }
 
 openApiGenerate {
-    inputSpec.set("$projectDir/src/main/resources/openapi.yaml")
+    inputSpec.set("$projectDir/src/main/resources/codebreaker.yaml")
     generatorName.set("java")
     outputDir.set("$buildDir/generated/openapi")
 

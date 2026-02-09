@@ -31,7 +31,7 @@ The key to getting **Records** and **Builders** lies in the `configOptions`. By 
 ```kotlin
 openApiGenerate {
     generatorName.set("java")
-    inputSpec.set("$projectDir/src/main/resources/openapi.yaml")
+    inputSpec.set("$projectDir/src/main/resources/codebreaker.yaml")
     outputDir.set("$buildDir/generated")
     apiPackage.set("com.example.api")
     modelPackage.set("com.example.model")
@@ -130,7 +130,7 @@ For a client using Moshi and Java Records, use the `google-api-client` or `nativ
 ```kotlin
 openApiGenerate {
     generatorName.set("java")
-    inputSpec.set("$projectDir/src/main/resources/openapi.yaml")
+    inputSpec.set("$projectDir/src/main/resources/codebreaker.yaml")
     outputDir.set("$buildDir/generated")
     apiPackage.set("com.example.api")
     modelPackage.set("com.example.model")
@@ -279,7 +279,7 @@ To ensure your Java client is fully compatible with Moshi, Records, and Builders
 ```kotlin
 openApiGenerate {
     generatorName.set("java")
-    inputSpec.set("$projectDir/src/main/resources/openapi.yaml")
+    inputSpec.set("$projectDir/src/main/resources/codebreaker.yaml")
     outputDir.set("$buildDir/generated")
     
     configOptions.set(mapOf(
