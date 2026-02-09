@@ -52,7 +52,12 @@ enum CodebreakerService implements AbstractCodebreakerService {
         .enqueue(new Callback<>() {
           @Override
           public void onResponse(Call<Game> call, Response<Game> response) {
-            future.complete(response.body());
+            if (response.isSuccessful()) {
+              future.complete(response.body());
+            } else {
+              // TODO: 2026-02-09 Make this specific to error types.
+              future.completeExceptionally(new IllegalArgumentException(response.message()));
+            }
           }
 
           @Override
