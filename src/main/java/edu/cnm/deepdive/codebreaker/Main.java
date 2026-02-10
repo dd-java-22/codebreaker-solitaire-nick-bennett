@@ -1,27 +1,14 @@
 package edu.cnm.deepdive.codebreaker;
 
-import edu.cnm.deepdive.codebreaker.model.Game;
-import edu.cnm.deepdive.codebreaker.service.CodebreakerService;
-import java.util.concurrent.CompletableFuture;
+import edu.cnm.deepdive.codebreaker.viewmodel.GameViewModel;
 
 public class Main {
 
   static void main() {
 
-    Game game = new Game()
-        .pool("ABCDE")
-        .length(2);
-
-    CodebreakerService service = CodebreakerService.getInstance();
-    CompletableFuture<Game> future = service.startGame(game);
-    future
-        .thenAccept((startedGame) -> {
-          System.out.println("Created a game:" + startedGame);
-        })
-        .exceptionally((throwable) -> {
-          throwable.printStackTrace();
-          return null;
-        });
+    GameViewModel viewModel = new GameViewModel();
+    viewModel.registerGameObserver(System.out::println);
+    viewModel.startGame("ABCDE", 2);
     System.out.println("Game start requested!");
   }
 
