@@ -99,7 +99,7 @@ public class GameViewModel {
         .text(text)
         .build();
     service
-        .submitGuess(game.getId(), guess)
+        .submitGuess(game, guess)
         .thenApply(this::setGuess)
         .thenApply((receivedGuess) -> {
           setSolved(receivedGuess.getSolution());

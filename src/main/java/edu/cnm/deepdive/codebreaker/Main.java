@@ -12,11 +12,16 @@ public class Main {
 
   private final BlockingQueue<Game> updateQueue = new LinkedBlockingQueue<>();
   private boolean solved;
+  private Game game;
 
   void main() {
     GameViewModel viewModel = GameViewModel.getInstance();
     viewModel.registerGameObserver(updateQueue::add);
     viewModel.registerSolvedObserver((solved) -> this.solved = Boolean.TRUE.equals(solved));
+    viewModel.registerErrorObserver(throwable -> {
+      System.err.println(throwable.toString());
+      updateQueue.add(game);
+    });
     viewModel.startGame("ABCDE", 2);
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -24,6 +29,7 @@ public class Main {
     while (!solved) {
       try {
         Game game = updateQueue.take();
+        this.game = game;
         System.out.println(game);
         if (solved) {
           System.out.println("You solved it!");
