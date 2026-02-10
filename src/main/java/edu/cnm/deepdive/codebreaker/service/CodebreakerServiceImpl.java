@@ -70,13 +70,14 @@ class CodebreakerServiceImpl implements CodebreakerService {
     CompletableFuture<Game> future = new CompletableFuture<>();
     api
         .getGame(gameId)
-        .enqueue(new Callback<Game>() {
+        .enqueue(new Callback<>() {
           @Override
           public void onResponse(Call<Game> call, Response<Game> response) {
             if (response.isSuccessful()) {
               future.complete(response.body());
             } else {
-              future.completeExceptionally(new IllegalArgumentException());
+              future.completeExceptionally(
+                  new IllegalArgumentException("Specified game doesn't exist!"));
             }
           }
 
@@ -90,17 +91,81 @@ class CodebreakerServiceImpl implements CodebreakerService {
 
   @Override
   public CompletableFuture<Void> delete(String gameId) {
-    throw new UnsupportedOperationException("Not yet implemented.");
+    CompletableFuture<Void> future = new CompletableFuture<>();
+    api
+        .deleteGame(gameId)
+        .enqueue(new Callback<>() {
+          @Override
+          public void onResponse(Call<Void> call, Response<Void> response) {
+            if (response.isSuccessful()) {
+              future.complete(null);
+            } else {
+              future.completeExceptionally(new IllegalArgumentException("Specified game doesn't exist!"));
+            }
+          }
+
+          @Override
+          public void onFailure(Call<Void> call, Throwable t) {
+            future.completeExceptionally(t);
+          }
+        });
+    return future;
   }
 
   @Override
   public CompletableFuture<Guess> submitGuess(String gameId, Guess guess) {
-    throw new UnsupportedOperationException("Not yet implemented.");
+    CompletableFuture<Guess> future = new CompletableFuture<>();
+    api.submitGuess(gameId, guess)
+        .enqueue(new Callback<Guess>() {
+          @Override
+          public void onResponse(Call<Guess> call, Response<Guess> response) {
+            if (response.isSuccessful()) {
+              future.complete(response.body());
+            } else {
+              switch (response.code()) {
+                case 400 -> future.completeExceptionally(
+                    new IllegalArgumentException("Invalid guess content!"));
+                case 404 -> future.completeExceptionally(
+                    new IllegalArgumentException("Game not found!"));
+                default -> future.completeExceptionally(
+                    new IllegalArgumentException("Unknown error!"));
+              }
+            }
+          }
+
+          @Override
+          public void onFailure(Call<Guess> call, Throwable t) {
+            future.completeExceptionally(t);
+          }
+        });
+    return future;
   }
 
   @Override
   public CompletableFuture<Guess> getGuess(String gameId, String guessId) {
-    throw new UnsupportedOperationException("Not yet implemented.");
+    CompletableFuture<Guess> future = new CompletableFuture<>();
+    api.getGuess(gameId, guessId)
+        .enqueue(new Callback<Guess>() {
+          @Override
+          public void onResponse(Call<Guess> call, Response<Guess> response) {
+            if (response.isSuccessful()) {
+              future.complete(response.body());
+            } else {
+              switch (response.code()) {
+                case 404 -> future.completeExceptionally(
+                    new IllegalArgumentException("Game or guess not found!"));
+                default -> future.completeExceptionally(
+                    new IllegalArgumentException("Unknown error!"));
+              }
+            }
+          }
+
+          @Override
+          public void onFailure(Call<Guess> call, Throwable t) {
+
+          }
+        });
+    return future;
   }
 
   private static Gson buildGson() {
