@@ -84,16 +84,24 @@ public class GameViewModel {
         .build();
     service
         .submitGuess(game.getId(), guess)
-        .thenAccept((guessResponse) -> {
-          setGuess(guessResponse);
+        .thenApply(this::setGuess)
+        .thenApply((guessResponse) -> {
           //noinspection DataFlowIssue
           game.getGuesses().add(guessResponse);
-          setGame(game);
+          return game;
         })
+        .thenAccept(this::setGame)
         .exceptionally(this::logError);
   }
 
-  // TODO: 2026-02-10 Add methods to get and delete game, submit and get guess.
+  public void getGuess(String guessId) {
+    service
+        .getGuess(game.getId(), guessId)
+        .thenAccept(this::setGuess)
+        .exceptionally(this::logError);
+  }
+
+// TODO: 2026-02-10 Add methods to get and delete game, submit and get guess.
 
   public void registerGameObserver(Consumer<Game> observer) {
     gameObservers.add(observer);
