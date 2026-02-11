@@ -55,7 +55,7 @@ class CodebreakerServiceImpl implements CodebreakerService {
     api = buildApi(properties, gson, client);
   }
 
-  public static CodebreakerServiceImpl getInstance() {
+  static CodebreakerServiceImpl getInstance() {
     return Holder.INSTANCE;
   }
 
