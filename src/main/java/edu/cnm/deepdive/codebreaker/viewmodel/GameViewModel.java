@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
-@SuppressWarnings({"UnusedReturnValue", "CallToPrintStackTrace"})
+@SuppressWarnings({"UnusedReturnValue", "CallToPrintStackTrace", "unused"})
 public class GameViewModel {
 
   private final CodebreakerService service;
@@ -18,8 +18,8 @@ public class GameViewModel {
 
   private Game game;
   private Guess guess;
-  private Throwable error;
   private Boolean solved;
+  private Throwable error;
 
   private GameViewModel() {
     service = CodebreakerService.getInstance();
@@ -33,39 +33,10 @@ public class GameViewModel {
     return Holder.INSTANCE;
   }
 
-  private Game setGame(Game game) {
-    this.game = game;
-    gameObservers
-        .forEach((consumer) -> consumer.accept(game));
-    return game;
-  }
-
-  private Guess setGuess(Guess guess) {
-    this.guess = guess;
-    guessObservers
-        .forEach((consumer) -> consumer.accept(guess));
-    return guess;
-  }
-
-  private Throwable setError(Throwable error) {
-    this.error = error;
-    errorObservers
-        .forEach((consumer) -> consumer.accept(error));
-    return error;
-  }
-
-  private Boolean setSolved(Boolean solved) {
-    this.solved = solved;
-    solvedObservers
-        .forEach((consumer) -> consumer.accept(solved));
-    return solved;
-  }
-
   public void startGame(String pool, int length) {
-    Game game = new Game.Builder()
+    Game game = new Game()
         .pool(pool)
-        .length(length)
-        .build();
+        .length(length);
     service
         .startGame(game)
         .thenApply((startedGame) -> setGame(startedGame).getSolved())
@@ -83,34 +54,32 @@ public class GameViewModel {
 
   public void deleteGame(String gameId) {
     service
-        .delete(gameId)
+        .deleteGame(gameId)
         .exceptionally(this::logError);
   }
 
   public void deleteGame() {
     service
-        .delete(game.getId())
+        .deleteGame(game.getId())
         .thenRun(() -> setGame(null))
         .exceptionally(this::logError);
   }
 
   public void submitGuess(String text) {
-    Guess guess = new Guess.Builder()
-        .text(text)
-        .build();
+    Guess guess = new Guess()
+        .text(text);
     service
         .submitGuess(game, guess)
         .thenApply(this::setGuess)
-        .thenApply((receivedGuess) -> {
-          setSolved(receivedGuess.getSolution());
-          return receivedGuess;
+        .thenAccept((guessResponse) -> {
+          if (Boolean.TRUE.equals(guessResponse.getSolution())) {
+            getGame(game.getId());
+          } else {
+            //noinspection DataFlowIssue
+            game.getGuesses().add(guessResponse);
+            setGame(game);
+          }
         })
-        .thenApply((guessResponse) -> {
-          //noinspection DataFlowIssue
-          game.getGuesses().add(guessResponse);
-          return game;
-        })
-        .thenAccept(this::setGame)
         .exceptionally(this::logError);
   }
 
@@ -121,28 +90,70 @@ public class GameViewModel {
         .exceptionally(this::logError);
   }
 
-// TODO: 2026-02-10 Add methods to get and delete game, submit and get guess.
+  public void shutdown() {
+    service.shutdown();
+  }
 
   public void registerGameObserver(Consumer<Game> observer) {
     gameObservers.add(observer);
+    if (game != null) {
+      observer.accept(game);
+    }
   }
 
   public void registerGuessObserver(Consumer<Guess> observer) {
     guessObservers.add(observer);
-  }
-
-  public void registerErrorObserver(Consumer<Throwable> observer) {
-    errorObservers.add(observer);
+    if (guess != null) {
+      observer.accept(guess);
+    }
   }
 
   public void registerSolvedObserver(Consumer<Boolean> observer) {
     solvedObservers.add(observer);
+    if (solved != null) {
+      observer.accept(solved);
+    }
+  }
+
+  public void registerErrorObserver(Consumer<Throwable> observer) {
+    errorObservers.add(observer);
+    if (error != null) {
+      observer.accept(error);
+    }
+  }
+
+  private Game setGame(Game game) {
+    this.game = game;
+    gameObservers
+        .forEach((consumer) -> consumer.accept(game));
+    return game;
+  }
+
+  private Guess setGuess(Guess guess) {
+    this.guess = guess;
+    guessObservers
+        .forEach((consumer) -> consumer.accept(guess));
+    return guess;
+  }
+
+  private Boolean setSolved(Boolean solved) {
+    this.solved = solved;
+    solvedObservers
+        .forEach((consumer) -> consumer.accept(solved));
+    return solved;
+  }
+
+  private Throwable setError(Throwable error) {
+    this.error = error;
+    errorObservers
+        .forEach((consumer) -> consumer.accept(error));
+    return error;
   }
 
   private Void logError(Throwable error) {
     //noinspection ThrowableNotThrown
-    setError(error);
-    error.printStackTrace();
+    setError(error.getCause() != null ? error.getCause() : error);
+//    this.error.printStackTrace();
     return null;
   }
 

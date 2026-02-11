@@ -53,42 +53,29 @@ dependencies {
     testRuntimeOnly(libs.junit.platform)
 }
 
-val openApiGenerator = "java"
-val openApiOutDir = layout.buildDirectory.dir("generated/openapi").get().asFile.toString()
-val openApiSpec = "$projectDir/api/codebreaker.yaml"
-val apiPkg = "${properties.get("basePackage")}.service"
-val modelPkg = "${properties.get("basePackage")}.model"
 val openApiCommonOptions = mapOf(
-    "library" to "retrofit2",
-    "serializationLibrary" to "gson",
     "dateLibrary" to "java8",
-    "useJakartaEe" to "true",
+    "hideGenerationTimestamp" to "true",
+    "library" to "retrofit2",
     "openApiNullable" to "false",
-    "useBeanValidation" to "false"
+    "serializationLibrary" to "gson",
+    "skipIfSpecIsUnchanged" to "true",
+    "useBeanValidation" to "false",
+    "useJakartaEe" to "true"
 )
 val openApiGlobalProperties = mapOf(
-    "models" to "false",
-    "apis" to "false",
-    "supportingFiles" to "false",
     "apiDocs" to "false",
     "apiTests" to "false",
+    "apis" to "false",
     "modelDocs" to "false",
-    "modelTests" to "false"
+    "modelTests" to "false",
+    "models" to "false",
+    "supportingFiles" to "false",
 )
 
 tasks.register<GenerateTask>("openApiGenerateModels") {
 
-    generatorName = openApiGenerator
-    inputSpec = openApiSpec
-    outputDir = openApiOutDir
-    apiPackage = apiPkg
-    modelPackage = modelPkg
-    ignoreFileOverride = "$projectDir/api/openapi-generator-ignore"
-
-    configOptions = openApiCommonOptions + mapOf(
-        "generateBuilders" to "true",
-        "useRecords" to "true"
-    )
+    configOptions = openApiCommonOptions
 
     globalProperties = openApiGlobalProperties + mapOf(
         "models" to "",
@@ -97,13 +84,6 @@ tasks.register<GenerateTask>("openApiGenerateModels") {
 }
 
 tasks.register<GenerateTask>("openApiGenerateApis") {
-
-    generatorName = openApiGenerator
-    inputSpec = openApiSpec
-    outputDir = openApiOutDir
-    apiPackage = apiPkg
-    modelPackage = modelPkg
-    ignoreFileOverride = "$projectDir/api/openapi-generator-ignore"
 
     configOptions = openApiCommonOptions + mapOf(
         "useTags" to "true"
@@ -114,6 +94,25 @@ tasks.register<GenerateTask>("openApiGenerateApis") {
         "apiDocs" to "true",
         "supportingFiles" to "CollectionFormats.java,StringUtil.java"
     )
+}
+
+tasks.withType<GenerateTask> {
+
+    group = "openapi tools"
+
+    generatorName = "java"
+
+    inputSpec = "$projectDir/api/codebreaker.yaml"
+    outputDir = layout.buildDirectory.dir("generated/openapi").get().asFile.toString()
+
+    apiPackage = "${properties.get("basePackage")}.service"
+    modelPackage = "${properties.get("basePackage")}.model"
+
+    outputs.dir(outputDir)
+    inputs.file(inputSpec)
+
+    ignoreFileOverride = "$projectDir/api/.openapi-generator-ignore"
+
 }
 
 tasks.openApiGenerate {
