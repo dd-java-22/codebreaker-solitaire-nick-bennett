@@ -105,8 +105,9 @@ tasks.withType<GenerateTask> {
     inputSpec = "$projectDir/api/codebreaker.yaml"
     outputDir = layout.buildDirectory.dir("generated/openapi").get().asFile.toString()
 
-    apiPackage = "${properties.get("basePackage")}.service"
-    modelPackage = "${properties.get("basePackage")}.model"
+    val basePackage = properties.get("basePackage")
+    apiPackage = "${basePackage}.service"
+    modelPackage = "${basePackage}.model"
 
     outputs.dir(outputDir)
     inputs.file(inputSpec)

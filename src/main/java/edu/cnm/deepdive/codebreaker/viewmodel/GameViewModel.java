@@ -66,8 +66,7 @@ public class GameViewModel {
   }
 
   public void submitGuess(String text) {
-    Guess guess = new Guess()
-        .text(text);
+    Guess guess = new Guess().text(text);
     service
         .submitGuess(game, guess)
         .thenApply(this::setGuess)
