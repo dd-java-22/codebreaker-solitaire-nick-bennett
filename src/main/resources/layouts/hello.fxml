@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<VBox
+  xmlns="http://javafx.com/javafx"
+  xmlns:fx="http://javafx.com/fxml"
+  minWidth="400"
+  minHeight="400"
+  fx:controller="edu.cnm.deepdive.codebreaker.controller.HelloController">
+
+  <Text fx:id="greeting">Hello, world!</Text>
+
+</VBox>
