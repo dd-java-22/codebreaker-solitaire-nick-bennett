@@ -35,7 +35,8 @@
     GridPane.rowIndex="0"
     GridPane.columnSpan="2">
 
-    <TextFlow id="text-flow">
+    <TextFlow
+      fx:id="textFlow">
       <Text fx:id="gameState"/>
     </TextFlow>
 

@@ -17,12 +17,12 @@ GridPane {
   -fx-border-width: 1px;
 }
 
-#text-flow {
+#textFlow {
   -fx-padding: 10px;
 }
 
 #gameState {
-  -fx-fill: #c0c0c0;
+  -fx-fill: #404080;
   -fx-font-family: "Segoe UI", sans-serif;
   -fx-font-size: 14px;
 }
