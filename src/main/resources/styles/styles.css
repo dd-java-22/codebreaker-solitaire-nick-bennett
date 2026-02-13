@@ -1,17 +1,51 @@
-BorderPane {
+.root {
+  -fx-background-color: #2b2b2b;
+  -fx-padding: 5px;
+}
+
+GridPane {
   -fx-pref-width: 300px;
   -fx-pref-height: 600px;
   -fx-min-width: 300px;
   -fx-min-height: 600px;
-  -fx-border-width: 10px;
+}
+
+#scrollPane {
+  -fx-background-color: #1e1e1e;
+  -fx-background-insets: 0;
+  -fx-border-color: #444444;
+  -fx-border-width: 1px;
+}
+
+#text-flow {
+  -fx-padding: 10px;
 }
 
 #gameState {
-  -fx-pref-width: 100%;
-  -fx-min-width: 100%;
-  -fx-pref-height: 500px;
-  -fx-min-height: 500px;
-  -fx-border-width: 1px;
-  -fx-border-color: gray;
+  -fx-fill: #c0c0c0;
+  -fx-font-family: "Segoe UI", sans-serif;
+  -fx-font-size: 14px;
 }
 
+#guessInput {
+  -fx-background-color: #3c3f41;
+  -fx-text-fill: white;
+  -fx-prompt-text-fill: #888888;
+  -fx-background-radius: 0;
+  -fx-border-color: #444444;
+  -fx-border-width: 1px 0 1px 1px;
+}
+
+#guessInput:focused {
+  -fx-border-color: #0078d7;
+}
+
+#send {
+  -fx-background-color: #0078d7;
+  -fx-background-radius: 3px;
+  -fx-cursor: hand;
+}
+
+#send:hover {
+  -fx-background-color: #1a8ad4;
+}
