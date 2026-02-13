@@ -1,29 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
-<BorderPane
+<?import javafx.scene.text.TextFlow?>
+<GridPane
   xmlns="http://javafx.com/javafx"
   xmlns:fx="http://javafx.com/fxml"
   fx:controller="edu.cnm.deepdive.codebreaker.controller.MainController"
   stylesheets="@../styles/styles.css">
 
-  <top>
-    <Text fx:id="gameState"/>
-  </top>
+  <columnConstraints>
+    <ColumnConstraints hgrow="ALWAYS" minWidth="10"/>
+    <ColumnConstraints hgrow="NEVER" prefWidth="50"/>
+  </columnConstraints>
 
-  <center>
+  <rowConstraints>
+    <RowConstraints vgrow="ALWAYS" minHeight="10"/>
+    <RowConstraints vgrow="NEVER" prefHeight="50"/>
+  </rowConstraints>
 
-    <TextField fx:id="guessInput"/>
+  <!--suppress JavaFxRedundantPropertyValue -->
+  <ScrollPane
+    fx:id="scrollPane"
+    hbarPolicy="NEVER"
+    vbarPolicy="AS_NEEDED"
+    GridPane.columnIndex="0"
+    GridPane.rowIndex="0"
+    GridPane.columnSpan="2">
 
-  </center>
+    <TextFlow id="text-flow">
+      <Text fx:id="gameState"/>
+    </TextFlow>
 
-  <right>
+  </ScrollPane>
 
-    <Button fx:id="send" text="Send" onAction="#submitGuess"/>
+  <TextField
+    fx:id="guessInput"
+    promptText="Enter guess ..."
+    GridPane.columnIndex="0"
+    GridPane.rowIndex="1"/>
 
-  </right>
+  <Button
+    fx:id="send"
+    onAction="#submitGuess"
+    GridPane.columnIndex="1"
+    GridPane.rowIndex="1">
 
-</BorderPane>
+    <graphic>
+
+      <ImageView
+        fitHeight="24"
+        fitWidth="24"
+        pickOnBounds="true"
+        image="@../images/send.png"/>
+
+    </graphic>
+
+  </Button>
+
+</GridPane>
