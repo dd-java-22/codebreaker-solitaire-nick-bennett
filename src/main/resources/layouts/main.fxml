@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Text?>
+<BorderPane
+  xmlns="http://javafx.com/javafx"
+  xmlns:fx="http://javafx.com/fxml"
+  fx:controller="edu.cnm.deepdive.codebreaker.controller.MainController"
+  stylesheets="@../styles/styles.css">
+
+  <top>
+    <Text fx:id="gameState"/>
+  </top>
+
+  <center>
+
+    <TextField fx:id="guessInput"/>
+
+  </center>
+
+  <right>
+
+    <Button fx:id="send" text="Send" onAction="#submitGuess"/>
+
+  </right>
+
+</BorderPane>

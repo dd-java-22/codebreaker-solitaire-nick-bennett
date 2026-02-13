@@ -10,6 +10,11 @@ public interface CodebreakerService {
     return CodebreakerServiceImpl.getInstance();
   }
 
+  /**
+   *
+   * @param game
+   * @return
+   */
   CompletableFuture<Game> startGame(Game game);
 
   CompletableFuture<Game> getGame(String gameId);
