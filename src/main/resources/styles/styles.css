@@ -1,5 +1,5 @@
 .root {
-  -fx-background-color: #2b2b2b;
+  -fx-background-color: #A0A0A0;
   -fx-padding: 5px;
 }
 
@@ -50,15 +50,36 @@ GridPane {
   -fx-background-color: #1a8ad4;
 }
 
+TilePane#guessPalette {
+  -fx-max-height: Infinity;
+  -fx-max-width: Infinity;
+  -fx-alignment: center;
+  -fx-tile-alignment: center;
+  -fx-hgap: 16px;
+  -fx-vgap: 16px;
+  -fx-pref-columns: 4;
+  -fx-padding: 10px;
+}
+
 Button.palette-button {
   -fx-background-color: transparent;
   -fx-padding: 0;
   -fx-border-color: transparent;
+  -fx-alignment: center;
 }
 
 Button.palette-button > Circle {
-  -fx-stroke-width: 0;
-  -fx-stroke: transparent;
+  -fx-stroke-width: 2px;
+  -fx-stroke: #000000C0;
+}
+
+Button.palette-button:hover {
+  -fx-cursor: hand;
+}
+
+Button.palette-button:hover > Circle {
+  -fx-stroke-width: 2px;
+  -fx-stroke: white;
 }
 
 Button.palette-button.red-fill > Circle {

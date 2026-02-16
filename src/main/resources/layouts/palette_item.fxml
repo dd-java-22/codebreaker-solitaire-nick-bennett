@@ -7,8 +7,9 @@
   stylesheets="@../styles/styles.css"
   styleClass="palette-button">
 
-  <Circle
-    fx:id="paletteButtonCircle"
-    radius="15"/>
+  <graphic>
+    <Circle
+      radius="20"/>
+  </graphic>
 
 </Button>
