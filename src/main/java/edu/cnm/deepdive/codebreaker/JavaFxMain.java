@@ -14,7 +14,7 @@ public class JavaFxMain extends Application {
 
   @Override
   public void start(Stage stage) throws Exception {
-    ResourceBundle bundle = ResourceBundle.getBundle("strings");
+    ResourceBundle bundle = ResourceBundle.getBundle("game");
     ClassLoader classLoader = getClass().getClassLoader();
     stage.setTitle(bundle.getString("window_title"));
     FXMLLoader fxmlLoader =

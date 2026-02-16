@@ -66,15 +66,16 @@ Button.palette-button {
   -fx-padding: 0;
   -fx-border-color: transparent;
   -fx-alignment: center;
+  -fx-content-display: center;
+}
+
+Button.palette-button:hover {
+  -fx-cursor: hand;
 }
 
 Button.palette-button > Circle {
   -fx-stroke-width: 2px;
   -fx-stroke: #000000C0;
-}
-
-Button.palette-button:hover {
-  -fx-cursor: hand;
 }
 
 Button.palette-button:hover > Circle {

@@ -30,7 +30,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @SuppressWarnings("NullableProblems")
 class CodebreakerServiceImpl implements CodebreakerService {
 
-  private static final String PROPERTIES_FILE = "service.properties";
+  private static final String PROPERTIES_FILE = "game.properties";
   private static final String LOG_LEVEL_KEY = "logLevel";
   private static final String BASE_URL_KEY = "baseUrl";
   private static final int MIN_CODE_LENGTH = 1;

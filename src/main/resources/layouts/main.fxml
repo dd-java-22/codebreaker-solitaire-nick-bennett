@@ -45,10 +45,10 @@
   </ScrollPane>
 
   <TilePane
-    fx:id="guessPalette"
-    orientation="HORIZONTAL"
+    fx:id="guessContainer"
     GridPane.columnIndex="0"
-    GridPane.rowIndex="2"/>
+    GridPane.rowIndex="1"/>
+
 
   <Button
     fx:id="send"
@@ -76,5 +76,9 @@
 
   </Button>
 
+  <TilePane
+    fx:id="guessPalette"
+    GridPane.columnIndex="0"
+    GridPane.rowIndex="2"/>
 
 </GridPane>
