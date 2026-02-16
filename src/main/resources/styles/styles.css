@@ -49,3 +49,9 @@ GridPane {
 #send:hover {
   -fx-background-color: #1a8ad4;
 }
+
+Button.palette-button {
+  -fx-background-color: transparent;
+  -fx-padding: 0;
+  -fx-border-color: transparent;
+}
