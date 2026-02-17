@@ -110,3 +110,21 @@ Button.palette-button.indigo-fill > Circle {
 Button.palette-button.violet-fill > Circle {
   -fx-fill: violet;
 }
+
+TilePane#guessContainer {
+  -fx-max-height: Infinity;
+  -fx-max-width: Infinity;
+  -fx-alignment: center;
+  -fx-tile-alignment: center;
+  -fx-hgap: 8px;
+  -fx-vgap: 8px;
+  -fx-padding: 8px;
+}
+
+RadioButton.guess-item {
+  
+}
+
+.guess-item {
+  
+}
