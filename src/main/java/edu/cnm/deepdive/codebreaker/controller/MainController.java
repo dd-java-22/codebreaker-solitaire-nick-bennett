@@ -8,13 +8,13 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -28,6 +28,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.TilePane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import org.jetbrains.annotations.NotNull;
 
 public class MainController {
 
@@ -170,43 +171,57 @@ public class MainController {
   }
 
   private void buildPalette() {
-    EventHandler<ActionEvent> handler = (event) -> {
-      Integer codePoint = (Integer) ((Node) event.getSource()).getUserData();
-      ToggleButton button = (ToggleButton) group.getSelectedToggle();
-      button.setUserData(codePoint);
-      ObservableList<String> styleClasses = button.getStyleClass();
-      styleClasses.subList(1, styleClasses.size()).clear();
-      styleClasses.add(codePointClasses.get(codePoint));
-      ObservableList<Toggle> toggles = group.getToggles();
-      int position = toggles.indexOf(button);
-      if (position < toggles.size() - 1) {
-        selectGuessItem(toggles.get(position + 1));
-      } else {
-        button.requestFocus();
-      }
-      updateSend();
-    };
     ObservableList<Node> children = guessPalette.getChildren();
     children.clear();
     codePointClasses
         .entrySet()
         .stream()
-        .map((entry) -> {
-          try {
-            Integer key = entry.getKey();
-            String name = codePointNames.get(key);
-            Labeled node = new FXMLLoader(paletteItemUrl, resources).load();
-            node.addEventHandler(ActionEvent.ACTION, handler);
-            node.setTooltip(new Tooltip(name));
-            node.setText(buildSingleCharacterMnemonicLabel(name));
-            node.setUserData(key);
-            node.getStyleClass().add(entry.getValue());
-            return node;
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
-        })
+        .map(this::buildPaletteItem)
         .forEach(children::add);
+  }
+
+  @NotNull
+  private Labeled buildPaletteItem(Entry<Integer, String> entry) {
+    try {
+      Integer key = entry.getKey();
+      String name = codePointNames.get(key);
+      Labeled node = new FXMLLoader(paletteItemUrl, resources).load();
+      node.addEventHandler(ActionEvent.ACTION, this::handlePaletteSelection);
+      node.setTooltip(new Tooltip(name));
+      node.setText(buildSingleCharacterMnemonicLabel(name));
+      node.setUserData(key);
+      node.getStyleClass().add(entry.getValue());
+      return node;
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private void handlePaletteSelection(ActionEvent event) {
+    ToggleButton button = updateGuessItem(event);
+    advanceSelectedItem(button);
+    updateSend();
+  }
+
+  private void advanceSelectedItem(ToggleButton button) {
+    ObservableList<Toggle> toggles = group.getToggles();
+    int position = toggles.indexOf(button);
+    if (position < toggles.size() - 1) {
+      selectGuessItem(toggles.get(position + 1));
+    } else {
+      button.requestFocus();
+    }
+  }
+
+  @NotNull
+  private ToggleButton updateGuessItem(ActionEvent event) {
+    Integer codePoint = (Integer) ((Node) event.getSource()).getUserData();
+    ToggleButton button = (ToggleButton) group.getSelectedToggle();
+    button.setUserData(codePoint);
+    ObservableList<String> styleClasses = button.getStyleClass();
+    styleClasses.subList(1, styleClasses.size()).clear();
+    styleClasses.add(codePointClasses.get(codePoint));
+    return button;
   }
 
   private void updateSend() {

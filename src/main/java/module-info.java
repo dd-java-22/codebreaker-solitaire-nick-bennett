@@ -10,6 +10,7 @@ module edu.cnm.deepdive.codebreaker {
   requires javafx.fxml;
   requires jakarta.annotation;
   requires jakarta.validation;
+  requires annotations;
 
   exports edu.cnm.deepdive.codebreaker to javafx.graphics;
 
