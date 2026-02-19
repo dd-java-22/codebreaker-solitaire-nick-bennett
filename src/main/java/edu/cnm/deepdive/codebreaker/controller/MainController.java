@@ -21,6 +21,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.TilePane;
 import javafx.scene.text.Text;
@@ -31,7 +34,9 @@ public class MainController {
   private static final String POOL_KEY = "pool";
   private static final String LENGTH_KEY = "length";
   private static final Pattern PROPERTY_LIST_DELIMITER = Pattern.compile("\\s*,\\s*");
-  
+  private static final String GUESS_ITEM_KEY = "guess_item_layout";
+  private static final String PALETTE_ITEM_KEY = "palette_item_layout";
+
   @FXML
   private ResourceBundle resources;
   @FXML
@@ -51,9 +56,15 @@ public class MainController {
   private Game game;
   private Map<Integer, String> codePointNames;
   private Map<Integer, String> codePointClasses;
+  private URL paletteItemUrl;
+  private URL guessItemUrl;
+  private ToggleGroup group;
 
   @FXML
   private void initialize() throws IOException {
+    paletteItemUrl = getItemUrl(resources.getString(PALETTE_ITEM_KEY));
+    guessItemUrl = getItemUrl(resources.getString(GUESS_ITEM_KEY));
+
     buildCodePointMaps();
     viewModel = connectToViewModel();
     startGame();
@@ -107,14 +118,76 @@ public class MainController {
 
   private void handleGame(Game game) {
     this.game = game;
-    gameState.setText(game.toString());
-    EventHandler<ActionEvent> handler = (event) ->
-        System.out.println(((Node)event.getSource()).getUserData());
+    gameState.setText(game.toString()); // FIXME: 2026-02-18 Remove and replace with list view.
+    buildPalette();
+    buildGuess();
+    updateSend();
+  }
+
+  private void buildGuess() {
+    group = new ToggleGroup();
+    initializeGuess(getLastGuess());
+    selectGuessItem(group.getToggles().getFirst());
+  }
+
+  private int[] getLastGuess() {
+    //noinspection DataFlowIssue
+    return game.getGuesses().isEmpty()
+        ? new int[game.getLength()]
+        : game
+            .getGuesses()
+            .getLast()
+            .getText()
+            .codePoints()
+            .toArray();
+  }
+
+  private void initializeGuess(int[] lastGuess) {
+    ObservableList<Toggle> toggles = group.getToggles();
+    ObservableList<Node> children = guessContainer.getChildren();
+    children.clear();
+    IntStream.range(0, game.getLength())
+        .forEach((i) -> {
+          try {
+            ToggleButton button = new FXMLLoader(guessItemUrl, resources).load();
+            String styleClass = codePointClasses.get(lastGuess[i]);
+            if (styleClass != null) {
+              button.getStyleClass().add(styleClass);
+              button.setUserData(lastGuess[i]);
+            }
+            toggles.add(button);
+            children.add(button);
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+        });
+  }
+
+  private void selectGuessItem(Toggle toggle) {
+    ToggleButton firstButton = (ToggleButton) toggle;
+    group.selectToggle(firstButton);
+    firstButton.requestFocus();
+  }
+
+  private void buildPalette() {
+    EventHandler<ActionEvent> handler = (event) -> {
+      Integer codePoint = (Integer) ((Node) event.getSource()).getUserData();
+      ToggleButton button = (ToggleButton) group.getSelectedToggle();
+      button.setUserData(codePoint);
+      ObservableList<String> styleClasses = button.getStyleClass();
+      styleClasses.subList(1, styleClasses.size()).clear();
+      styleClasses.add(codePointClasses.get(codePoint));
+      ObservableList<Toggle> toggles = group.getToggles();
+      int position = toggles.indexOf(button);
+      if (position < toggles.size() - 1) {
+        selectGuessItem(toggles.get(position + 1));
+      } else {
+        button.requestFocus();
+      }
+      updateSend();
+    };
     ObservableList<Node> children = guessPalette.getChildren();
     children.clear();
-    URL layoutUrl = getClass()
-        .getClassLoader()
-        .getResource(resources.getString("palette_item_layout"));
     codePointClasses
         .entrySet()
         .stream()
@@ -122,7 +195,7 @@ public class MainController {
           try {
             Integer key = entry.getKey();
             String name = codePointNames.get(key);
-            Labeled node = new FXMLLoader(layoutUrl, resources).load();
+            Labeled node = new FXMLLoader(paletteItemUrl, resources).load();
             node.addEventHandler(ActionEvent.ACTION, handler);
             node.setTooltip(new Tooltip(name));
             node.setText(buildSingleCharacterMnemonicLabel(name));
@@ -136,11 +209,25 @@ public class MainController {
         .forEach(children::add);
   }
 
+  private void updateSend() {
+    boolean sendDisabled = group
+        .getToggles()
+        .stream()
+        .anyMatch((toggle) -> ((ToggleButton) toggle).getUserData() == null);
+    send.setDisable(sendDisabled);
+  }
+
+  private URL getItemUrl(String itemPath) {
+    return getClass()
+        .getClassLoader()
+        .getResource(itemPath);
+  }
+
   private String buildSingleCharacterMnemonicLabel(String name) {
     return IntStream.concat(
-        IntStream.of('_'),
-        name.codePoints().limit(1)
-    )
+            IntStream.of('_'),
+            name.codePoints().limit(1)
+        )
         .boxed()
         .reduce(new StringBuilder(), StringBuilder::appendCodePoint, StringBuilder::append)
         .toString();
