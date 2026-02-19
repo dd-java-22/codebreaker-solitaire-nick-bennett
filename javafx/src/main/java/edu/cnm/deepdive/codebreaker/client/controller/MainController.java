@@ -16,6 +16,9 @@
 package edu.cnm.deepdive.codebreaker.client.controller;
 
 import edu.cnm.deepdive.codebreaker.api.model.Game;
+import edu.cnm.deepdive.codebreaker.api.model.Guess;
+import edu.cnm.deepdive.codebreaker.client.adapter.GuessAdapter;
+import edu.cnm.deepdive.codebreaker.client.util.Constants;
 import edu.cnm.deepdive.codebreaker.client.viewmodel.GameViewModel;
 import java.io.IOException;
 import java.net.URL;
@@ -35,14 +38,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.TilePane;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 
 /**
  * Handles UI interactions and updates for the Codebreaker game. This class is responsible for
@@ -52,7 +53,6 @@ import javafx.scene.text.TextFlow;
  */
 public class MainController {
 
-  private static final String POOL_KEY = "pool";
   private static final String POOL_NAMES_KEY = "pool_names";
   private static final String POOL_CLASSES_KEY = "pool_classes";
   private static final String LENGTH_KEY = "length";
@@ -64,11 +64,7 @@ public class MainController {
   @FXML
   private ResourceBundle resources;
   @FXML
-  private ScrollPane scrollPane;
-  @FXML
-  private TextFlow textFlow;
-  @FXML
-  private Text gameState;
+  private ListView<Guess> guessHistory;
   @FXML
   private TilePane guessContainer;
   @FXML
@@ -118,7 +114,7 @@ public class MainController {
   }
 
   private void loadGameProperties() {
-    pool = resources.getString(POOL_KEY);
+    pool = resources.getString(Constants.POOL_KEY);
     length = Integer.parseInt(resources.getString(LENGTH_KEY));
     List<Integer> poolCodePoints = pool
         .codePoints()
@@ -158,12 +154,19 @@ public class MainController {
   }
 
   private void handleGame(Game game) {
-    // TODO: Add logic to handle null gamee reference (e.g., after deleting current game).
+    // TODO: Add logic to handle null game reference (e.g., after deleting current game).
     this.game = game;
-    gameState.setText(game.toString()); // FIXME: Remove and replace with list view.
+    updateGuessHistory();
     buildPalette();
     buildGuess();
     updateSend();
+  }
+
+  private void updateGuessHistory() {
+    guessHistory.setCellFactory(new GuessAdapter(resources));
+    guessHistory.getItems().clear();
+    //noinspection DataFlowIssue
+    guessHistory.getItems().addAll(game.getGuesses());
   }
 
   private void buildPalette() {

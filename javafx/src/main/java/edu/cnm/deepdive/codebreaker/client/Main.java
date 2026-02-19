@@ -16,6 +16,7 @@
 package edu.cnm.deepdive.codebreaker.client;
 
 import edu.cnm.deepdive.codebreaker.client.controller.MainController;
+import edu.cnm.deepdive.codebreaker.client.util.Constants;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Application;
@@ -30,7 +31,6 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-  private static final String BUNDLE_BASE_NAME = "bundles/game";
   private static final String WINDOW_TITLE_KEY = "window_title";
   private static final String MAIN_LAYOUT_KEY = "main_layout";
   private MainController controller;
@@ -41,7 +41,7 @@ public class Main extends Application {
 
   @Override
   public void start(Stage stage) throws Exception {
-    ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_BASE_NAME);
+    ResourceBundle bundle = ResourceBundle.getBundle(Constants.BUNDLE_BASE_NAME);
     stage.setTitle(bundle.getString(WINDOW_TITLE_KEY));
     URL location = getClass().getResource(bundle.getString(MAIN_LAYOUT_KEY));
     FXMLLoader fxmlLoader = new FXMLLoader(location, bundle);
