@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.Region?>
+<Button xmlns="http://javafx.com/javafx"
+  xmlns:fx="http://javafx.com/fxml"
+  stylesheets="@../styles/styles.css">
+
+  <graphic>
+    <Region
+      styleClass="graphic-region"/>
+  </graphic>
+
+</Button>

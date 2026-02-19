@@ -13,22 +13,20 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
 
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+/**
+ * Implements a JavaFX-based user interface for the Codebreaker Solitaire client.
+ */
+module edu.cnm.deepdive.codebreaker.javafx {
 
-rootProject.name = "codebreaker-solitaire"
-include(":api", ":client",":javafx")
+  requires javafx.controls;
+  requires javafx.fxml;
+  requires edu.cnm.deepdive.codebreaker.api;
+  requires edu.cnm.deepdive.codebreaker.client;
+
+  exports edu.cnm.deepdive.codebreaker.client to javafx.graphics;
+
+  opens edu.cnm.deepdive.codebreaker.client to javafx.fxml;
+  opens edu.cnm.deepdive.codebreaker.client.controller to javafx.fxml;
+
+}

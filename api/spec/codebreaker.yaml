@@ -1,0 +1,244 @@
+openapi: 3.0.0
+info:
+  title: Codebreaker Solitaire API
+  description: API for managing and playing Codebreaker Solitaire games.
+  version: 4.1.2
+  contact:
+    name: Nick Bennett, Deep Dive / CNM Ingenuity, Inc.
+    email: nick@nickbenn.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://ddc-java.services/codebreaker-solitaire
+    description: Production server
+
+paths:
+  /games:
+    post:
+      summary: Start a new game.
+      operationId: startGame
+      tags: [Codebreaker]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Game'
+      responses:
+        '201':
+          description: Code generated & game started successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '400':
+          description: Invalid code length or character pool.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /games/{gameId}:
+    parameters:
+      - name: gameId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Retrieve a game resource
+      operationId: getGame
+      tags: [Codebreaker]
+      responses:
+        '200':
+          description: Specified game returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '404':
+          description: Game not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a game resource
+      operationId: deleteGame
+      tags: [Codebreaker]
+      responses:
+        '204':
+          description: Specified game deleted.
+        '404':
+          description: Game not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /games/{gameId}/guesses:
+    post:
+      summary: Submit a new guess for a game
+      operationId: submitGuess
+      tags: [Codebreaker]
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Guess'
+      responses:
+        '201':
+          description: Guess submitted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Guess'
+        '400':
+          description: Length of guess doesn’t match code length.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Game not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Game already solved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /games/{gameId}/guesses/{guessId}:
+    get:
+      summary: Retrieve a specific guess resource
+      operationId: getGuess
+      tags: [Codebreaker]
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: guessId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Specified guess returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Guess'
+        '404':
+          description: Game or Guess not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Game:
+      type: object
+      required:
+        - pool
+        - length
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: Unique identifier of game resource.
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Server timestamp of game start.
+        pool:
+          type: string
+          description: Pool of available characters for code and guesses.
+        length:
+          type: integer
+          minimum: 1
+          maximum: 20
+          description: Length (in characters) of generated code.
+        solved:
+          type: boolean
+          readOnly: true
+          description: Flag indicating whether game is completed (i.e., secret code has been guessed).
+        text:
+          type: string
+          readOnly: true
+          description: Text of secret code, included only in responses for completed (solved) games.
+        guesses:
+          type: array
+          readOnly: true
+          description: Guesses validated and processed since start of game.
+          items:
+            $ref: '#/components/schemas/Guess'
+
+    Guess:
+      type: object
+      required:
+        - text
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: Unique identifier of guess resource.
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Server timestamp of guess submission.
+        text:
+          type: string
+          description: Text of guess.
+        exactMatches:
+          type: integer
+          readOnly: true
+          description: Number of characters (codepoints) of guess matching characters in secret code exactly.
+        nearMatches:
+          type: integer
+          readOnly: true
+          description: Number of characters (codepoints) of guess matching characters in secret code, but not in correct positions.
+        solution:
+          type: boolean
+          readOnly: true
+          description: Flag indicating whether this guess exactly matches the secret code.
+
+    Error:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Server timestamp of request resulting in error.
+        status:
+          type: integer
+          description: HTTP response status code.
+        error:
+          type: string
+          description: HTTP response status text.
+        message:
+          type: string
+          description: Additional error message.
+        path:
+          type: string
+          description: Host-relative URL of request.
+        details:
+          type: object
+          description: Additional details, generally included with validation errors.

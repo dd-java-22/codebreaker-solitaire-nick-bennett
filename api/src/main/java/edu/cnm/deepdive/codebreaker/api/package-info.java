@@ -13,22 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "codebreaker-solitaire"
-include(":api", ":client",":javafx")
+/**
+ * Contains utility classes and base definitions for the Codebreaker Solitaire API.
+ */
+package edu.cnm.deepdive.codebreaker.api;

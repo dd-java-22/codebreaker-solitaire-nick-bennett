@@ -13,22 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "codebreaker-solitaire"
-include(":api", ":client",":javafx")
+/**
+ * Provides the client-side service API for interacting with the Codebreaker Solitaire REST
+ * service. Implementations in this package handle HTTP requests/responses via Retrofit and map
+ * them to domain models and exceptions suitable for use by higher-level clients (e.g., JavaFX UI).
+ */
+package edu.cnm.deepdive.codebreaker.client.service;

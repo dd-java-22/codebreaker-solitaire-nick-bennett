@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+<GridPane
+  xmlns="http://javafx.com/javafx"
+  xmlns:fx="http://javafx.com/fxml"
+  fx:controller="edu.cnm.deepdive.codebreaker.client.controller.MainController"
+  stylesheets="@../styles/styles.css">
+
+  <columnConstraints>
+    <ColumnConstraints hgrow="ALWAYS" minWidth="10"/>
+    <ColumnConstraints hgrow="NEVER" minWidth="50"/>
+  </columnConstraints>
+
+  <rowConstraints>
+    <RowConstraints vgrow="ALWAYS" minHeight="10"/>
+    <RowConstraints vgrow="NEVER" minHeight="50"/>
+    <RowConstraints vgrow="NEVER" minHeight="32"/>
+  </rowConstraints>
+
+  <!--suppress JavaFxRedundantPropertyValue -->
+  <ScrollPane
+    fx:id="scrollPane"
+    hbarPolicy="NEVER"
+    vbarPolicy="AS_NEEDED"
+    GridPane.columnIndex="0"
+    GridPane.rowIndex="0"
+    GridPane.columnSpan="2">
+
+    <TextFlow
+      fx:id="textFlow">
+      <Text fx:id="gameState"/>
+    </TextFlow>
+
+  </ScrollPane>
+
+  <TilePane
+    fx:id="guessContainer"
+    GridPane.columnIndex="0"
+    GridPane.rowIndex="1"/>
+
+
+  <Button
+    fx:id="send"
+    onAction="#submitGuess"
+    GridPane.columnIndex="1"
+    GridPane.rowIndex="1">
+
+    <tooltip>
+      <Tooltip text="%send_tooltip"/>
+    </tooltip>
+
+    <graphic>
+
+      <ImageView
+        fitHeight="24"
+        fitWidth="24"
+        pickOnBounds="true">
+
+        <Image
+          url="@../images/send.png"/>
+
+      </ImageView>
+
+    </graphic>
+
+  </Button>
+
+  <TilePane
+    fx:id="guessPalette"
+    GridPane.columnIndex="0"
+    GridPane.rowIndex="2"
+    GridPane.columnSpan="2"/>
+
+</GridPane>

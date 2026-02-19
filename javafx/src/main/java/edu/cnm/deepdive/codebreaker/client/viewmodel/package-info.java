@@ -13,22 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "codebreaker-solitaire"
-include(":api", ":client",":javafx")
+/**
+ * Defines view-model classes that expose observable game state and operations to the JavaFX UI
+ * for the Codebreaker Solitaire client.
+ */
+package edu.cnm.deepdive.codebreaker.client.viewmodel;

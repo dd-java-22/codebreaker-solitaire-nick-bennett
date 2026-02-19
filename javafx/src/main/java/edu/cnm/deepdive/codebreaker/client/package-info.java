@@ -13,22 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "codebreaker-solitaire"
-include(":api", ":client",":javafx")
+/**
+ * Contains the JavaFX application entry points and UI-level types for the Codebreaker Solitaire
+ * client. Classes in this package bootstrap the application and compose views, controllers, and
+ * services.
+ */
+package edu.cnm.deepdive.codebreaker.client;

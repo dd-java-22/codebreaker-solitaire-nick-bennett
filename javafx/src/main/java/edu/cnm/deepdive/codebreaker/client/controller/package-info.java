@@ -13,22 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "codebreaker-solitaire"
-include(":api", ":client",":javafx")
+/**
+ * Contains JavaFX controllers for the Codebreaker Solitaire client UI. Controllers coordinate
+ * user interactions and view updates, delegating game operations to the service and view-model
+ * layers.
+ */
+package edu.cnm.deepdive.codebreaker.client.controller;

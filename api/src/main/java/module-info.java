@@ -13,22 +13,23 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
 
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+/**
+ * Defines the service and data model interfaces for the Codebreaker Solitaire API.
+ */
+module edu.cnm.deepdive.codebreaker.api {
 
-rootProject.name = "codebreaker-solitaire"
-include(":api", ":client",":javafx")
+  requires kotlin.stdlib;
+
+  requires retrofit2;
+  requires com.google.gson;
+  requires jakarta.annotation;
+  requires jakarta.validation;
+
+  exports edu.cnm.deepdive.codebreaker.api.model;
+  exports edu.cnm.deepdive.codebreaker.api.service;
+
+  opens edu.cnm.deepdive.codebreaker.api.model to com.google.gson, jakarta.validation, jakarta.annotation;
+  opens edu.cnm.deepdive.codebreaker.api.service to retrofit2;
+
+}

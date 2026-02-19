@@ -1,0 +1,219 @@
+.root {
+  -cb-background-color: #C0C0C0;
+  -fx-background-color: -cb-background-color;
+  -fx-padding: 5px;
+}
+
+GridPane {
+  -fx-pref-width: 300px;
+  -fx-pref-height: 600px;
+  -fx-min-width: 300px;
+  -fx-min-height: 600px;
+}
+
+#scrollPane {
+  -fx-background-color: #1e1e1e;
+  -fx-background-insets: 0;
+  -fx-border-color: #444444;
+  -fx-border-width: 1px;
+}
+
+#textFlow {
+  -fx-padding: 10px;
+}
+
+#gameState {
+  -fx-fill: #404080;
+  -fx-font-family: "Segoe UI", sans-serif;
+  -fx-font-size: 14px;
+}
+
+#guessInput {
+  -fx-background-color: #3c3f41;
+  -fx-text-fill: white;
+  -fx-prompt-text-fill: #888888;
+  -fx-background-radius: 0;
+  -fx-border-color: #444444;
+  -fx-border-width: 1px 0 1px 1px;
+}
+
+#guessInput:focused {
+  -fx-border-color: #0078d7;
+}
+
+#send {
+  -fx-background-color: #0078d7;
+  -fx-background-radius: 3px;
+  -fx-cursor: hand;
+  -fx-opacity: 1;
+}
+
+#send:hover {
+  -fx-background-color: #1a8ad4;
+}
+
+#send:disabled {
+  -fx-opacity: 0.2;
+}
+
+#guessPalette {
+  -fx-max-height: Infinity;
+  -fx-max-width: Infinity;
+  -fx-alignment: center;
+  -fx-tile-alignment: center;
+  -fx-hgap: 16px;
+  -fx-vgap: 16px;
+  -fx-pref-columns: 4;
+  -fx-padding: 10px;
+}
+
+#guessPalette .button {
+  -fx-background-color: transparent;
+  -fx-padding: 0;
+  -fx-alignment: center;
+  -fx-content-display: center;
+  -fx-text-fill: #202020;
+  -fx-font-weight: bold;
+  -fx-font-size: 16px;
+}
+
+#guessPalette .button:hover {
+  -fx-cursor: hand;
+}
+
+#guessPalette .button .graphic-region {
+  -fx-min-width: 40px;
+  -fx-min-height: 40px;
+  -fx-border-width: 2px;
+  -fx-border-style: solid;
+  -fx-border-color: #000000C0;
+}
+
+#guessPalette .button:hover .graphic-region {
+  -fx-border-color: white;
+}
+
+#guessContainer {
+  -fx-alignment: center;
+  -fx-tile-alignment: center;
+  -fx-gridpane-alignment: center;
+  -fx-hgap: 8px;
+  -fx-vgap: 8px;
+  -fx-padding: 8px;
+  /* TODO: Draw a box around this container, and use a different background color. */
+}
+
+#guessContainer .radio-button {
+  -fx-content-display: center;
+  -fx-min-width: 30px;
+  -fx-min-height: 30px;
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-border-width: 2px;
+  -fx-border-radius: 4px;
+  -fx-background-radius: 4px;
+  -fx-cursor: hand;
+  -fx-text-fill: #202020;
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+}
+
+#guessContainer .radio-button .radio {
+  -fx-min-width: 0;
+  -fx-pref-width: 0;
+  -fx-max-width: 0;
+  -fx-padding: 0;
+  -fx-opacity: 0;
+}
+
+#guessContainer .radio-button:selected {
+  -fx-border-color: #404040;
+  -fx-background-color: #A0A0A0;
+}
+
+#guessContainer .radio-button .graphic-region {
+  -fx-min-width: 32px;
+  -fx-min-height: 32px;
+  -fx-border-color: black;
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+}
+
+.radio-button:show-mnemonics > .mnemonic-underline,
+.button:show-mnemonics > .mnemonic-underline {
+  -fx-stroke: -fx-text-fill;
+}
+
+#guessContainer .radio-button.red-fill ,
+#guessPalette .button.red-fill {
+  -fx-text-fill: white;
+}
+
+/* TODO: Define text fills for the other colors, as the above does for .red-fill. */
+
+/* TODO: Refine shape definitions. */
+
+#guessContainer .radio-button.red-fill .graphic-region,
+#guessPalette .button.red-fill .graphic-region {
+  -fx-background-color: red;
+  -fx-shape: "M 0,50
+      a 50, 50 0 1,0 100, 0
+      a 50, 50 0 1,0 -100, 0
+      z";
+}
+
+#guessContainer .radio-button.orange-fill .graphic-region,
+#guessPalette .button.orange-fill .graphic-region {
+  -fx-background-color: orange;
+  -fx-shape: "M 0,50
+  a 50, 50 0 1,0 100, 0
+  a 50, 50 0 1,0 -100, 0
+  z";
+}
+
+#guessContainer .radio-button.yellow-fill .graphic-region,
+#guessPalette .button.yellow-fill .graphic-region {
+  -fx-background-color: yellow;
+  -fx-shape: "M 0,50
+  a 50, 50 0 1,0 100, 0
+  a 50, 50 0 1,0 -100, 0
+  z";
+}
+
+#guessContainer .radio-button.green-fill .graphic-region,
+#guessPalette .button.green-fill .graphic-region {
+  -fx-background-color: green;
+  -fx-shape: "M 0,50
+      l 50,-50
+      l 50,50
+      l -50,50
+      z";
+}
+
+#guessContainer .radio-button.blue-fill .graphic-region,
+#guessPalette .button.blue-fill .graphic-region {
+  -fx-background-color: blue;
+  -fx-shape: "M 0,100
+      h 100
+      l -50,-100
+      z";
+}
+
+#guessContainer .radio-button.indigo-fill .graphic-region,
+#guessPalette .button.indigo-fill .graphic-region {
+  -fx-background-color: indigo;
+  -fx-shape: "M 0,50
+  a 50, 50 0 1,0 100, 0
+  a 50, 50 0 1,0 -100, 0
+  z";
+}
+
+#guessContainer .radio-button.violet-fill .graphic-region,
+#guessPalette .button.violet-fill .graphic-region {
+  -fx-background-color: violet;
+  -fx-shape: "M 0,50
+  a 50, 50 0 1,0 100, 0
+  a 50, 50 0 1,0 -100, 0
+  z";
+}
+

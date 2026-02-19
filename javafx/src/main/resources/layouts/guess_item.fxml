@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.layout.Region?>
+<RadioButton
+  xmlns="http://javafx.com/javafx"
+  xmlns:fx="http://javafx.com/fxml"
+  stylesheets="@../styles/styles.css">
+
+  <graphic>
+    <Region
+      styleClass="graphic-region"/>
+  </graphic>
+
+</RadioButton>
