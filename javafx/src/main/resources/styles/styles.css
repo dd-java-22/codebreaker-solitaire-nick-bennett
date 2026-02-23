@@ -4,22 +4,14 @@
   -fx-padding: 5px;
 }
 
-GridPane {
+GridPane.root {
   -fx-pref-width: 300px;
   -fx-pref-height: 600px;
   -fx-min-width: 300px;
   -fx-min-height: 600px;
-}
-
-#scrollPane {
-  -fx-background-color: #1e1e1e;
-  -fx-background-insets: 0;
-  -fx-border-color: #444444;
-  -fx-border-width: 1px;
-}
-
-#textFlow {
   -fx-padding: 10px;
+  -fx-hgap: 10px;
+  -fx-vgap: 10px;
 }
 
 #gameState {
@@ -131,7 +123,8 @@ GridPane {
   -fx-background-color: #A0A0A0;
 }
 
-#guessContainer .radio-button .graphic-region {
+#guessContainer .radio-button .graphic-region,
+#guessContent .label .graphic-region {
   -fx-min-width: 32px;
   -fx-min-height: 32px;
   -fx-border-color: black;
@@ -150,6 +143,39 @@ GridPane {
 }
 
 /* TODO: Define text fills for the other colors, as the above does for .red-fill. */
+
+#guessHistory .guess-history-item {
+  -fx-min-height: 48px;
+  -fx-pref-height: 48px;
+  -fx-max-height: 48px;
+}
+
+#guessHistory .list-cell {
+  -fx-padding: 0;
+  -fx-end-margin: 0;
+  -fx-start-margin: 0;
+}
+
+#guessContent {
+  -fx-min-height: 48px;
+  -fx-pref-height: 48px;
+  -fx-max-height: 48px;
+  -fx-max-width: Infinity;
+  -fx-alignment: center;
+  -fx-spacing: 8px;
+  -fx-padding: 0;
+}
+
+#guessScore {
+  -fx-min-height: 48px;
+  -fx-pref-height: 48px;
+  -fx-max-height: 48px;
+  -fx-max-width: Infinity;
+  -fx-padding: 5px 10px 5px 5px;
+  -fx-background-insets: 5px 10px 5px 5px;
+  -fx-shape: "M 98,0 h 2 l -98,100 h -2 z";
+  -fx-background-color: #404040;
+}
 
 /* TODO: Refine shape definitions. */
 
@@ -224,3 +250,13 @@ GridPane {
   z";
 }
 
+
+#guessScore #exactCount {
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+}
+
+#guessScore #nearCount {
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+}

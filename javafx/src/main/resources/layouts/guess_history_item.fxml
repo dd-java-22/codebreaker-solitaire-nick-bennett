@@ -15,6 +15,7 @@
   limitations under the License.
 -->
 
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -23,7 +24,7 @@
   xmlns="http://javafx.com/javafx"
   xmlns:fx="http://javafx.com/fxml"
   stylesheets="@../styles/styles.css"
-  styleClass="guess-history">
+  styleClass="guess-history-item">
 
   <columnConstraints>
     <ColumnConstraints hgrow="ALWAYS" minWidth="10"/>
@@ -36,17 +37,21 @@
     GridPane.rowIndex="0"
     GridPane.columnIndex="0"/>
 
-  <HBox
+  <AnchorPane
     fx:id="guessScore"
     GridPane.rowIndex="0"
     GridPane.columnIndex="1">
 
     <Text
-      fx:id="exactCount"/>
+      fx:id="exactCount"
+      AnchorPane.leftAnchor="0"
+      AnchorPane.topAnchor="0"/>
 
     <Text
-      fx:id="nearCount"/>
+      fx:id="nearCount"
+      AnchorPane.rightAnchor="0"
+      AnchorPane.bottomAnchor="0"/>
 
-  </HBox>
+  </AnchorPane>
 
 </GridPane>

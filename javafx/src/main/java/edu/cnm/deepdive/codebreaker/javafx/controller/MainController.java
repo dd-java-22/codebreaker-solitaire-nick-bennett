@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.stream.IntStream;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -45,7 +46,7 @@ import javafx.scene.layout.TilePane;
  * history. It coordinates with the {@link GameViewModel} to process user guesses and respond to
  * game state changes.
  */
-public class MainController {
+public class MainController implements Stoppable {
 
   private static final String LENGTH_KEY = "length";
   private static final String GUESS_ITEM_LAYOUT_KEY = "guess_item_layout";
@@ -70,8 +71,6 @@ public class MainController {
   private URL paletteItemUrl;
   private URL guessItemUrl;
   private ToggleGroup group;
-
-  // TODO: Add shutdown method, simply invokes viewModel.shutdown().
 
   /**
    * Initializes the controller after autowiring (to the nodes instantiated from the FXML layout by
@@ -100,6 +99,11 @@ public class MainController {
         .reduce(new StringBuilder(), StringBuilder::appendCodePoint, StringBuilder::append)
         .toString();
     viewModel.submitGuess(guessText);
+  }
+
+  @Override
+  public void shutdown() {
+    viewModel.shutdown();
   }
 
   private void loadGameProperties() {
@@ -133,6 +137,7 @@ public class MainController {
     guessHistory.getItems().clear();
     //noinspection DataFlowIssue
     guessHistory.getItems().addAll(game.getGuesses());
+    Platform.runLater(() -> guessHistory.scrollTo(Integer.MAX_VALUE));
   }
 
   private void buildPalette() {

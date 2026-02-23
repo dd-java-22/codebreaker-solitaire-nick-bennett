@@ -28,6 +28,7 @@
   xmlns="http://javafx.com/javafx"
   xmlns:fx="http://javafx.com/fxml"
   fx:controller="edu.cnm.deepdive.codebreaker.javafx.controller.MainController"
+  styleClass="root"
   stylesheets="@../styles/styles.css">
 
   <columnConstraints>
