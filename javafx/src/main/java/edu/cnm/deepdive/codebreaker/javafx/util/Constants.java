@@ -13,9 +13,24 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package edu.cnm.deepdive.codebreaker.javafx.util;
+
 /**
- * Contains the JavaFX application entry points and UI-level types for the Codebreaker Solitaire
- * client. Classes in this package bootstrap the application and compose views, controllers, and
- * services.
+ * Constants used in the Codebreaker Solitaire client.
  */
-package edu.cnm.deepdive.codebreaker.client;
+public final class Constants {
+
+  /**
+   * Base name of primary game configuration resource bundle.
+   */
+  public static final String BUNDLE_BASE_NAME = "bundles/game";
+
+  /**
+   * Resource bundle key for the game pool.
+   */
+  public static final String POOL_KEY = "pool";
+
+  private Constants() {
+  }
+
+}

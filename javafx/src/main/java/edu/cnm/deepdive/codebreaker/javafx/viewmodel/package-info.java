@@ -13,24 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package edu.cnm.deepdive.codebreaker.client.util;
-
 /**
- * Constants used in the Codebreaker Solitaire client.
+ * Defines view-model classes that expose observable game state and operations to the JavaFX UI
+ * for the Codebreaker Solitaire client.
  */
-public final class Constants {
-
-  /**
-   * Base name of primary game configuration resource bundle.
-   */
-  public static final String BUNDLE_BASE_NAME = "bundles/game";
-
-  /**
-   * Resource bundle key for the game pool.
-   */
-  public static final String POOL_KEY = "pool";
-
-  private Constants() {
-  }
-
-}
+package edu.cnm.deepdive.codebreaker.javafx.viewmodel;

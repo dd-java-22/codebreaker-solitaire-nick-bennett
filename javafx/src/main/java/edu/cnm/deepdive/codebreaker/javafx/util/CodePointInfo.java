@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package edu.cnm.deepdive.codebreaker.client.util;
+package edu.cnm.deepdive.codebreaker.javafx.util;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;

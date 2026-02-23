@@ -14,7 +14,8 @@
  *  limitations under the License.
  */
 /**
- * Defines view-model classes that expose observable game state and operations to the JavaFX UI
- * for the Codebreaker Solitaire client.
+ * Contains JavaFX controllers for the Codebreaker Solitaire client UI. Controllers coordinate
+ * user interactions and view updates, delegating game operations to the service and view-model
+ * layers.
  */
-package edu.cnm.deepdive.codebreaker.client.viewmodel;
+package edu.cnm.deepdive.codebreaker.javafx.controller;

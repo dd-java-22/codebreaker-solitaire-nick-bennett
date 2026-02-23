@@ -13,14 +13,14 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package edu.cnm.deepdive.codebreaker.client.controller;
+package edu.cnm.deepdive.codebreaker.javafx.controller;
 
 import edu.cnm.deepdive.codebreaker.api.model.Game;
 import edu.cnm.deepdive.codebreaker.api.model.Guess;
-import edu.cnm.deepdive.codebreaker.client.adapter.GuessAdapter;
-import edu.cnm.deepdive.codebreaker.client.util.CodePointInfo;
-import edu.cnm.deepdive.codebreaker.client.util.Constants;
-import edu.cnm.deepdive.codebreaker.client.viewmodel.GameViewModel;
+import edu.cnm.deepdive.codebreaker.javafx.adapter.GuessAdapter;
+import edu.cnm.deepdive.codebreaker.javafx.util.CodePointInfo;
+import edu.cnm.deepdive.codebreaker.javafx.util.Constants;
+import edu.cnm.deepdive.codebreaker.javafx.viewmodel.GameViewModel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;

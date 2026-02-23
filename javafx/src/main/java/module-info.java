@@ -24,10 +24,10 @@ module edu.cnm.deepdive.codebreaker.javafx {
   requires edu.cnm.deepdive.codebreaker.api;
   requires edu.cnm.deepdive.codebreaker.client;
 
-  exports edu.cnm.deepdive.codebreaker.client to javafx.graphics;
+  exports edu.cnm.deepdive.codebreaker.javafx to javafx.graphics;
 
-  opens edu.cnm.deepdive.codebreaker.client to javafx.fxml;
-  opens edu.cnm.deepdive.codebreaker.client.controller to javafx.fxml;
-  opens edu.cnm.deepdive.codebreaker.client.adapter to javafx.fxml;
+  opens edu.cnm.deepdive.codebreaker.javafx to javafx.fxml;
+  opens edu.cnm.deepdive.codebreaker.javafx.controller to javafx.fxml;
+  opens edu.cnm.deepdive.codebreaker.javafx.adapter to javafx.fxml;
 
 }
