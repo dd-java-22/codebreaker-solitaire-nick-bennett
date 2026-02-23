@@ -14,6 +14,6 @@
  *  limitations under the License.
  */
 /**
- * Utility classes for the Codebreaker Solitaire client.
+ * Adapters for UI components that require data transformation for display.
  */
-package edu.cnm.deepdive.codebreaker.client.util;
+package edu.cnm.deepdive.codebreaker.javafx.adapter;

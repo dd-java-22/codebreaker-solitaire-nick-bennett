@@ -1,4 +1,4 @@
-package edu.cnm.deepdive.codebreaker.client.viewmodel;
+package edu.cnm.deepdive.codebreaker.javafx.viewmodel;
 
 import edu.cnm.deepdive.codebreaker.api.model.Game;
 import edu.cnm.deepdive.codebreaker.api.model.Guess;

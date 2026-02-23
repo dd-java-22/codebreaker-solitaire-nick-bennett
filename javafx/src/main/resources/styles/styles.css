@@ -154,7 +154,8 @@ GridPane {
 /* TODO: Refine shape definitions. */
 
 #guessContainer .radio-button.red-fill .graphic-region,
-#guessPalette .button.red-fill .graphic-region {
+#guessPalette .button.red-fill .graphic-region,
+#guessHistory #guessContent .label.red-fill .graphic-region {
   -fx-background-color: red;
   -fx-shape: "M 0,50
       a 50, 50 0 1,0 100, 0
@@ -163,7 +164,8 @@ GridPane {
 }
 
 #guessContainer .radio-button.orange-fill .graphic-region,
-#guessPalette .button.orange-fill .graphic-region {
+#guessPalette .button.orange-fill .graphic-region,
+#guessHistory #guessContent .label.orange-fill .graphic-region {
   -fx-background-color: orange;
   -fx-shape: "M 0,50
   a 50, 50 0 1,0 100, 0
@@ -172,7 +174,8 @@ GridPane {
 }
 
 #guessContainer .radio-button.yellow-fill .graphic-region,
-#guessPalette .button.yellow-fill .graphic-region {
+#guessPalette .button.yellow-fill .graphic-region,
+#guessHistory #guessContent .label.yellow-fill .graphic-region {
   -fx-background-color: yellow;
   -fx-shape: "M 0,50
   a 50, 50 0 1,0 100, 0
@@ -181,7 +184,8 @@ GridPane {
 }
 
 #guessContainer .radio-button.green-fill .graphic-region,
-#guessPalette .button.green-fill .graphic-region {
+#guessPalette .button.green-fill .graphic-region,
+#guessHistory #guessContent .label.green-fill .graphic-region {
   -fx-background-color: green;
   -fx-shape: "M 0,50
       l 50,-50
@@ -191,7 +195,8 @@ GridPane {
 }
 
 #guessContainer .radio-button.blue-fill .graphic-region,
-#guessPalette .button.blue-fill .graphic-region {
+#guessPalette .button.blue-fill .graphic-region,
+#guessHistory #guessContent .label.blue-fill .graphic-region {
   -fx-background-color: blue;
   -fx-shape: "M 0,100
       h 100
@@ -200,7 +205,8 @@ GridPane {
 }
 
 #guessContainer .radio-button.indigo-fill .graphic-region,
-#guessPalette .button.indigo-fill .graphic-region {
+#guessPalette .button.indigo-fill .graphic-region,
+#guessHistory #guessContent .label.indigo-fill .graphic-region {
   -fx-background-color: indigo;
   -fx-shape: "M 0,50
   a 50, 50 0 1,0 100, 0
@@ -209,7 +215,8 @@ GridPane {
 }
 
 #guessContainer .radio-button.violet-fill .graphic-region,
-#guessPalette .button.violet-fill .graphic-region {
+#guessPalette .button.violet-fill .graphic-region,
+#guessHistory #guessContent .label.violet-fill .graphic-region {
   -fx-background-color: violet;
   -fx-shape: "M 0,50
   a 50, 50 0 1,0 100, 0
