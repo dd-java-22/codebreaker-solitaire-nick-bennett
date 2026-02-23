@@ -13,10 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package edu.cnm.deepdive.codebreaker.javafx;
+package edu.cnm.deepdive.codebreaker.client;
 
-import edu.cnm.deepdive.codebreaker.javafx.controller.MainController;
-import edu.cnm.deepdive.codebreaker.javafx.util.Constants;
+import edu.cnm.deepdive.codebreaker.client.controller.MainController;
+import edu.cnm.deepdive.codebreaker.client.util.Constants;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Application;

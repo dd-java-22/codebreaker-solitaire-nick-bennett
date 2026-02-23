@@ -14,8 +14,6 @@
  *  limitations under the License.
  */
 /**
- * Contains the JavaFX application entry points and UI-level types for the Codebreaker Solitaire
- * client. Classes in this package bootstrap the application and compose views, controllers, and
- * services.
+ * Adapters for UI components that require data transformation for display.
  */
-package edu.cnm.deepdive.codebreaker.javafx;
+package edu.cnm.deepdive.codebreaker.client.adapter;

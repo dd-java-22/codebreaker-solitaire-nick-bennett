@@ -27,7 +27,7 @@
 <GridPane
   xmlns="http://javafx.com/javafx"
   xmlns:fx="http://javafx.com/fxml"
-  fx:controller="edu.cnm.deepdive.codebreaker.javafx.controller.MainController"
+  fx:controller="edu.cnm.deepdive.codebreaker.client.controller.MainController"
   stylesheets="@../styles/styles.css">
 
   <columnConstraints>

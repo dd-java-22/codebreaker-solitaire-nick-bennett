@@ -14,6 +14,8 @@
  *  limitations under the License.
  */
 /**
- * Utility classes for the Codebreaker Solitaire client.
+ * Contains JavaFX controllers for the Codebreaker Solitaire client UI. Controllers coordinate
+ * user interactions and view updates, delegating game operations to the service and view-model
+ * layers.
  */
-package edu.cnm.deepdive.codebreaker.javafx.util;
+package edu.cnm.deepdive.codebreaker.client.controller;
