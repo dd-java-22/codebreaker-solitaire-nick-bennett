@@ -37,6 +37,7 @@
   </columnConstraints>
 
   <rowConstraints>
+    <RowConstraints vgrow="NEVER" minHeight="32"/>
     <RowConstraints vgrow="ALWAYS" minHeight="10"/>
     <RowConstraints vgrow="NEVER" minHeight="50"/>
     <RowConstraints vgrow="NEVER" minHeight="32"/>

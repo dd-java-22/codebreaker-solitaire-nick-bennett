@@ -55,14 +55,19 @@ public class MainController implements Stoppable {
 
   @FXML
   private ResourceBundle resources;
+
   @FXML
   private Button newGame;
+
   @FXML
   private ListView<Guess> guessHistory;
+
   @FXML
   private TilePane guessContainer;
+
   @FXML
   private Button send;
+
   @FXML
   private TilePane guessPalette;
 
@@ -159,7 +164,8 @@ public class MainController implements Stoppable {
   }
 
   private void updateSend() {
-    boolean sendDisabled = group
+    boolean sendDisabled = Boolean.TRUE.equals(game.getSolved())
+        || group
         .getToggles()
         .stream()
         .anyMatch((toggle) -> ((ToggleButton) toggle).getUserData() == null);
