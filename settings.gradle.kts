@@ -31,4 +31,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "codebreaker-solitaire"
-include(":api", ":client",":javafx")
+include(":api", ":client",":javafx", ":app")
