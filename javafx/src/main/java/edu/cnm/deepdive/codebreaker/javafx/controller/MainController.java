@@ -23,6 +23,7 @@ import edu.cnm.deepdive.codebreaker.javafx.util.Constants;
 import edu.cnm.deepdive.codebreaker.javafx.viewmodel.GameViewModel;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.IntStream;
 import javafx.application.Platform;
@@ -92,6 +93,11 @@ public class MainController implements Stoppable {
     startGame();
   }
 
+  /**
+   * Starts a new game by invoking the {@link GameViewModel#startGame(String, int)} method with the
+   * current pool and length settings. This method is typically invoked when the user clicks the
+   * "new game" button.
+   */
   @FXML
   protected void startGame() {
     viewModel.startGame(pool, length);
@@ -114,7 +120,7 @@ public class MainController implements Stoppable {
   }
 
   @Override
-  public void shutdown() {
+  public void stop() {
     viewModel.shutdown();
   }
 
@@ -143,9 +149,10 @@ public class MainController implements Stoppable {
   private void updateGuessHistory() {
     guessHistory.setCellFactory(new GuessAdapter(resources));
     guessHistory.getItems().clear();
+    List<Guess> guesses = game.getGuesses();
     //noinspection DataFlowIssue
-    guessHistory.getItems().addAll(game.getGuesses());
-    Platform.runLater(() -> guessHistory.scrollTo(game.getGuesses().size() - 1));
+    guessHistory.getItems().addAll(guesses);
+    Platform.runLater(() -> guessHistory.scrollTo(guesses.size() - 1));
   }
 
   private void buildPalette() {
@@ -155,7 +162,6 @@ public class MainController implements Stoppable {
         .codePoints()
         .mapToObj(this::buildPaletteItem)
         .forEach(children::add);
-//    guessPalette.setMaxWidth(Region.USE_PREF_SIZE);
   }
 
   private void buildGuess() {

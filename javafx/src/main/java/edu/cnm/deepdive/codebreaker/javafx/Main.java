@@ -55,7 +55,7 @@ public class Main extends Application {
 
   @Override
   public void stop() throws Exception {
-    controller.shutdown();
+    controller.stop();
     super.stop();
   }
 
