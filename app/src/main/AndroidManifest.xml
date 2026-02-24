@@ -1,0 +1,20 @@
+<manifest
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <application
+    android:label="@string/app_name"
+    android:name=".CodebreakerApplication"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme"
+    android:allowBackup="false"
+    tools:ignore="AllowBackup,DataExtractionRules">
+
+<!--
+    This is where the activities go.
+-->
+
+  </application>
+
+
+</manifest>
