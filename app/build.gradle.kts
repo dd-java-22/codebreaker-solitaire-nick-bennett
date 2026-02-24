@@ -28,7 +28,7 @@ plugins {
 
 android {
 
-    namespace = project["basePackageName"] as String?
+    namespace = project.property("basePackageName") as String?
     compileSdk = (project.property("targetSdk") as String).toInt()
 
     defaultConfig {
@@ -85,6 +85,8 @@ android {
 dependencies {
 
     // .jar-based libraries included in project
+    implementation(project(":api"))
+    implementation(project(":client"))
 
     // Basic Android components
     implementation(libs.app.compat)
@@ -111,23 +113,12 @@ dependencies {
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)
 
-    // Gson (Google JSON parser) library
-    implementation(libs.gson)
-
     // Google Sign-in library
     implementation(libs.play.auth)
-
-    // Retrofit (REST client) with ReactiveX & Gson integration
-    implementation(libs.retrofit.core)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.retrofit.adapter.rx.java)
 
     // Hilt dependency-injection library & annotation processor
     implementation(libs.hilt.android.core)
     annotationProcessor(libs.hilt.compiler)
-
-    // OkHttp logging dependency
-    implementation(libs.logging.interceptor)
 
     // Libraries for JVM-based testing.
     testImplementation(libs.junit.api)
@@ -157,7 +148,8 @@ dependencies {
 }
 
 roomDdl {
-    source.set(project.file("$projectDir/schemas/edu.cnm.deepdive.capstone.service.LocalDatabase/1.json"))
+    source.set(project.file(
+        "$projectDir/schemas/edu.cnm.deepdive.codebreaker.app.service.CodebreakerDatabase/1.json"))
     destination.set(project.file("$projectDir/../docs/sql/ddl.sql"))
 }
 
@@ -219,8 +211,7 @@ android.applicationVariants.configureEach {
             links(
                 "https://docs.oracle.com/en/java/javase/${libs.versions.java.get()}/docs/api/",
                 "https://javadoc.io/doc/com.google.dagger/dagger/${libs.versions.hilt.get()}/",
-                "https://javadoc.io/doc/com.google.dagger/hilt-android/latest/",
-                "https://reactivex.io/RxJava/3.x/javadoc/"
+                "https://javadoc.io/doc/com.google.dagger/hilt-android/latest/"
             )
             linksOffline("https://developer.android.com/reference", "$projectDir")
             addBooleanOption("html5", true)
