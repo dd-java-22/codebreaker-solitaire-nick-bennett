@@ -26,6 +26,7 @@ val javaVersion: String = libs.versions.java.get()
 application {
     mainModule = properties["mainModule"] as String
     mainClass = properties["mainClass"] as String
+    applicationName = properties["applicationName"] as String
 }
 
 javafx {

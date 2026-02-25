@@ -18,6 +18,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 plugins {
     java
     jacoco
+    kotlin("jvm").version(libs.versions.kotlin.get())
 }
 
 val javaVersion: String = libs.versions.java.get()
@@ -28,13 +29,24 @@ java {
     }
 }
 
+kotlin {
+    jvmToolchain(javaVersion.toInt())
+}
+
+sourceSets.main {
+    java.srcDirs("src/main/java", "src/main/kotlin")
+    kotlin.srcDirs("src/main/java", "src/main/kotlin")
+}
+
 dependencies {
     implementation(project(":api"))
+    implementation(kotlin("stdlib"))
     implementation(libs.gson)
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+    testImplementation(kotlin("test"))
     testImplementation(libs.junit.aggregator)
     testRuntimeOnly(libs.junit.engine)
     testRuntimeOnly(libs.junit.platform)
