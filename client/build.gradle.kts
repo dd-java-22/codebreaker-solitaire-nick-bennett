@@ -33,10 +33,10 @@ kotlin {
     jvmToolchain(javaVersion.toInt())
 }
 
-sourceSets.main {
-    java.srcDirs("src/main/java", "src/main/kotlin")
-    kotlin.srcDirs("src/main/java", "src/main/kotlin")
-}
+//sourceSets.main {
+//    java.srcDirs("src/main/java", "src/main/kotlin")
+//    kotlin.srcDirs("src/main/java", "src/main/kotlin")
+//}
 
 dependencies {
     implementation(project(":api"))
