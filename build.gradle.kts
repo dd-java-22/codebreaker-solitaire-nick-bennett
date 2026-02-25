@@ -14,8 +14,6 @@
  *  limitations under the License.
  */
 plugins {
-    application
-    jacoco
     alias(libs.plugins.openapi).apply(false)
     alias(libs.plugins.openjfx).apply(false)
 }
