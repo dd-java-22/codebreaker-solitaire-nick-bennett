@@ -1,34 +1,35 @@
 [versions]
 
 # Java and Kotlin compilers and standard libraries
-java = "25"
+java = "21"
 kotlin = "2.3.0"
 
 # Core Android plugins and libraries
-android-gradle = "8.12.0"
+android-gradle = "8.12.3"
 app-compat = "1.7.1"
-activity = "1.12.2"
+activity = "1.12.4"
 lifecycle = "2.10.0"
-navigation = "2.9.6"
+navigation = "2.9.7"
 constraint-layout = "2.2.1"
 recycler-view = "1.4.0"
 fragment = "1.8.9"
 preference = "1.2.1"
 view-pager = "1.1.0"
+desugar = "2.1.5"
 
 # Other standard and Google Android libraries
 room = "2.8.4"
 #noinspection NewerVersionAvailable
 hilt = "2.58"
 material = "1.13.0"
-play-services-auth = "21.5.0"
+play-services-auth = "21.5.1"
 
 # JavaFX plugins and libraries
 openjfx-plugin = "0.1.0"
-openjfx-library = "25.0.2"
+openjfx-library = "21.0.10"
 
 # Spring ecosystem plugins and libraries
-spring-boot = "4.0.2"
+spring-boot = "4.0.3"
 spring-dependency = "1.1.7"
 asciidoctor-convert = "4.0.5"
 
@@ -47,7 +48,8 @@ picasso = "2.8"
 
 # Google libraries
 gson = "2.13.2"
-dagger = "2.59"
+#noinspection NewerVersionAvailable
+dagger = "2.58"
 
 # Jakarta libraries
 jakarta-annotation = "3.0.0"
@@ -67,7 +69,7 @@ commons-rng = "1.6"
 commons-text = "1.15.0"
 
 # Other third-party libraries and plugins
-openapi = "7.19.0"
+openapi = "7.20.0"
 modularity = "2.0.0"
 badass-jlink = "3.2.1"
 shadow = "9.3.1"
@@ -76,20 +78,20 @@ jansi = "2.4.2"
 jline = "3.30.6"
 picocli-core = "4.7.7"
 picocli-jline3 = "4.7.7"
-jackson-databind = "3.0.4"
-jackson-yaml = "3.0.4"
-jackson-xml = "3.0.4"
-jackson-jsr310 = "2.20.1"
+jackson-databind = "3.1.0"
+jackson-yaml = "3.1.0"
+jackson-xml = "3.1.0"
+jackson-jsr310 = "2.21.1"
 json-schema-validator = "3.0.0"
-commonmark = "0.27.0"
+commonmark = "0.27.1"
 gradle-versions = "0.53.0"
 
 # Test plugin & library versions
-junit = "6.0.2"
-junit-platform = "6.0.2"
+junit = "6.0.3"
+junit-platform = "6.0.3"
 junit-plugin = "2.0.1"
 android-test-runner = "1.7.0"
-junit-android = "1.9.0"
+junit-android = "2.0.1"
 instant-task-executor = "1.0.0"
 espresso = "3.7.0"
 xmlunit = "2.11.0"
@@ -123,6 +125,9 @@ preference = { group = "androidx.preference", name = "preference", version.ref =
 
 # Material Design components
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# Desugaring library
+desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar" }
 
 # ReactiveX libraries
 rx-java = { group = "io.reactivex.rxjava3", name = "rxjava", version.ref = "rx-java" }

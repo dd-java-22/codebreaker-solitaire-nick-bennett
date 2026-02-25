@@ -15,8 +15,7 @@
  */
 import com.android.build.gradle.internal.tasks.factory.dependsOn
 import java.io.FileInputStream
-import java.util.Locale
-import java.util.Properties
+import java.util.*
 
 plugins {
     alias(libs.plugins.android.application)
@@ -70,6 +69,7 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.valueOf("VERSION_${libs.versions.java.get()}")
         targetCompatibility = JavaVersion.valueOf("VERSION_${libs.versions.java.get()}")
     }
@@ -87,6 +87,9 @@ dependencies {
     // .jar-based libraries included in project
     implementation(project(":api"))
     implementation(project(":client"))
+
+    // Desugaring for subset of JDK in Android
+    coreLibraryDesugaring(libs.desugar)
 
     // Basic Android components
     implementation(libs.app.compat)
