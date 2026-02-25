@@ -16,7 +16,6 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-    java
     jacoco
     kotlin("jvm").version(libs.versions.kotlin.get())
 }
@@ -32,11 +31,6 @@ java {
 kotlin {
     jvmToolchain(javaVersion.toInt())
 }
-
-//sourceSets.main {
-//    java.srcDirs("src/main/java", "src/main/kotlin")
-//    kotlin.srcDirs("src/main/java", "src/main/kotlin")
-//}
 
 dependencies {
     implementation(project(":api"))
