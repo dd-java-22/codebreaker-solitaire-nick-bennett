@@ -13,250 +13,241 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package edu.cnm.deepdive.codebreaker.client.service;
+package edu.cnm.deepdive.codebreaker.client.service
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import edu.cnm.deepdive.codebreaker.api.model.Game;
-import edu.cnm.deepdive.codebreaker.api.model.Guess;
-import edu.cnm.deepdive.codebreaker.api.service.CodebreakerApi;
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.OffsetDateTime;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import okhttp3.logging.HttpLoggingInterceptor.Level;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
+import edu.cnm.deepdive.codebreaker.api.model.Game
+import edu.cnm.deepdive.codebreaker.api.model.Guess
+import edu.cnm.deepdive.codebreaker.api.service.CodebreakerApi
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
+import java.time.OffsetDateTime
+import java.util.*
+import java.util.Map
+import java.util.concurrent.CompletableFuture
+import java.util.function.IntPredicate
+import java.util.function.Supplier
+import java.util.stream.Collectors
+import kotlin.collections.MutableMap
 
-@SuppressWarnings("NullableProblems")
-class CodebreakerServiceImpl implements CodebreakerService {
+internal object CodebreakerServiceImpl : CodebreakerService {
+    private val client: OkHttpClient
+    private val api: CodebreakerApi
 
-  private static final String PROPERTIES_FILE = "service.properties";
-  private static final String LOG_LEVEL_KEY = "logLevel";
-  private static final String BASE_URL_KEY = "baseUrl";
-  private static final int MIN_CODE_LENGTH = 1;
-  private static final int MAX_CODE_LENGTH = 20;
-  private static final int MIN_POOL_LENGTH = 1;
-  private static final int MAX_POOL_LENGTH = 255;
-
-  private static final Map<Integer, Supplier<Throwable>> CODES_TO_EXCEPTIONS = Map.ofEntries(
-      Map.entry(400, InvalidPayloadException::new),
-      Map.entry(404, ResourceNotFoundException::new),
-      Map.entry(409, GameSolvedException::new),
-      Map.entry(500, UnknownServiceException::new)
-  );
-
-  private final OkHttpClient client;
-  private final CodebreakerApi api;
-
-  private CodebreakerServiceImpl() {
-    Properties properties = loadProperties();
-    Gson gson = buildGson();
-    client = buildClient(properties);
-    api = buildApi(properties, gson, client);
-  }
-
-  @Override
-  public CompletableFuture<Game> startGame(Game game) {
-    return isValidGame(game)
-        ? buildStartGameFuture(game)
-        : CompletableFuture.failedFuture(new InvalidPayloadException());
-  }
-
-  @Override
-  public CompletableFuture<Game> getGame(String gameId) {
-    return buildGetGameFuture(gameId);
-  }
-
-  @Override
-  public CompletableFuture<Void> deleteGame(String gameId) {
-    return buildDeleteGameFuture(gameId);
-  }
-
-  @Override
-  public CompletableFuture<Guess> submitGuess(Game game, Guess guess) {
-    return isValidGuess(game, guess)
-        ? buildSubmitGuessFuture(game, guess)
-        : CompletableFuture.failedFuture(new InvalidPayloadException());
-  }
-
-  @Override
-  public CompletableFuture<Guess> getGuess(String gameId, String guessId) {
-    return buildGetGuessFuture(gameId, guessId);
-  }
-
-  @Override
-  public void shutdown() {
-    try (ExecutorService executor = client.dispatcher().executorService()) {
-      executor.shutdown();
-      client.connectionPool().evictAll();
-    }
-  }
-
-  static CodebreakerServiceImpl getInstance() {
-    return Holder.INSTANCE;
-  }
-
-  private static Properties loadProperties() {
-    Properties properties = new Properties();
-    try (InputStream input =
-        CodebreakerServiceImpl.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
-      properties.load(input);
-      return properties;
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  private static Gson buildGson() {
-    return new GsonBuilder()
-        .registerTypeAdapter(OffsetDateTime.class, new OffsetDateTimeAdapter())
-        .create();
-  }
-
-  private static OkHttpClient buildClient(Properties properties) {
-    Interceptor interceptor = new HttpLoggingInterceptor()
-        .setLevel(Level.valueOf(properties.getProperty(LOG_LEVEL_KEY).toUpperCase()));
-    return new OkHttpClient.Builder()
-        .addInterceptor(interceptor)
-        .build();
-  }
-
-  private static CodebreakerApi buildApi(Properties properties, Gson gson, OkHttpClient client) {
-    return new Retrofit.Builder()
-        .baseUrl(properties.getProperty(BASE_URL_KEY))
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .client(client)
-        .build()
-        .create(CodebreakerApi.class);
-  }
-
-  private static boolean isValidGame(Game game) {
-    int codeLength = game.getLength();
-    String pool = game.getPool();
-    int poolLength = pool.length();
-    return codeLength >= MIN_CODE_LENGTH
-        && codeLength <= MAX_CODE_LENGTH
-        && poolLength >= MIN_POOL_LENGTH
-        && poolLength <= MAX_POOL_LENGTH
-        && pool.codePoints()
-        .allMatch((codePoint) ->
-            Character.isDefined(codePoint)
-                && !Character.isWhitespace(codePoint)
-                && !Character.isISOControl(codePoint));
-  }
-
-  private CompletableFuture<Game> buildStartGameFuture(Game game) {
-    CompletableFuture<Game> future = new CompletableFuture<>();
-    api.startGame(game).enqueue(new ServiceCallback<>(future));
-    return future;
-  }
-
-  private CompletableFuture<Game> buildGetGameFuture(String gameId) {
-    CompletableFuture<Game> future = new CompletableFuture<>();
-    api.getGame(gameId).enqueue(new ServiceCallback<>(future));
-    return future;
-  }
-
-  private CompletableFuture<Void> buildDeleteGameFuture(String gameId) {
-    CompletableFuture<Void> future = new CompletableFuture<>();
-    api.deleteGame(gameId).enqueue(new ServiceCallback<>(future));
-    return future;
-  }
-
-  private static boolean isValidGuess(Game game, Guess guess) {
-    boolean valid = true;
-    if (guess.getText().length() != game.getLength()) {
-      valid = false;
-    } else {
-      Set<Integer> poolCodePoints = game
-          .getPool()
-          .codePoints()
-          .boxed()
-          .collect(Collectors.toSet());
-      valid = guess
-          .getText()
-          .codePoints()
-          .allMatch(poolCodePoints::contains);
-    }
-    return valid;
-  }
-
-  private CompletableFuture<Guess> buildSubmitGuessFuture(Game game, Guess guess) {
-    CompletableFuture<Guess> future = new CompletableFuture<>();
-    api.submitGuess(game.getId(), guess).enqueue(new ServiceCallback<>(future));
-    return future;
-  }
-
-  private CompletableFuture<Guess> buildGetGuessFuture(String gameId, String guessId) {
-    CompletableFuture<Guess> future = new CompletableFuture<>();
-    api.getGuess(gameId, guessId).enqueue(new ServiceCallback<>(future));
-    return future;
-  }
-
-  private static class OffsetDateTimeAdapter extends TypeAdapter<OffsetDateTime> {
-
-    @Override
-    public void write(JsonWriter jsonWriter, OffsetDateTime offsetDateTime) throws IOException {
-      jsonWriter.jsonValue(offsetDateTime != null ? offsetDateTime.toString() : null);
+    init {
+        val properties = loadProperties()
+        val gson = buildGson()
+        client = buildClient(properties)
+        api = buildApi(properties, gson, client)
     }
 
-    @Override
-    public OffsetDateTime read(JsonReader jsonReader) throws IOException {
-      return OffsetDateTime.parse(jsonReader.nextString());
+    override fun startGame(game: Game): CompletableFuture<Game> {
+        return if (isValidGame(game))
+            buildStartGameFuture(game)
+        else
+            CompletableFuture.failedFuture(InvalidPayloadException())
     }
 
-  }
-
-  private static class ServiceCallback<T> implements Callback<T> {
-
-    private final CompletableFuture<T> future;
-
-    private ServiceCallback(CompletableFuture<T> future) {
-      this.future = future;
+    override fun getGame(gameId: String): CompletableFuture<Game> {
+        return buildGetGameFuture(gameId)
     }
 
-    @Override
-    public void onResponse(Call<T> call, Response<T> response) {
-      CompletableFuture<T> future = future();
-      if (response.isSuccessful()) {
-        future.complete(response.body());
-      } else {
-        future.completeExceptionally(
-            CODES_TO_EXCEPTIONS.getOrDefault(response.code(), UnknownServiceException::new).get());
-      }
+    override fun deleteGame(gameId: String): CompletableFuture<Void?> {
+        return buildDeleteGameFuture(gameId)
     }
 
-    @Override
-    public void onFailure(Call<T> call, Throwable throwable) {
-      future.completeExceptionally(throwable);
+    override fun submitGuess(game: Game, guess: Guess): CompletableFuture<Guess> {
+        return if (isValidGuess(game, guess))
+            buildSubmitGuessFuture(game, guess)
+        else
+            CompletableFuture.failedFuture(InvalidPayloadException())
     }
 
-    protected CompletableFuture<T> future() {
-      return future;
+    override fun getGuess(gameId: String, guessId: String): CompletableFuture<Guess> {
+        return buildGetGuessFuture(gameId, guessId)
     }
 
-  }
+    override fun shutdown() {
+        client.dispatcher.executorService.use { executor ->
+            executor.shutdown()
+            client.connectionPool.evictAll()
+        }
+    }
 
-  private static class Holder {
+    private fun buildStartGameFuture(game: Game): CompletableFuture<Game> {
+        return CompletableFuture<Game>().apply {
+            api.startGame(game).enqueue(ServiceCallback<Game>(this))
+        }
+    }
 
-    static final CodebreakerServiceImpl INSTANCE = new CodebreakerServiceImpl();
+    private fun buildGetGameFuture(gameId: String): CompletableFuture<Game> {
+        return CompletableFuture<Game>().apply {
+            api.getGame(gameId).enqueue(ServiceCallback<Game>(this))
+        }
+    }
 
-  }
+    private fun buildDeleteGameFuture(gameId: String): CompletableFuture<Void?> {
+        return CompletableFuture<Void?>().apply {
+            api.deleteGame(gameId).enqueue(ServiceCallback<Void?>(this))
+        }
+    }
 
+    private fun buildSubmitGuessFuture(game: Game, guess: Guess): CompletableFuture<Guess> {
+        return CompletableFuture<Guess>().apply {
+            api.submitGuess(game.getId(), guess).enqueue(ServiceCallback<Guess?>(this))
+        }
+    }
+
+    private fun buildGetGuessFuture(gameId: String, guessId: String): CompletableFuture<Guess> {
+       return CompletableFuture<Guess>().apply {
+           api.getGuess(gameId, guessId).enqueue(ServiceCallback<Guess?>(this))
+       }
+    }
+
+    private class OffsetDateTimeAdapter : TypeAdapter<OffsetDateTime?>() {
+        @Throws(IOException::class)
+        override fun write(jsonWriter: JsonWriter, offsetDateTime: OffsetDateTime?) {
+            jsonWriter.jsonValue(if (offsetDateTime != null) offsetDateTime.toString() else null)
+        }
+
+        @Throws(IOException::class)
+        override fun read(jsonReader: JsonReader): OffsetDateTime {
+            return OffsetDateTime.parse(jsonReader.nextString())
+        }
+    }
+
+    private class ServiceCallback<T>(private val future: CompletableFuture<T?>) : Callback<T?> {
+        override fun onResponse(call: Call<T?>, response: Response<T?>) {
+            val future = future()
+            if (response.isSuccessful()) {
+                future.complete(response.body())
+            } else {
+                future.completeExceptionally(
+                    CODES_TO_EXCEPTIONS.getOrDefault(
+                        response.code(),
+                        java.util.function.Supplier { UnknownServiceException() })!!.get()
+                )
+            }
+        }
+
+        override fun onFailure(call: Call<T?>, throwable: Throwable) {
+            future.completeExceptionally(throwable)
+        }
+
+        protected fun future(): CompletableFuture<T?> {
+            return future
+        }
+    }
+
+    private object Holder {
+        val instance: CodebreakerServiceImpl = CodebreakerServiceImpl()
+            get() = Holder.field
+    }
+
+    companion object {
+        private const val PROPERTIES_FILE = "service.properties"
+        private const val LOG_LEVEL_KEY = "logLevel"
+        private const val BASE_URL_KEY = "baseUrl"
+        private const val MIN_CODE_LENGTH = 1
+        private const val MAX_CODE_LENGTH = 20
+        private const val MIN_POOL_LENGTH = 1
+        private const val MAX_POOL_LENGTH = 255
+
+        private val CODES_TO_EXCEPTIONS: MutableMap<Int?, Supplier<Throwable?>?> =
+            Map.ofEntries<Int?, Supplier<Throwable?>?>(
+                Map.entry<Int?, Supplier<Throwable?>?>(400, Supplier { InvalidPayloadException() }),
+                Map.entry<Int?, Supplier<Throwable?>?>(
+                    404,
+                    Supplier { ResourceNotFoundException() }),
+                Map.entry<Int?, Supplier<Throwable?>?>(409, Supplier { GameSolvedException() }),
+                Map.entry<Int?, Supplier<Throwable?>?>(500, Supplier { UnknownServiceException() })
+            )
+
+        private fun loadProperties(): Properties {
+            val properties = Properties()
+            try {
+                CodebreakerServiceImpl::class.java.getClassLoader().getResourceAsStream(
+                    PROPERTIES_FILE
+                ).use { input ->
+                    properties.load(input)
+                    return properties
+                }
+            } catch (e: IOException) {
+                throw RuntimeException(e)
+            }
+        }
+
+        private fun buildGson(): Gson {
+            return GsonBuilder()
+                .registerTypeAdapter(OffsetDateTime::class.java, OffsetDateTimeAdapter())
+                .create()
+        }
+
+        private fun buildClient(properties: Properties): OkHttpClient {
+            val interceptor: Interceptor = HttpLoggingInterceptor()
+                .setLevel(
+                    valueOf.valueOf(
+                        properties.getProperty(LOG_LEVEL_KEY).uppercase(Locale.getDefault())
+                    )
+                )
+            return OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .build()
+        }
+
+        private fun buildApi(
+            properties: Properties,
+            gson: Gson,
+            client: OkHttpClient
+        ): CodebreakerApi {
+            return Retrofit.Builder()
+                .baseUrl(properties.getProperty(BASE_URL_KEY))
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(client)
+                .build()
+                .create<CodebreakerApi>(CodebreakerApi::class.java)
+        }
+
+        private fun isValidGame(game: Game): Boolean {
+            val codeLength = game.getLength()
+            val pool = game.getPool()
+            val poolLength = pool.length
+            return codeLength >= MIN_CODE_LENGTH && codeLength <= MAX_CODE_LENGTH && poolLength >= MIN_POOL_LENGTH && poolLength <= MAX_POOL_LENGTH && pool.codePoints()
+                .allMatch(IntPredicate { codePoint: Int ->
+                    Character.isDefined(codePoint)
+                            && !Character.isWhitespace(codePoint) && !Character.isISOControl(
+                        codePoint
+                    )
+                })
+        }
+
+        private fun isValidGuess(game: Game, guess: Guess): Boolean {
+            var valid = true
+            if (guess.getText().length != game.getLength()) {
+                valid = false
+            } else {
+                val poolCodePoints = game
+                    .getPool()
+                    .codePoints()
+                    .boxed()
+                    .collect(Collectors.toSet())
+                valid = guess
+                    .getText()
+                    .codePoints()
+                    .allMatch(IntPredicate { o: Int -> poolCodePoints.contains(o) })
+            }
+            return valid
+        }
+    }
 }
