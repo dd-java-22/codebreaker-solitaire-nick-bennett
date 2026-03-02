@@ -35,7 +35,6 @@ import java.io.IOException
 import java.time.OffsetDateTime
 import java.util.*
 import java.util.concurrent.CompletableFuture
-import java.util.function.IntPredicate
 import java.util.function.Supplier
 import java.util.stream.Collectors
 
@@ -85,31 +84,31 @@ internal object CodebreakerServiceImpl : CodebreakerService {
 
     private fun buildStartGameFuture(game: Game): CompletableFuture<Game> {
         return CompletableFuture<Game>().apply {
-            api.startGame(game).enqueue(ServiceCallback<Game>(this))
+            api.startGame(game).enqueue(ServiceCallback(this))
         }
     }
 
     private fun buildGetGameFuture(gameId: String): CompletableFuture<Game> {
         return CompletableFuture<Game>().apply {
-            api.getGame(gameId).enqueue(ServiceCallback<Game>(this))
+            api.getGame(gameId).enqueue(ServiceCallback(this))
         }
     }
 
     private fun buildDeleteGameFuture(gameId: String): CompletableFuture<Void?> {
         return CompletableFuture<Void?>().apply {
-            api.deleteGame(gameId).enqueue(ServiceCallback<Void?>(this))
+            api.deleteGame(gameId).enqueue(ServiceCallback(this))
         }
     }
 
     private fun buildSubmitGuessFuture(game: Game, guess: Guess): CompletableFuture<Guess> {
         return CompletableFuture<Guess>().apply {
-            api.submitGuess(game.getId(), guess).enqueue(ServiceCallback<Guess>(this))
+            api.submitGuess(game.id, guess).enqueue(ServiceCallback(this))
         }
     }
 
     private fun buildGetGuessFuture(gameId: String, guessId: String): CompletableFuture<Guess> {
         return CompletableFuture<Guess>().apply {
-            api.getGuess(gameId, guessId).enqueue(ServiceCallback<Guess>(this))
+            api.getGuess(gameId, guessId).enqueue(ServiceCallback(this))
         }
     }
 
@@ -202,42 +201,45 @@ private fun buildClient(properties: Properties): OkHttpClient {
         .build()
 }
 
-private fun buildApi(properties: Properties, gson: Gson, client: OkHttpClient): CodebreakerApi {
+private fun buildApi(
+    properties: Properties,
+    gson: Gson,
+    @Suppress("SameParameterValue") client: OkHttpClient
+): CodebreakerApi {
     return Retrofit.Builder()
         .baseUrl(properties.getProperty(BASE_URL_KEY))
         .addConverterFactory(GsonConverterFactory.create(gson))
         .client(client)
         .build()
-        .create<CodebreakerApi>(CodebreakerApi::class.java)
+        .create(CodebreakerApi::class.java)
 }
 
 private fun isValidGame(game: Game): Boolean {
-    val codeLength = game.getLength()
-    val pool = game.getPool()
+    val codeLength = game.length
+    val pool = game.pool
     val poolLength = pool.length
-    return codeLength >= MIN_CODE_LENGTH && codeLength <= MAX_CODE_LENGTH && poolLength >= MIN_POOL_LENGTH && poolLength <= MAX_POOL_LENGTH && pool.codePoints()
-        .allMatch(IntPredicate { codePoint: Int ->
-            Character.isDefined(codePoint)
-                    && !Character.isWhitespace(codePoint) && !Character.isISOControl(
-                codePoint
-            )
-        })
+    return codeLength in MIN_CODE_LENGTH..MAX_CODE_LENGTH
+            && poolLength in MIN_POOL_LENGTH..MAX_POOL_LENGTH
+            && pool.codePoints()
+        .allMatch { codePoint: Int -> Character.isDefined(codePoint)
+                    && !Character.isWhitespace(codePoint)
+                && !Character.isISOControl(codePoint)
+        }
 }
 
 private fun isValidGuess(game: Game, guess: Guess): Boolean {
-    var valid = true
-    if (guess.getText().length != game.getLength()) {
+    var valid: Boolean
+    if (guess.text.length != game.length) {
         valid = false
     } else {
-        val poolCodePoints = game
-            .getPool()
+        val poolCodePoints = game.pool
             .codePoints()
             .boxed()
             .collect(Collectors.toSet())
         valid = guess
-            .getText()
+            .text
             .codePoints()
-            .allMatch(IntPredicate { o: Int -> poolCodePoints.contains(o) })
+            .allMatch { poolCodePoints.contains(it) }
     }
     return valid
 }

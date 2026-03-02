@@ -68,6 +68,6 @@ interface CodebreakerService {
              *
              * @return The singleton instance of the `CodebreakerService` interface.
              */
-            get() = CodebreakerServiceImpl.getInstance()
+            get() = CodebreakerServiceImpl
     }
 }
