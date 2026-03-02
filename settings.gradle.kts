@@ -24,9 +24,19 @@ pluginManagement {
 @Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
+
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("https://ddc-java.github.io/version-catalogs/")
+        }
+    }
+
+    versionCatalogs {
+        create("libs") {
+            from("edu.cnm.deepdive:catalog-jdk21:22.0.1")
+        }
     }
 }
 
