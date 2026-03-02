@@ -27,7 +27,7 @@ public class GameViewModel extends ViewModel {
     this.service = service;
     game = new MutableLiveData<>();
     guess = new MutableLiveData<>();
-    solved = Transformations.map(game, Game::getSolved);
+    solved = Transformations.distinctUntilChanged(Transformations.map(game, Game::getSolved));
     error = new MutableLiveData<>();
   }
 
@@ -41,23 +41,54 @@ public class GameViewModel extends ViewModel {
   }
 
   public void getGame(String gameId) {
-    throw new UnsupportedOperationException("Not yet implemented");
+    service
+        .getGame(gameId)
+        .thenAccept(this.game::postValue)
+        .exceptionally(this::postThrowable);
   }
 
   public void deleteGame(String gameId) {
-    throw new UnsupportedOperationException("Not yet implemented");
+    service
+        .deleteGame(gameId)
+        .exceptionally(this::postThrowable);
   }
 
   public void deleteGame() {
-    throw new UnsupportedOperationException("Not yet implemented");
+    Game game = this.game.getValue();
+    this.game.setValue(null);
+    if (game != null) {
+      service
+          .deleteGame(game.getId())
+          .exceptionally(this::postThrowable);
+    }
   }
 
+  @SuppressWarnings("DataFlowIssue")
   public void submitGuess(String text) {
-    throw new UnsupportedOperationException("Not yet implemented");
+    Guess guess = new Guess().text(text);
+    Game game = this.game.getValue();
+    service
+        .submitGuess(game, guess)
+        .thenApply((g) -> {
+          this.guess.postValue(g);
+          return g;
+        })
+        .thenAccept((g) -> {
+          if (Boolean.TRUE.equals(g.getSolution())) {
+            getGame(game.getId());
+          } else {
+            game.getGuesses().add(g);
+            this.game.postValue(game);
+          }
+        });
   }
 
   public void getGuess(String guessId) {
-    throw new UnsupportedOperationException("Not yet implemented");
+    //noinspection DataFlowIssue
+    service
+        .getGuess(game.getValue().getId(), guessId)
+        .thenAccept(guess::postValue)
+        .exceptionally(this::postThrowable);
   }
 
   public LiveData<Game> getGame() {
