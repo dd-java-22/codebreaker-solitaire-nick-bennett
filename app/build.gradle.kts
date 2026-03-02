@@ -80,6 +80,13 @@ android {
         // dataBinding = true
     }
 
+    packaging {
+        resources {
+            excludes += "/META-INF/NOTICE.md"
+            excludes += "/META-INF/LICENSE.md"
+        }
+    }
+
 }
 
 dependencies {
