@@ -9,10 +9,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import dagger.hilt.android.AndroidEntryPoint;
 import edu.cnm.deepdive.codebreaker.app.databinding.FragmentGameBinding;
+import edu.cnm.deepdive.codebreaker.app.util.SymbolMap;
+import jakarta.inject.Inject;
 
 @AndroidEntryPoint
 public class GameFragment extends Fragment {
 
+  @Inject
+  SymbolMap symbolMap;
+  
   private FragmentGameBinding binding;
 
   @Nullable
