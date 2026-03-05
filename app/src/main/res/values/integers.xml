@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <integer-array name="color_drawables">
+  <array name="color_drawables">
     <item>@drawable/symbol</item>
     <item>@drawable/symbol</item>
     <item>@drawable/symbol</item>
@@ -8,5 +8,5 @@
     <item>@drawable/symbol</item>
     <item>@drawable/symbol</item>
     <item>@drawable/symbol</item>
-  </integer-array>
+  </array>
 </resources>

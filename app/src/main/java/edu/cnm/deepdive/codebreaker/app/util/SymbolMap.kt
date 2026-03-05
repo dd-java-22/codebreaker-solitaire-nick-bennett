@@ -62,8 +62,13 @@ class SymbolMap @Inject constructor(
     }
 
     private fun getDrawables(res: Resources): List<Drawable> {
-        return res.getIntArray(R.array.color_drawables).map { id ->
-            ContextCompat.getDrawable(context, id) as Drawable
+        val typedArray = res.obtainTypedArray(R.array.color_drawables)
+        return try {
+            List(typedArray.length()) { i ->
+                ContextCompat.getDrawable(context, typedArray.getResourceId(i, 0)) as Drawable
+            }
+        } finally {
+            typedArray.recycle()
         }
     }
 
