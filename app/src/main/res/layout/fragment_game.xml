@@ -31,7 +31,7 @@
         <!-- TODO: Add toggle buttons by 9 March. -->
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
+    <Button
       android:id="@+id/submit"
       style="@style/Widget.Material3.Button.IconButton"
       android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
       android:contentDescription="@string/submit_guess"
       app:icon="@drawable/ic_send"
       />
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:id="@+id/palette"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/color_red"
                 style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="0dp"
@@ -64,7 +64,7 @@
                 android:text="@string/red"
                 app:backgroundTint="@color/red"/>
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/color_orange"
                 style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="0dp"
@@ -73,7 +73,7 @@
                 android:text="@string/orange"
                 app:backgroundTint="@color/orange"/>
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/color_yellow"
                 style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="0dp"
@@ -82,7 +82,7 @@
                 android:text="@string/yellow"
                 app:backgroundTint="@color/yellow"/>
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/color_green"
                 style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="0dp"
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/color_blue"
                 style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="0dp"
@@ -107,7 +107,7 @@
                 android:text="@string/blue"
                 app:backgroundTint="@color/blue"/>
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/color_indigo"
                 style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="0dp"
@@ -116,7 +116,7 @@
                 android:text="@string/indigo"
                 app:backgroundTint="@color/indigo"/>
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/color_violet"
                 style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="0dp"
@@ -132,6 +132,6 @@
 
         </LinearLayout>
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
