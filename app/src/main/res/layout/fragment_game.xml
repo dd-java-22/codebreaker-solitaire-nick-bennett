@@ -11,41 +11,36 @@
         android:id="@+id/guesses"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/submit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@android:layout/simple_list_item_1"/>
+        tools:listitem="@android:layout/simple_list_item_1">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+      android:id="@+id/guess_controls"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintBottom_toTopOf="@id/palette"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toStartOf="@id/submit">
+        <!-- TODO: Add toggle buttons by 9 March. -->
+    </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/submit"
-        style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/submit_guess"
-        app:icon="@drawable/ic_send"
-        app:layout_constraintBottom_toTopOf="@id/palette"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <HorizontalScrollView
-        android:id="@+id/guess_scroller"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/submit"
-        app:layout_constraintBottom_toBottomOf="@id/submit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/submit">
-
-        <LinearLayout
-            android:id="@+id/guess_controls"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <!-- Toggle buttons will be added here -->
-        </LinearLayout>
-
-    </HorizontalScrollView>
-
+      android:id="@+id/submit"
+      style="@style/Widget.Material3.Button.IconButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toTopOf="@id/palette"
+      android:contentDescription="@string/submit_guess"
+      app:icon="@drawable/ic_send"
+      />
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/palette"
         android:layout_width="0dp"
