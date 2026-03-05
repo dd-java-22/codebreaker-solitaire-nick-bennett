@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-plugins {
-    alias(libs.plugins.openapi).apply(false)
-    alias(libs.plugins.openjfx).apply(false)
-}
+/**
+ * Adapters for UI components that require data transformation for display.
+ */
+package edu.cnm.deepdive.codebreaker.javafx.adapter;

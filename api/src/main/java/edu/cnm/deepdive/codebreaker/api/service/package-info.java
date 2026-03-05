@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-plugins {
-    alias(libs.plugins.openapi).apply(false)
-    alias(libs.plugins.openjfx).apply(false)
-}
+/**
+ * Defines the Retrofit service interfaces for the Codebreaker Solitaire API.
+ */
+package edu.cnm.deepdive.codebreaker.api.service;

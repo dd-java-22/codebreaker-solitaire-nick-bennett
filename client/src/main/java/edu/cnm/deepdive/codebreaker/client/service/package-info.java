@@ -13,7 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-plugins {
-    alias(libs.plugins.openapi).apply(false)
-    alias(libs.plugins.openjfx).apply(false)
-}
+/**
+ * Provides the client-side service API for interacting with the Codebreaker Solitaire REST
+ * service. Implementations in this package handle HTTP requests/responses via Retrofit and map
+ * them to domain models and exceptions suitable for use by higher-level clients (e.g., JavaFX UI).
+ */
+package edu.cnm.deepdive.codebreaker.client.service;

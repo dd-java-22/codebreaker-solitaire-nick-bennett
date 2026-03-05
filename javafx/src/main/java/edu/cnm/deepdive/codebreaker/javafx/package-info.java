@@ -13,7 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-plugins {
-    alias(libs.plugins.openapi).apply(false)
-    alias(libs.plugins.openjfx).apply(false)
-}
+/**
+ * Contains the JavaFX application entry points and UI-level types for the Codebreaker Solitaire
+ * client. Classes in this package bootstrap the application and compose views, controllers, and
+ * services.
+ */
+package edu.cnm.deepdive.codebreaker.javafx;

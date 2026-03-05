@@ -13,7 +13,23 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-plugins {
-    alias(libs.plugins.openapi).apply(false)
-    alias(libs.plugins.openjfx).apply(false)
+
+/**
+ * Defines the service and data model interfaces for the Codebreaker Solitaire API.
+ */
+module edu.cnm.deepdive.codebreaker.api {
+
+  requires kotlin.stdlib;
+
+  requires retrofit2;
+  requires com.google.gson;
+  requires jakarta.annotation;
+  requires jakarta.validation;
+
+  exports edu.cnm.deepdive.codebreaker.api.model;
+  exports edu.cnm.deepdive.codebreaker.api.service;
+
+  opens edu.cnm.deepdive.codebreaker.api.model to com.google.gson, jakarta.validation, jakarta.annotation;
+  opens edu.cnm.deepdive.codebreaker.api.service to retrofit2;
+
 }

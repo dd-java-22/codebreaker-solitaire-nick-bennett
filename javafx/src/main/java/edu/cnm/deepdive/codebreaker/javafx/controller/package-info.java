@@ -13,7 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-plugins {
-    alias(libs.plugins.openapi).apply(false)
-    alias(libs.plugins.openjfx).apply(false)
-}
+/**
+ * Contains JavaFX controllers for the Codebreaker Solitaire client UI. Controllers coordinate
+ * user interactions and view updates, delegating game operations to the service and view-model
+ * layers.
+ */
+package edu.cnm.deepdive.codebreaker.javafx.controller;

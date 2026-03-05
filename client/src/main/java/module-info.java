@@ -13,7 +13,19 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-plugins {
-    alias(libs.plugins.openapi).apply(false)
-    alias(libs.plugins.openjfx).apply(false)
+
+/**
+ * Provides a client implementation for interacting with the Codebreaker Solitaire service.
+ */
+module edu.cnm.deepdive.codebreaker.client {
+
+  requires okhttp3;
+  requires okhttp3.logging;
+  requires retrofit2;
+  requires retrofit2.converter.gson;
+  requires com.google.gson;
+  requires edu.cnm.deepdive.codebreaker.api;
+
+  exports edu.cnm.deepdive.codebreaker.client.service;
+
 }

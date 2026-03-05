@@ -13,7 +13,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-plugins {
-    alias(libs.plugins.openapi).apply(false)
-    alias(libs.plugins.openjfx).apply(false)
+
+/**
+ * Implements a JavaFX-based user interface for the Codebreaker Solitaire client.
+ */
+module edu.cnm.deepdive.codebreaker.javafx {
+
+  requires javafx.controls;
+  requires javafx.fxml;
+  requires edu.cnm.deepdive.codebreaker.api;
+  requires edu.cnm.deepdive.codebreaker.client;
+
+  exports edu.cnm.deepdive.codebreaker.javafx to javafx.graphics;
+
+  opens edu.cnm.deepdive.codebreaker.javafx to javafx.fxml;
+  opens edu.cnm.deepdive.codebreaker.javafx.controller to javafx.fxml;
+  opens edu.cnm.deepdive.codebreaker.javafx.adapter to javafx.fxml;
+
 }

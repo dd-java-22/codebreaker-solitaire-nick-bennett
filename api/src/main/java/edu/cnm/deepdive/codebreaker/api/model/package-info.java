@@ -13,7 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-plugins {
-    alias(libs.plugins.openapi).apply(false)
-    alias(libs.plugins.openjfx).apply(false)
-}
+/**
+ * Provides the data model classes for the Codebreaker Solitaire API.
+ * These classes are used for serializing and deserializing data exchanged with the service.
+ */
+package edu.cnm.deepdive.codebreaker.api.model;

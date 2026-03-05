@@ -13,7 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-plugins {
-    alias(libs.plugins.openapi).apply(false)
-    alias(libs.plugins.openjfx).apply(false)
-}
+/**
+ * Defines view-model classes that expose observable game state and operations to the JavaFX UI
+ * for the Codebreaker Solitaire client.
+ */
+package edu.cnm.deepdive.codebreaker.javafx.viewmodel;

@@ -13,7 +13,24 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-plugins {
-    alias(libs.plugins.openapi).apply(false)
-    alias(libs.plugins.openjfx).apply(false)
+package edu.cnm.deepdive.codebreaker.javafx.util;
+
+/**
+ * Constants used in the Codebreaker Solitaire client.
+ */
+public final class Constants {
+
+  /**
+   * Base name of primary game configuration resource bundle.
+   */
+  public static final String BUNDLE_BASE_NAME = "bundles/game";
+
+  /**
+   * Resource bundle key for the game pool.
+   */
+  public static final String POOL_KEY = "pool";
+
+  private Constants() {
+  }
+
 }
