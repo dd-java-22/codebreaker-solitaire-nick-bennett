@@ -7,4 +7,15 @@
   <color name="blue">#FF0000FF</color>
   <color name="indigo">#FF4B0082</color>
   <color name="violet">#FFEE82EE</color>
+
+  <array name="color_values">
+      <item>@color/red</item>
+      <item>@color/orange</item>
+      <item>@color/yellow</item>
+      <item>@color/green</item>
+      <item>@color/blue</item>
+      <item>@color/indigo</item>
+      <item>@color/violet</item>
+  </array>
+
 </resources>
