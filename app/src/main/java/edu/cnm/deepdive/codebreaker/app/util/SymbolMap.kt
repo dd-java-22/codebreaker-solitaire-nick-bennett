@@ -14,6 +14,7 @@ class SymbolMap @Inject constructor(
 ) {
 
     private val symbols: Map<Int, SymbolAttributes>
+    private val keyList: List<Int>
 
     init {
         val resources = context.resources
@@ -22,15 +23,16 @@ class SymbolMap @Inject constructor(
         val values = getColorValues(resources)
         val drawables = getDrawables(resources)
 
-        symbols = keys.indices.associate {
-            keys[it].codePointAt(0) to SymbolAttributes(values[it], names[it], drawables[it])
+        keyList = keys.map { it.codePointAt(0) }
+        symbols = keyList.indices.associate { i ->
+            keyList[i] to SymbolAttributes(values[i], names[i], drawables[i])
         }
     }
 
     /**
-     * Returns an unmodifiable list of symbol key codepoints.
+     * Returns an unmodifiable list of symbol key codepoints in resource order.
      */
-    fun getKeys(): List<Int> = symbols.keys.toList()
+    fun getKeys(): List<Int> = keyList
 
     /**
      * Returns the Int color value associated with the given key codepoint.
@@ -61,7 +63,7 @@ class SymbolMap @Inject constructor(
 
     private fun getDrawables(res: Resources): List<Drawable> {
         return res.getIntArray(R.array.color_drawables).map { id ->
-            ContextCompat.getDrawable(context, id)!!
+            ContextCompat.getDrawable(context, id) as Drawable
         }
     }
 
