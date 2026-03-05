@@ -1,6 +1,7 @@
 package edu.cnm.deepdive.codebreaker.app.util
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
@@ -15,30 +16,30 @@ class SymbolMap @Inject constructor(
     private val symbols: Map<Int, SymbolAttributes>
 
     init {
-        val names = context.resources.getStringArray(R.array.color_names)
-        val valuesTyped = context.resources.obtainTypedArray(R.array.color_values)
-        val values = mutableListOf<Int>()
-        for (i in 0 until valuesTyped.length()) {
-            val color = valuesTyped.getColor(i, Color.TRANSPARENT)
-            values.add(color)
+        val resources = context.resources
+        val names = resources.getStringArray(R.array.color_names)
+        val keys = resources.getStringArray(R.array.color_keys)
+        val values = getColorValues(resources)
+        val drawables = getDrawables(resources)
+
+        symbols = keys.indices.associate { i ->
+            keys[i].codePointAt(0) to SymbolAttributes(values[i], names[i], drawables[i])
         }
-        valuesTyped.recycle()
-        val keys = context.resources.getStringArray(R.array.color_keys)
-        val drawableIds = context.resources.getIntArray(R.array.color_drawables)
-        val drawables = mutableListOf<Drawable>()
-        for (i in 0 until drawableIds.size) {
-            val drawable = ContextCompat.getDrawable(context, drawableIds[i]) as Drawable
-            drawables.add(drawable)
+    }
+
+    private fun getColorValues(res: Resources): List<Int> {
+        val typedArray = res.obtainTypedArray(R.array.color_values)
+        return try {
+            List(typedArray.length()) { i -> typedArray.getColor(i, Color.TRANSPARENT) }
+        } finally {
+            typedArray.recycle()
         }
-        symbols = keys
-            .indices
-            .associate { i ->
-                val key = keys[i]
-                val name = names[i]
-                val value = values[i]
-                val drawable = drawables[i]
-                key.codePointAt(0) to SymbolAttributes(value, name, drawable)
-            }
+    }
+
+    private fun getDrawables(res: Resources): List<Drawable> {
+        return res.getIntArray(R.array.color_drawables).map { id ->
+            ContextCompat.getDrawable(context, id)!!
+        }
     }
 
     private data class SymbolAttributes(
