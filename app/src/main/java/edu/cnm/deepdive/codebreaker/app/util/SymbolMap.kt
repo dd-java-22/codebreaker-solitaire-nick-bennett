@@ -22,10 +22,33 @@ class SymbolMap @Inject constructor(
         val values = getColorValues(resources)
         val drawables = getDrawables(resources)
 
-        symbols = keys.indices.associate { i ->
-            keys[i].codePointAt(0) to SymbolAttributes(values[i], names[i], drawables[i])
+        symbols = keys.indices.associate {
+            keys[it].codePointAt(0) to SymbolAttributes(values[it], names[it], drawables[it])
         }
     }
+
+    /**
+     * Returns an unmodifiable list of symbol key codepoints.
+     */
+    fun getKeys(): List<Int> = symbols.keys.toList()
+
+    /**
+     * Returns the Int color value associated with the given key codepoint.
+     * Throws an exception if the key is not found.
+     */
+    fun getColor(key: Int): Int = symbols.getValue(key).value
+
+    /**
+     * Returns the String name associated with the given key codepoint.
+     * Throws an exception if the key is not found.
+     */
+    fun getName(key: Int): String = symbols.getValue(key).name
+
+    /**
+     * Returns the Drawable associated with the given key codepoint.
+     * Throws an exception if the key is not found.
+     */
+    fun getDrawable(key: Int): Drawable = symbols.getValue(key).drawable
 
     private fun getColorValues(res: Resources): List<Int> {
         val typedArray = res.obtainTypedArray(R.array.color_values)
