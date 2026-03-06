@@ -20,24 +20,26 @@
     tools:listitem="@android:layout/simple_list_item_1">
   </androidx.recyclerview.widget.RecyclerView>
 
-  <LinearLayout
+  <RadioGroup
     android:id="@+id/guess_controls"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:padding="@dimen/half_dynamic_spacing"
     app:layout_constraintBottom_toTopOf="@id/palette"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toStartOf="@id/submit">
     <!-- TODO: Add toggle buttons by 9 March. -->
-  </LinearLayout>
+  </RadioGroup>
 
   <Button
     android:id="@+id/submit"
     style="@style/Widget.Material3.Button.IconButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:contentDescription="@string/submit_guess"
+    android:layout_width="@dimen/button_size"
+    android:layout_height="@dimen/button_size"
     android:layout_margin="@dimen/half_dynamic_spacing"
+    android:contentDescription="@string/submit_guess"
+    android:tooltipText="@string/submit_guess"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintBottom_toTopOf="@id/palette"
     app:icon="@drawable/ic_send"/>

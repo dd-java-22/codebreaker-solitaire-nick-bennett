@@ -10,8 +10,9 @@
   <string name="blue">Blue</string>
   <string name="indigo">Indigo</string>
   <string name="violet">Violet</string>
+  <string name="no_symbol">No symbol</string>
 
-  <string-array name="color_names">
+  <string-array name="symbol_names">
     <item>@string/red</item>
     <item>@string/orange</item>
     <item>@string/yellow</item>
@@ -21,7 +22,7 @@
     <item>@string/violet</item>
   </string-array>
 
-  <string-array name="color_keys">
+  <string-array name="symbols">
     <item>R</item>
     <item>O</item>
     <item>Y</item>

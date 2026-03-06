@@ -3,10 +3,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:shape="oval">
   <solid
-    android:color="@android:color/white" />
-  <stroke
-    android:width="@dimen/symbol_border_width"
-    android:color="@android:color/black" />
+    android:color="#FFFF00C0" />
   <size
     android:width="@dimen/symbol_size"
     android:height="@dimen/symbol_size" />

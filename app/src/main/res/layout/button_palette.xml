@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageButton
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="@dimen/button_size"
+  android:layout_height="@dimen/button_size"
+  android:layout_marginVertical="@dimen/half_dynamic_spacing"
+  android:background="?attr/selectableItemBackgroundBorderless"
+  android:layout_weight="1"
+  tools:ignore="ContentDescription"
+  tools:viewBindingIgnore="true"/>

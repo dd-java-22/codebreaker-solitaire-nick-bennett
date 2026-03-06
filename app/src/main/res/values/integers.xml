@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <array name="color_drawables">
+  <array name="symbol_drawables">
     <item>@drawable/symbol</item>
     <item>@drawable/symbol</item>
     <item>@drawable/symbol</item>

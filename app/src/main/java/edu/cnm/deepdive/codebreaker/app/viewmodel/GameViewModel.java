@@ -40,7 +40,7 @@ public class GameViewModel extends ViewModel {
         .exceptionally(this::postThrowable);
   }
 
-  public void getGame(String gameId) {
+  public void fetchGame(String gameId) {
     service
         .getGame(gameId)
         .thenAccept(this.game::postValue)
@@ -57,6 +57,7 @@ public class GameViewModel extends ViewModel {
     Game game = this.game.getValue();
     this.game.setValue(null);
     if (game != null) {
+      //noinspection DataFlowIssue
       service
           .deleteGame(game.getId())
           .exceptionally(this::postThrowable);
@@ -75,7 +76,7 @@ public class GameViewModel extends ViewModel {
         })
         .thenAccept((g) -> {
           if (Boolean.TRUE.equals(g.getSolution())) {
-            getGame(game.getId());
+            fetchGame(game.getId());
           } else {
             game.getGuesses().add(g);
             this.game.postValue(game);
@@ -83,7 +84,7 @@ public class GameViewModel extends ViewModel {
         });
   }
 
-  public void getGuess(String guessId) {
+  public void fetchGuess(String guessId) {
     //noinspection DataFlowIssue
     service
         .getGuess(game.getValue().getId(), guessId)
