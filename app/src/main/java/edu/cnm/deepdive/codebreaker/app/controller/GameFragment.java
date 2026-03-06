@@ -41,14 +41,6 @@ public class GameFragment extends Fragment {
     gameViewModel
         .getGame()
         .observe(lifecycleOwner, (game) -> {
-          // TODO: 2026-03-06 Handle updates to the game.
-          //  1. Clear all children from binding.palette.
-          //  2. Add a new child for every symbol in the game.getPool().
-          //     a. Inflate a layout for the symbol.
-          //     b. Set the symbol text (contentDescription and tooltip).
-          //     c. Set the symbol drawable.
-          //     d. Set the symbol drawable's tint.
-          //     e. Add the symbol widget to the binding.palette children.
           binding.palette.removeAllViews();
           game.getPool()
               .codePoints()
