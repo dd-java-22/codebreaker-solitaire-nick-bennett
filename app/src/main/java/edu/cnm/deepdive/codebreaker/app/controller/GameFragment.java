@@ -32,16 +32,17 @@ import java.util.stream.IntStream;
 @AndroidEntryPoint
 public class GameFragment extends Fragment {
 
+  private static final String TAG = GameFragment.class.getSimpleName();
+
   @Inject
   SymbolMap symbolMap;
 
   private FragmentGameBinding binding;
   private GameViewModel gameViewModel;
 
-  @Nullable
   @Override
-  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
+  public @Nullable View onCreateView(@NonNull LayoutInflater inflater,
+      @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     binding = FragmentGameBinding.inflate(inflater, container, false);
     binding.submit.setOnClickListener((v) -> submitGuess());
     return binding.getRoot();
@@ -146,11 +147,13 @@ public class GameFragment extends Fragment {
     paletteControl.setTooltipText(attributes.getName());
     paletteControl.setImageDrawable(attributes.getDrawable());
     paletteControl.setImageTintList(ColorStateList.valueOf(attributes.getColor()));
-    paletteControl.setOnClickListener((control) -> handlePaletteClick(codePoint));
+    paletteControl.setOnClickListener(this::handlePaletteClick);
+    paletteControl.setTag(codePoint);
     return paletteControl;
   }
 
-  private void handlePaletteClick(int codePoint) {
+  private void handlePaletteClick(View control) {
+    int codePoint = (Integer) control.getTag();
     int selectedGuessWidgetId = binding.guessControls.getCheckedRadioButtonId();
     if (selectedGuessWidgetId != -1) {
       CompoundButton guessControl = binding.guessControls.findViewById(selectedGuessWidgetId);

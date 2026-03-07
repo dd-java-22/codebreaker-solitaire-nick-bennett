@@ -28,21 +28,19 @@
     android:padding="@dimen/half_dynamic_spacing"
     app:layout_constraintBottom_toTopOf="@id/palette"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toStartOf="@id/submit">
-    <!-- TODO: Add toggle buttons by 9 March. -->
-  </RadioGroup>
+    app:layout_constraintEnd_toStartOf="@id/submit"/>
 
-  <Button
+  <ImageButton
     android:id="@+id/submit"
-    style="@style/Widget.Material3.Button.IconButton"
     android:layout_width="@dimen/button_size"
     android:layout_height="@dimen/button_size"
     android:layout_margin="@dimen/half_dynamic_spacing"
     android:contentDescription="@string/submit_guess"
     android:tooltipText="@string/submit_guess"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    app:icon="@drawable/ic_send"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintBottom_toTopOf="@id/palette"
-    app:icon="@drawable/ic_send"/>
+    app:layout_constraintBottom_toTopOf="@id/palette"/>
 
   <LinearLayout
     android:id="@+id/palette"

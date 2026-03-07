@@ -4,4 +4,5 @@
   <dimen name="symbol_border_width">4dp</dimen>
   <dimen name="half_dynamic_spacing">8dp</dimen>
   <dimen name="button_size">48dp</dimen>
+  <dimen name="half_static_spacing">4dp</dimen>
 </resources>

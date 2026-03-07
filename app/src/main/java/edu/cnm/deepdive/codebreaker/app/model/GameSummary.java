@@ -8,30 +8,27 @@ import androidx.room.PrimaryKey;
 import java.time.Instant;
 
 @Entity(
-    tableName = "game",
+    tableName = "game_summary",
     indices = {
         @Index(value = "external_key", unique = true),
         @Index(value = {"started", "solved", "last_played"}),
         @Index(value = {"length", "guess_count"})
     }
 )
-public class Game {
+public class GameSummary {
 
   @PrimaryKey(autoGenerate = true)
   @ColumnInfo(name = "game_id")
   private long id;
 
-  @NonNull
   @ColumnInfo(name = "external_key")
-  private String externalKey = "";
+  private  @NonNull String externalKey = "";
 
-  @NonNull
-  private String pool = "";
+  private @NonNull String pool = "";
 
   private int length;
 
-  @NonNull
-  private Instant started = Instant.now();
+  private @NonNull Instant started = Instant.now();
 
   @ColumnInfo(name = "guess_count")
   private int guessCount;
@@ -55,8 +52,7 @@ public class Game {
     this.id = id;
   }
 
-  @NonNull
-  public String getExternalKey() {
+  public @NonNull String getExternalKey() {
     return externalKey;
   }
 
@@ -64,8 +60,7 @@ public class Game {
     this.externalKey = externalKey;
   }
 
-  @NonNull
-  public String getPool() {
+  public @NonNull String getPool() {
     return pool;
   }
 
@@ -81,8 +76,7 @@ public class Game {
     this.length = length;
   }
 
-  @NonNull
-  public Instant getStarted() {
+  public @NonNull Instant getStarted() {
     return started;
   }
 
