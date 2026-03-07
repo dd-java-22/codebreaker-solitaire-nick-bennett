@@ -10,6 +10,16 @@
 
 ---
 
+## Pre-Flight Checklist (Mandatory)
+
+Before performing any file modifications or running any build/test commands, you MUST check the current Git state of the working tree.
+
+1.  **Check Status:** Run `git status`.
+2.  **Commit if Needed:** If uncommitted changes exist (and weren't made by you during this session's current turn), commit them immediately using the **Prompted** format specified in the Team Guidelines (`../.junie/AGENTS.md`).
+3.  **Execute & Commit:** Only after verifying a clean state (or committing pre-existing changes), proceed with your modifications, and then commit your changes using the **Automatic** format.
+
+---
+
 ## Responsibility
 
 While you should attempt to identify obvious contradictions, the user is responsible for the granularity and clarity of the rules provided at each level.
