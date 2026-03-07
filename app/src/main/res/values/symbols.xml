@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+  <string-array name="symbols">
+    <item>R</item>
+    <item>O</item>
+    <item>Y</item>
+    <item>G</item>
+    <item>B</item>
+    <item>I</item>
+    <item>V</item>
+  </string-array>
+
+  <string-array name="symbol_names">
+    <item>Red</item>
+    <item>Orange</item>
+    <item>Yellow</item>
+    <item>Green</item>
+    <item>Blue</item>
+    <item>Indigo</item>
+    <item>Violet</item>
+  </string-array>
+
   <array name="symbol_colors">
     <item>@color/red</item>
     <item>@color/orange</item>
@@ -20,25 +40,5 @@
     <item>@drawable/symbol</item>
     <item>@drawable/symbol</item>
   </array>
-
-  <string-array name="symbol_names">
-    <item>Red</item>
-    <item>Orange</item>
-    <item>Yellow</item>
-    <item>Green</item>
-    <item>Blue</item>
-    <item>Indigo</item>
-    <item>Violet</item>
-  </string-array>
-
-  <string-array name="symbols">
-    <item>R</item>
-    <item>O</item>
-    <item>Y</item>
-    <item>G</item>
-    <item>B</item>
-    <item>I</item>
-    <item>V</item>
-  </string-array>
 
 </resources>
