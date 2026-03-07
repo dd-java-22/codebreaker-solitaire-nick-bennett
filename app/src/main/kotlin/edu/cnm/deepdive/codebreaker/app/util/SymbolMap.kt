@@ -21,7 +21,7 @@ class SymbolMap @Inject constructor(
         val names = resources.getStringArray(R.array.symbol_names)
         val symbols = resources.getStringArray(R.array.symbols)
         val values = getColors(resources)
-        val drawableResIds = getDrawableResIds(resources)
+        val drawableResIds = getDrawableIds(resources)
 
         symbolList = symbols.map { it.codePointAt(0) }
         symbolsToAttributes = symbolList
@@ -63,12 +63,11 @@ class SymbolMap @Inject constructor(
     fun getName(symbol: Int): String = symbolsToAttributes.getValue(symbol).name
 
     /**
-     * Returns a fresh, mutated [Drawable] associated with the given symbol codepoint.
+     * Returns the Drawable resource ID associated with the given symbol codepoint.
      * Throws an exception if the key is not found.
      */
     @Throws(NoSuchElementException::class)
-    fun getDrawable(symbol: Int): Drawable =
-        ContextCompat.getDrawable(context, symbolsToAttributes.getValue(symbol).drawableResId)!!.mutate()
+    fun getDrawableId(symbol: Int): Int = symbolsToAttributes.getValue(symbol).drawableId
 
     private fun getColors(res: Resources): List<Int> {
         val typedArray = res.obtainTypedArray(R.array.symbol_colors)
@@ -79,7 +78,7 @@ class SymbolMap @Inject constructor(
         }
     }
 
-    private fun getDrawableResIds(res: Resources): List<Int> {
+    private fun getDrawableIds(res: Resources): List<Int> {
         val typedArray = res.obtainTypedArray(R.array.symbol_drawables)
         return try {
             List(typedArray.length()) { i -> typedArray.getResourceId(i, 0) }
@@ -91,7 +90,7 @@ class SymbolMap @Inject constructor(
     data class SymbolAttributes(
         val color: Int,
         val name: String,
-        val drawableResId: Int
+        val drawableId: Int
     )
 
 }
