@@ -1,15 +1,21 @@
 package edu.cnm.deepdive.codebreaker.app.adapter;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import dagger.hilt.android.qualifiers.ActivityContext;
 import jakarta.inject.Inject;
 
 public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
 
+  private final LayoutInflater inflater;
+
   @Inject
-  public GuessesAdapter() {
+  public GuessesAdapter(@ActivityContext Context context) {
+    inflater = LayoutInflater.from(context);
   }
 
   @Override
