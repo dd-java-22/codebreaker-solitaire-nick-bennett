@@ -26,8 +26,8 @@ class SymbolMap @Inject constructor(
         symbolList = symbols.map { it.codePointAt(0) }
         symbolsToAttributes = symbolList
             .indices
-            .associate { i ->
-                symbolList[i] to SymbolAttributes(values[i], names[i], drawableResIds[i])
+            .associate { i -> symbolList[i] to
+                    SymbolAttributes(symbolList[i], values[i], names[i], drawableResIds[i])
             }
     }
 
@@ -88,6 +88,7 @@ class SymbolMap @Inject constructor(
     }
 
     data class SymbolAttributes(
+        val codePoint: Int,
         val color: Int,
         val name: String,
         val drawableId: Int
