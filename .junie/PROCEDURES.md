@@ -2,7 +2,7 @@
 
 **HALT:** If you have already read this file and aggregated guidelines during this session, **do not read this file again** and do not re-execute these steps.
 
-1.  **Literal Path Access:** Access guidelines ONLY at these exact paths. **Do not use `ls -R`** or any recursive search commands:
+1.  **Literal Path Access:** Access guidelines ONLY at these exact paths, and at locations explicity specified by the contents of these files. **Do not use `ls -R`** or any recursive search commands:
   
     - `./.junie/AGENTS.md` (Level 1: Project)
     -   `../.junie/AGENTS.md` (Level 2: Team)
