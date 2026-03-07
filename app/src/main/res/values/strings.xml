@@ -11,30 +11,10 @@
   <string name="indigo">Indigo</string>
   <string name="violet">Violet</string>
   <string name="no_symbol">No symbol</string>
-  <string name="game_solved">Game already solved</string>
-  <string name="invalid_payload">Invalid request payload</string>
-  <string name="resource_not_found">Resource not found</string>
-  <string name="unknown_service_error">Unknown service error</string>
-  <string name="generic_error">An unexpected error occurred</string>
-
-  <string-array name="symbol_names">
-    <item>@string/red</item>
-    <item>@string/orange</item>
-    <item>@string/yellow</item>
-    <item>@string/green</item>
-    <item>@string/blue</item>
-    <item>@string/indigo</item>
-    <item>@string/violet</item>
-  </string-array>
-
-  <string-array name="symbols">
-    <item>R</item>
-    <item>O</item>
-    <item>Y</item>
-    <item>G</item>
-    <item>B</item>
-    <item>I</item>
-    <item>V</item>
-  </string-array>
+  <string name="game_solved">Unable to submit guess for an already solved game.</string>
+  <string name="invalid_payload">Invalid submission contents.</string>
+  <string name="resource_not_found">Specified game does not exist.</string>
+  <string name="unknown_service_error">An unexpected service error occurred.</string>
+  <string name="generic_error">An unexpected error occurred.</string>
 
 </resources>

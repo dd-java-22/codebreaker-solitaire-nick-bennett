@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <array name="symbol_colors">
+    <item>@color/red</item>
+    <item>@color/orange</item>
+    <item>@color/yellow</item>
+    <item>@color/green</item>
+    <item>@color/blue</item>
+    <item>@color/indigo</item>
+    <item>@color/violet</item>
+  </array>
+
+  <array name="symbol_drawables">
+    <item>@drawable/symbol</item>
+    <item>@drawable/symbol</item>
+    <item>@drawable/symbol</item>
+    <item>@drawable/symbol</item>
+    <item>@drawable/symbol</item>
+    <item>@drawable/symbol</item>
+    <item>@drawable/symbol</item>
+  </array>
+
+  <string-array name="symbol_names">
+    <item>@string/red</item>
+    <item>@string/orange</item>
+    <item>@string/yellow</item>
+    <item>@string/green</item>
+    <item>@string/blue</item>
+    <item>@string/indigo</item>
+    <item>@string/violet</item>
+  </string-array>
+
+  <string-array name="symbols">
+    <item>R</item>
+    <item>O</item>
+    <item>Y</item>
+    <item>G</item>
+    <item>B</item>
+    <item>I</item>
+    <item>V</item>
+  </string-array>
+
+</resources>
