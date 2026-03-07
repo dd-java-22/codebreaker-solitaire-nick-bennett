@@ -4,8 +4,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import jakarta.inject.Inject;
 
 public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
+
+  @Inject
+  public GuessesAdapter() {
+  }
 
   @Override
   public @NonNull ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -22,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import edu.cnm.deepdive.codebreaker.api.model.Game;
 import edu.cnm.deepdive.codebreaker.api.model.Guess;
 import edu.cnm.deepdive.codebreaker.app.R;
+import edu.cnm.deepdive.codebreaker.app.adapter.GuessesAdapter;
 import edu.cnm.deepdive.codebreaker.app.databinding.FragmentGameBinding;
 import edu.cnm.deepdive.codebreaker.app.util.SymbolMap;
 import edu.cnm.deepdive.codebreaker.app.util.SymbolMap.SymbolAttributes;
@@ -41,6 +42,9 @@ public class GameFragment extends Fragment {
 
   @Inject
   SymbolMap symbolMap;
+
+  @Inject
+  GuessesAdapter adapter;
 
   private FragmentGameBinding binding;
   private GameViewModel gameViewModel;
