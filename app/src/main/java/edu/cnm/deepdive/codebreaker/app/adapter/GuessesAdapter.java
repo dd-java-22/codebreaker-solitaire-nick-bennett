@@ -7,9 +7,8 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-  @NonNull
   @Override
-  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+  public @NonNull ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     throw new UnsupportedOperationException();
   }
 
