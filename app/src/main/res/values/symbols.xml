@@ -22,13 +22,13 @@
   </array>
 
   <string-array name="symbol_names">
-    <item>@string/red</item>
-    <item>@string/orange</item>
-    <item>@string/yellow</item>
-    <item>@string/green</item>
-    <item>@string/blue</item>
-    <item>@string/indigo</item>
-    <item>@string/violet</item>
+    <item>Red</item>
+    <item>Orange</item>
+    <item>Yellow</item>
+    <item>Green</item>
+    <item>Blue</item>
+    <item>Indigo</item>
+    <item>Violet</item>
   </string-array>
 
   <string-array name="symbols">
