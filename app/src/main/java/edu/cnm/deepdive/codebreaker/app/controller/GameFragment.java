@@ -26,6 +26,7 @@ import edu.cnm.deepdive.codebreaker.app.util.SymbolMap;
 import edu.cnm.deepdive.codebreaker.app.util.SymbolMap.SymbolAttributes;
 import edu.cnm.deepdive.codebreaker.app.viewmodel.GameViewModel;
 import jakarta.inject.Inject;
+import java.util.List;
 import java.util.stream.IntStream;
 
 @AndroidEntryPoint
@@ -42,6 +43,7 @@ public class GameFragment extends Fragment {
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
     binding = FragmentGameBinding.inflate(inflater, container, false);
+    binding.submit.setOnClickListener((v) -> submitGuess());
     return binding.getRoot();
   }
 
@@ -54,7 +56,7 @@ public class GameFragment extends Fragment {
     gameViewModel.getSolved().observe(lifecycleOwner, this::handleSolved);
     gameViewModel.getGuess().observe(lifecycleOwner, this::handleGuess);
     gameViewModel.getError().observe(lifecycleOwner, this::handleError);
-    gameViewModel.startGame("ROYGBIV", 5);
+    gameViewModel.startGame("ROYGBIV", 4);
   }
 
   @Override
@@ -63,9 +65,17 @@ public class GameFragment extends Fragment {
     super.onDestroyView();
   }
 
+  private void submitGuess() {
+    int[] guessCodePoints = IntStream.range(0, binding.guessControls.getChildCount())
+        .mapToObj((pos) -> binding.guessControls.getChildAt(pos))
+        .mapToInt((v) -> (Integer) v.getTag())
+        .toArray();
+    gameViewModel.submitGuess(new String(guessCodePoints, 0, guessCodePoints.length));
+  }
+
   private void handleGame(Game game) {
-    buildPaletteControls(game);
     buildGuessControls(game);
+    buildPaletteControls(game);
   }
 
   private void handleSolved(Boolean solved) {
@@ -87,15 +97,6 @@ public class GameFragment extends Fragment {
     // TODO: 2026-03-06 Handle error.
   }
 
-  private void buildPaletteControls(Game game) {
-    binding.palette.removeAllViews();
-    game.getPool()
-        .codePoints()
-        .mapToObj(this::buildPaletteButton)
-        .forEach(binding.palette::addView);
-  }
-
-  @SuppressWarnings("NewApi")
   private void buildGuessControls(Game game) {
     int[] previousGuess = getLastGuessCodePoints(game);
     binding.guessControls.removeAllViews();
@@ -108,25 +109,21 @@ public class GameFragment extends Fragment {
     }
   }
 
-  private @NonNull ImageView buildPaletteButton(int codePoint) {
-    ImageView paletteControl = (ImageView) getLayoutInflater()
-        .inflate(R.layout.button_palette, binding.palette, false);
-    SymbolAttributes attributes = symbolMap.getAttributes(codePoint);
-    paletteControl.setContentDescription(attributes.getName());
-    paletteControl.setTooltipText(attributes.getName());
-    paletteControl.setImageDrawable(attributes.getDrawable());
-    paletteControl.setImageTintList(ColorStateList.valueOf(attributes.getColor()));
-    paletteControl.setOnClickListener((control) -> handlePaletteClick(codePoint));
-    return paletteControl;
+  private void buildPaletteControls(Game game) {
+    binding.palette.removeAllViews();
+    game.getPool()
+        .codePoints()
+        .mapToObj(this::buildPaletteButton)
+        .forEach(binding.palette::addView);
   }
 
   private static int[] getLastGuessCodePoints(Game game) {
-    //noinspection DataFlowIssue
-    return game.getGuesses().isEmpty()
+    List<Guess> guesses = game.getGuesses();
+    //noinspection DataFlowIssue,SequencedCollectionMethodCanBeUsed
+    return guesses.isEmpty()
         ? new int[game.getLength()]
-        : game
-            .getGuesses()
-            .getLast()
+        : guesses
+            .get(guesses.size() - 1)
             .getText()
             .codePoints()
             .toArray();
@@ -141,6 +138,18 @@ public class GameFragment extends Fragment {
     return guessControl;
   }
 
+  private @NonNull ImageView buildPaletteButton(int codePoint) {
+    ImageView paletteControl = (ImageView) getLayoutInflater()
+        .inflate(R.layout.button_palette, binding.palette, false);
+    SymbolAttributes attributes = symbolMap.getAttributes(codePoint);
+    paletteControl.setContentDescription(attributes.getName());
+    paletteControl.setTooltipText(attributes.getName());
+    paletteControl.setImageDrawable(attributes.getDrawable());
+    paletteControl.setImageTintList(ColorStateList.valueOf(attributes.getColor()));
+    paletteControl.setOnClickListener((control) -> handlePaletteClick(codePoint));
+    return paletteControl;
+  }
+
   private void handlePaletteClick(int codePoint) {
     int selectedGuessWidgetId = binding.guessControls.getCheckedRadioButtonId();
     if (selectedGuessWidgetId != -1) {
@@ -148,10 +157,10 @@ public class GameFragment extends Fragment {
       attachText(codePoint, guessControl);
       attachBackground(codePoint, guessControl);
       guessControl.setTag(codePoint);
-      int nextPosition = binding.guessControls.indexOfChild(guessControl) + 1;
-      if (nextPosition < binding.guessControls.getChildCount()) {
-        binding.guessControls.check(binding.guessControls.getChildAt(nextPosition).getId());
-      }
+      int nextPosition = Math.min(
+          binding.guessControls.indexOfChild(guessControl) + 1,
+          binding.guessControls.getChildCount() - 1);
+      binding.guessControls.check(binding.guessControls.getChildAt(nextPosition).getId());
     }
     binding.submit.setEnabled(isGuessComplete());
   }

@@ -72,6 +72,7 @@ android {
     }
 
     compileOptions {
+//        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.valueOf("VERSION_${libs.versions.java.get()}")
         targetCompatibility = JavaVersion.valueOf("VERSION_${libs.versions.java.get()}")
     }
@@ -100,8 +101,13 @@ android {
 dependencies {
 
     // .jar-based libraries included in project
+
+    // Other subprojects.
     implementation(project(":api"))
     implementation(project(":client"))
+
+    // Desugaring for subset of JDK
+//    coreLibraryDesugaring(libs.desugar)
 
     // Basic Android components
     implementation(libs.app.compat)
