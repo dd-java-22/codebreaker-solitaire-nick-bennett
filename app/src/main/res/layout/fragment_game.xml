@@ -38,7 +38,7 @@
     android:contentDescription="@string/submit_guess"
     android:tooltipText="@string/submit_guess"
     android:background="?attr/selectableItemBackgroundBorderless"
-    app:icon="@drawable/ic_send"
+    android:src="@drawable/ic_send"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintBottom_toTopOf="@id/palette"/>
 
