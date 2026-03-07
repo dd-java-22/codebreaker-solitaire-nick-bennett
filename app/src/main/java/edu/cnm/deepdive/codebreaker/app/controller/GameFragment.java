@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +19,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import dagger.hilt.android.AndroidEntryPoint;
 import edu.cnm.deepdive.codebreaker.api.model.Game;
+import edu.cnm.deepdive.codebreaker.api.model.Guess;
 import edu.cnm.deepdive.codebreaker.app.R;
 import edu.cnm.deepdive.codebreaker.app.databinding.FragmentGameBinding;
 import edu.cnm.deepdive.codebreaker.app.util.SymbolMap;
@@ -49,25 +50,11 @@ public class GameFragment extends Fragment {
     super.onViewCreated(view, savedInstanceState);
     gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
     LifecycleOwner lifecycleOwner = getViewLifecycleOwner();
-    gameViewModel
-        .getGame()
-        .observe(lifecycleOwner, this::handleGame);
-    gameViewModel
-        .getSolved()
-        .observe(lifecycleOwner, (solved) -> {
-          // TODO: 2026-03-06 Handle changes to the solved state of the game.
-        });
-    gameViewModel
-        .getGuess()
-        .observe(lifecycleOwner, (guess) -> {
-          // TODO: 2026-03-06 Handles updates to the most recent guess.
-        });
-    gameViewModel
-        .getError()
-        .observe(lifecycleOwner, (error) -> {
-          // TODO: 2026-03-06 Handle error.
-        });
-    gameViewModel.startGame("ROYGBIV", 4);
+    gameViewModel.getGame().observe(lifecycleOwner, this::handleGame);
+    gameViewModel.getSolved().observe(lifecycleOwner, this::handleSolved);
+    gameViewModel.getGuess().observe(lifecycleOwner, this::handleGuess);
+    gameViewModel.getError().observe(lifecycleOwner, this::handleError);
+    gameViewModel.startGame("ROYGBIV", 5);
   }
 
   @Override
@@ -77,11 +64,30 @@ public class GameFragment extends Fragment {
   }
 
   private void handleGame(Game game) {
-    buildPalette(game);
+    buildPaletteControls(game);
     buildGuessControls(game);
   }
 
-  private void buildPalette(Game game) {
+  private void handleSolved(Boolean solved) {
+    boolean inProgress = Boolean.FALSE.equals(solved);
+    IntStream.range(0, binding.guessControls.getChildCount())
+        .mapToObj((pos) -> binding.guessControls.getChildAt(pos))
+        .forEach((v) -> v.setEnabled(inProgress));
+    IntStream.range(0, binding.palette.getChildCount())
+        .mapToObj((pos) -> binding.palette.getChildAt(pos))
+        .forEach((v) -> v.setEnabled(inProgress));
+    binding.submit.setEnabled(inProgress && isGuessComplete());
+  }
+
+  private void handleGuess(Guess guess) {
+    // TODO: 2026-03-06 Handle updates to the most recent guess.
+  }
+
+  private void handleError(Throwable error) {
+    // TODO: 2026-03-06 Handle error.
+  }
+
+  private void buildPaletteControls(Game game) {
     binding.palette.removeAllViews();
     game.getPool()
         .codePoints()
@@ -91,8 +97,32 @@ public class GameFragment extends Fragment {
 
   @SuppressWarnings("NewApi")
   private void buildGuessControls(Game game) {
+    int[] previousGuess = getLastGuessCodePoints(game);
+    binding.guessControls.removeAllViews();
+    IntStream.of(previousGuess)
+        .mapToObj(this::buildGuessButton)
+        .forEach(binding.guessControls::addView);
+    binding.guessControls.check(-1);
+    if (binding.guessControls.getChildCount() > 0) {
+      ((RadioButton) binding.guessControls.getChildAt(0)).setChecked(true);
+    }
+  }
+
+  private @NonNull ImageView buildPaletteButton(int codePoint) {
+    ImageView paletteControl = (ImageView) getLayoutInflater()
+        .inflate(R.layout.button_palette, binding.palette, false);
+    SymbolAttributes attributes = symbolMap.getAttributes(codePoint);
+    paletteControl.setContentDescription(attributes.getName());
+    paletteControl.setTooltipText(attributes.getName());
+    paletteControl.setImageDrawable(attributes.getDrawable());
+    paletteControl.setImageTintList(ColorStateList.valueOf(attributes.getColor()));
+    paletteControl.setOnClickListener((control) -> handlePaletteClick(codePoint));
+    return paletteControl;
+  }
+
+  private static int[] getLastGuessCodePoints(Game game) {
     //noinspection DataFlowIssue
-    int[] previousGuess = game.getGuesses().isEmpty()
+    return game.getGuesses().isEmpty()
         ? new int[game.getLength()]
         : game
             .getGuesses()
@@ -100,60 +130,47 @@ public class GameFragment extends Fragment {
             .getText()
             .codePoints()
             .toArray();
-    binding.guessControls.removeAllViews();
-    IntStream.of(previousGuess)
-        .mapToObj(this::buildGuessButton)
-        .forEach(binding.guessControls::addView);
-    if (binding.guessControls.getChildCount() > 0) {
-      ((RadioButton) binding.guessControls.getChildAt(0)).setChecked(true);
-    }
-  }
-
-  private @NonNull ImageButton buildPaletteButton(int codePoint) {
-    ImageButton paletteButton = (ImageButton) getLayoutInflater()
-        .inflate(R.layout.button_palette, binding.palette, false);
-    SymbolAttributes attributes = symbolMap.getAttributes(codePoint);
-    paletteButton.setContentDescription(attributes.getName());
-    paletteButton.setTooltipText(attributes.getName());
-    paletteButton.setImageDrawable(attributes.getDrawable());
-    paletteButton.setImageTintList(ColorStateList.valueOf(attributes.getColor()));
-    paletteButton.setOnClickListener((v) -> setSymbolOnChecked(codePoint));
-    return paletteButton;
   }
 
   private @NonNull CompoundButton buildGuessButton(int codePoint) {
-    CompoundButton paletteControl = (CompoundButton) getLayoutInflater()
+    CompoundButton guessControl = (CompoundButton) getLayoutInflater()
         .inflate(R.layout.button_guess, binding.palette, false);
+    attachText(codePoint, guessControl);
+    attachBackground(codePoint, guessControl);
+    guessControl.setTag(codePoint);
+    return guessControl;
+  }
+
+  private void handlePaletteClick(int codePoint) {
+    int selectedGuessWidgetId = binding.guessControls.getCheckedRadioButtonId();
+    if (selectedGuessWidgetId != -1) {
+      CompoundButton guessControl = binding.guessControls.findViewById(selectedGuessWidgetId);
+      attachText(codePoint, guessControl);
+      attachBackground(codePoint, guessControl);
+      guessControl.setTag(codePoint);
+      int nextPosition = binding.guessControls.indexOfChild(guessControl) + 1;
+      if (nextPosition < binding.guessControls.getChildCount()) {
+        binding.guessControls.check(binding.guessControls.getChildAt(nextPosition).getId());
+      }
+    }
+    binding.submit.setEnabled(isGuessComplete());
+  }
+
+  private void attachText(int codePoint, CompoundButton guessControl) {
     if (symbolMap.hasSymbol(codePoint)) {
       SymbolAttributes attributes = symbolMap.getAttributes(codePoint);
       String name = attributes.getName();
-      paletteControl.setContentDescription(name);
-      paletteControl.setTooltipText(name);
+      guessControl.setContentDescription(name);
+      guessControl.setTooltipText(name);
     } else {
       String noSymbolName = getString(R.string.no_symbol);
-      paletteControl.setContentDescription(noSymbolName);
-      paletteControl.setTooltipText(noSymbolName);
-    }
-    paletteControl.setBackground(buildCompoundButtonBackground(codePoint));
-    paletteControl.setTag(codePoint);
-    return paletteControl;
-  }
-
-  private void setSymbolOnChecked(int codePoint) {
-    int selectedGuessWidgetId = binding.guessControls.getCheckedRadioButtonId();
-    if (selectedGuessWidgetId != -1) {
-      RadioButton guessButton = binding.guessControls.findViewById(selectedGuessWidgetId);
-      guessButton.setBackground(buildCompoundButtonBackground(codePoint));
-      int nextPosition = binding.guessControls.indexOfChild(guessButton) + 1;
-      if (nextPosition < binding.guessControls.getChildCount()) {
-        RadioButton nextButton = ((RadioButton) binding.guessControls.getChildAt(nextPosition));
-        binding.guessControls.check(nextButton.getId());
-      }
+      guessControl.setContentDescription(noSymbolName);
+      guessControl.setTooltipText(noSymbolName);
     }
   }
 
   @SuppressWarnings("DataFlowIssue")
-  private StateListDrawable buildCompoundButtonBackground(int codePoint) {
+  private void attachBackground(int codePoint, CompoundButton control) {
     LayerDrawable checkedState = (LayerDrawable) ResourcesCompat.getDrawable(
         getResources(), R.drawable.guess_symbol_selected, null);
     LayerDrawable uncheckedState = (LayerDrawable) ResourcesCompat.getDrawable(
@@ -171,7 +188,13 @@ public class GameFragment extends Fragment {
     StateListDrawable stateListDrawable = new StateListDrawable();
     stateListDrawable.addState(new int[]{android.R.attr.state_checked}, checkedState);
     stateListDrawable.addState(new int[]{}, uncheckedState);
-    return stateListDrawable;
+    control.setBackground(stateListDrawable);
+  }
+
+  private boolean isGuessComplete() {
+    return IntStream.range(0, binding.guessControls.getChildCount())
+        .map((pos) -> (Integer) binding.guessControls.getChildAt(pos).getTag())
+        .allMatch(symbolMap::hasSymbol);
   }
 
 }
