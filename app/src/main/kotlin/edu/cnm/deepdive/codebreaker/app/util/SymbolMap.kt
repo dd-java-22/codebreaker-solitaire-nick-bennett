@@ -63,11 +63,12 @@ class SymbolMap @Inject constructor(
     fun getName(symbol: Int): String = symbolsToAttributes.getValue(symbol).name
 
     /**
-     * Returns the Drawable associated with the given symbol codepoint.
+     * Returns a fresh, mutated [Drawable] associated with the given symbol codepoint.
      * Throws an exception if the key is not found.
      */
     @Throws(NoSuchElementException::class)
-    fun getDrawable(symbol: Int): Drawable = symbolsToAttributes.getValue(symbol).drawable
+    fun getDrawable(symbol: Int): Drawable =
+        symbolsToAttributes.getValue(symbol).drawable.constantState!!.newDrawable().mutate()
 
     private fun getColors(res: Resources): List<Int> {
         val typedArray = res.obtainTypedArray(R.array.symbol_colors)

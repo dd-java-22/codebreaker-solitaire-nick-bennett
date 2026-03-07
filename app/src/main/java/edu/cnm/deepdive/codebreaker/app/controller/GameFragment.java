@@ -145,7 +145,7 @@ public class GameFragment extends Fragment {
     SymbolAttributes attributes = symbolMap.getAttributes(codePoint);
     paletteControl.setContentDescription(attributes.getName());
     paletteControl.setTooltipText(attributes.getName());
-    paletteControl.setImageDrawable(attributes.getDrawable());
+    paletteControl.setImageDrawable(symbolMap.getDrawable(codePoint));
     paletteControl.setImageTintList(ColorStateList.valueOf(attributes.getColor()));
     paletteControl.setOnClickListener(this::handlePaletteClick);
     paletteControl.setTag(codePoint);
@@ -188,9 +188,8 @@ public class GameFragment extends Fragment {
     LayerDrawable uncheckedState = (LayerDrawable) ResourcesCompat.getDrawable(
         getResources(), R.drawable.guess_symbol_unselected, null);
     if (symbolMap.hasSymbol(codePoint)) {
-      SymbolAttributes attributes = symbolMap.getAttributes(codePoint);
-      Drawable drawable = attributes.getDrawable();
-      drawable.setTint(attributes.getColor());
+      Drawable drawable = symbolMap.getDrawable(codePoint);
+      drawable.setTint(symbolMap.getColor(codePoint));
       checkedState.setDrawableByLayerId(R.id.symbol_layer, drawable);
       uncheckedState.setDrawableByLayerId(R.id.symbol_layer, drawable);
     } else {
