@@ -17,6 +17,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.snackbar.Snackbar;
 import dagger.hilt.android.AndroidEntryPoint;
 import edu.cnm.deepdive.codebreaker.api.model.Game;
 import edu.cnm.deepdive.codebreaker.api.model.Guess;
@@ -25,6 +26,10 @@ import edu.cnm.deepdive.codebreaker.app.databinding.FragmentGameBinding;
 import edu.cnm.deepdive.codebreaker.app.util.SymbolMap;
 import edu.cnm.deepdive.codebreaker.app.util.SymbolMap.SymbolAttributes;
 import edu.cnm.deepdive.codebreaker.app.viewmodel.GameViewModel;
+import edu.cnm.deepdive.codebreaker.client.service.GameSolvedException;
+import edu.cnm.deepdive.codebreaker.client.service.InvalidPayloadException;
+import edu.cnm.deepdive.codebreaker.client.service.ResourceNotFoundException;
+import edu.cnm.deepdive.codebreaker.client.service.UnknownServiceException;
 import jakarta.inject.Inject;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -95,7 +100,14 @@ public class GameFragment extends Fragment {
   }
 
   private void handleError(Throwable error) {
-    // TODO: 2026-03-06 Handle error.
+    int messageId = switch (error) {
+      case GameSolvedException ignored -> R.string.game_solved;
+      case InvalidPayloadException ignored -> R.string.invalid_payload;
+      case ResourceNotFoundException ignored -> R.string.resource_not_found;
+      case UnknownServiceException ignored -> R.string.unknown_service_error;
+      default -> R.string.generic_error;
+    };
+    Snackbar.make(binding.getRoot(), messageId, Snackbar.LENGTH_LONG).show();
   }
 
   private void buildGuessControls(Game game) {
