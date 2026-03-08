@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import dagger.hilt.android.qualifiers.ActivityContext;
 import edu.cnm.deepdive.codebreaker.api.model.Guess;
+import edu.cnm.deepdive.codebreaker.app.databinding.ItemGuessBinding;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
+public class GuessesAdapter extends RecyclerView.Adapter<GuessesAdapter.GuessHolder> {
 
   private final LayoutInflater inflater;
   private final List<Guess> guesses;
@@ -25,12 +26,12 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
   }
 
   @Override
-  public @NonNull ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    throw new UnsupportedOperationException();
+  public @NonNull GuessHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    return new GuessHolder(ItemGuessBinding.inflate(inflater, parent, false));
   }
 
   @Override
-  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull GuessHolder holder, int position) {
     throw new UnsupportedOperationException();
   }
 
@@ -51,10 +52,13 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
     notifyItemRangeRemoved(0, size);
   }
 
-  private static class GuessHolder extends ViewHolder {
+  static class GuessHolder extends RecyclerView.ViewHolder {
 
-    public GuessHolder(@NonNull android.view.View itemView) {
-      super(itemView);
+    private final ItemGuessBinding binding;
+
+    public GuessHolder(@NonNull ItemGuessBinding binding) {
+      super(binding.getRoot());
+      this.binding = binding;
     }
 
   }
