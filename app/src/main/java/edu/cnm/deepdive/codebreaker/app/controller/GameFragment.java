@@ -48,6 +48,7 @@ public class GameFragment extends Fragment {
 
   private FragmentGameBinding binding;
   private GameViewModel gameViewModel;
+  private Game game;
 
   @Override
   public @Nullable View onCreateView(@NonNull LayoutInflater inflater,
@@ -85,7 +86,7 @@ public class GameFragment extends Fragment {
 
   private void handleGame(Game game) {
     buildGuessControls(game);
-    buildPaletteControls(game);
+    buildPaletteControls(game);`n    updateGuessList(game);
   }
 
   private void handleSolved(Boolean solved) {
@@ -112,6 +113,17 @@ public class GameFragment extends Fragment {
       default -> R.string.generic_error;
     };
     Snackbar.make(binding.getRoot(), messageId, Snackbar.LENGTH_LONG).show();
+  }
+
+  private void updateGuessList(Game game) {
+    List<Guess> guesses = game.getGuesses();
+    if (guesses.size() < adapter.getItemCount() || game != this.game) {
+      adapter.clear();
+      adapter.addAll(guesses);
+    } else if (guesses.size() > adapter.getItemCount()) {
+      adapter.addAll(guesses.subList(adapter.getItemCount(), guesses.size()));
+    }
+    this.game = game;
   }
 
   private void buildGuessControls(Game game) {
