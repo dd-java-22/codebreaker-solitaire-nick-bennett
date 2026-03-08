@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:baselineAligned="false"
-  android:orientation="horizontal">
+  android:orientation="horizontal"
+  android:padding="@dimen/half_static_spacing">
 
   <LinearLayout
     android:id="@+id/symbols"
@@ -18,7 +20,8 @@
     android:layout_width="64dp"
     android:layout_height="match_parent"
     android:background="@drawable/separator_line"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="@dimen/half_static_spacing">
 
     <TextView
       android:id="@+id/exact_matches"
@@ -26,7 +29,9 @@
       android:layout_height="wrap_content"
       android:layout_weight="1"
       android:layout_gravity="top|start"
-      android:textAlignment="viewStart"/>
+      android:textAlignment="viewStart"
+      android:includeFontPadding="false"
+      tools:text="2"/>
 
     <TextView
       android:id="@+id/near_matches"
@@ -34,7 +39,9 @@
       android:layout_height="wrap_content"
       android:layout_weight="1"
       android:layout_gravity="bottom|end"
-      android:textAlignment="viewEnd"/>
+      android:textAlignment="viewEnd"
+      android:includeFontPadding="false"
+      tools:text="2"/>
 
   </LinearLayout>
 
