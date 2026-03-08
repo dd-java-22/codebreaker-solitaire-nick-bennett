@@ -12,18 +12,21 @@
     android:layout_width="0dp"
     android:layout_height="0dp"
     android:orientation="vertical"
+    android:layout_marginHorizontal="0dp"
+    android:layout_marginTop="0dp"
+    android:layout_marginBottom="@dimen/half_dynamic_spacing"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toTopOf="@id/submit"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    tools:listitem="@android:layout/simple_list_item_1">
-  </androidx.recyclerview.widget.RecyclerView>
+    tools:listitem="@layout/item_guess"/>
 
   <RadioGroup
     android:id="@+id/guess_controls"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/half_dynamic_spacing"
     android:orientation="horizontal"
     android:padding="@dimen/half_dynamic_spacing"
     app:layout_constraintBottom_toTopOf="@id/palette"
@@ -32,8 +35,8 @@
 
   <ImageButton
     android:id="@+id/submit"
-    android:layout_width="@dimen/button_size"
-    android:layout_height="@dimen/button_size"
+    android:layout_width="@dimen/control_size"
+    android:layout_height="@dimen/control_size"
     android:layout_margin="@dimen/half_dynamic_spacing"
     android:src="@drawable/send_button"
     android:scaleType="fitXY"
@@ -41,12 +44,14 @@
     android:contentDescription="@string/submit_guess"
     android:tooltipText="@string/submit_guess"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintBottom_toTopOf="@id/palette"/>
+    app:layout_constraintTop_toTopOf="@id/guess_controls"
+    app:layout_constraintBottom_toBottomOf="@id/guess_controls"/>
 
   <LinearLayout
     android:id="@+id/palette"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/half_dynamic_spacing"
     android:orientation="horizontal"
     android:gravity="center"
     android:padding="@dimen/half_dynamic_spacing"

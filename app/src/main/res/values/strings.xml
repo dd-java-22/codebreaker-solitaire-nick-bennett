@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="test_title">Test</string>
-  <string name="submit_guess">Submit Guess</string>
+
+  <string name="submit_guess">Submit guess</string>
 
   <string name="no_symbol">No symbol</string>
+  <string name="match_count_format">%1$d</string>
+
   <string name="game_solved">Unable to submit guess for an already solved game.</string>
   <string name="invalid_payload">Invalid submission contents.</string>
   <string name="resource_not_found">Specified game does not exist.</string>
   <string name="unknown_service_error">An unexpected service error occurred.</string>
   <string name="generic_error">An unexpected error occurred.</string>
-  <string name="match_count_format">%1$d</string>
 
 </resources>
