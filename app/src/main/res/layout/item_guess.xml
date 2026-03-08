@@ -17,6 +17,7 @@
     android:id="@+id/results"
     android:layout_width="64dp"
     android:layout_height="match_parent"
+    android:background="@drawable/separator_line"
     android:orientation="horizontal">
 
     <TextView
