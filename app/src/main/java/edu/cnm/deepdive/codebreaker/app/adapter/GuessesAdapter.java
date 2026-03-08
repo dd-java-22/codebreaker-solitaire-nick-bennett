@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import dagger.hilt.android.qualifiers.ActivityContext;
 import edu.cnm.deepdive.codebreaker.api.model.Guess;
+import edu.cnm.deepdive.codebreaker.app.R;
 import edu.cnm.deepdive.codebreaker.app.databinding.ItemGuessBinding;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
@@ -18,16 +19,18 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
 
   private final LayoutInflater inflater;
   private final List<Guess> guesses;
+  private final String matchCountFormat;
 
   @Inject
   public GuessesAdapter(@ActivityContext Context context) {
     inflater = LayoutInflater.from(context);
     guesses = new ArrayList<>();
+    matchCountFormat = context.getString(R.string.match_count_format);
   }
 
   @Override
   public @NonNull ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    return new GuessHolder(ItemGuessBinding.inflate(inflater, parent, false));
+    return new GuessHolder(ItemGuessBinding.inflate(inflater, parent, false), matchCountFormat);
   }
 
   @Override
@@ -55,15 +58,17 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
   private static class GuessHolder extends RecyclerView.ViewHolder {
 
     private final ItemGuessBinding binding;
+    private final String matchCountFormat;
 
-    public GuessHolder(@NonNull ItemGuessBinding binding) {
+    public GuessHolder(@NonNull ItemGuessBinding binding, String matchCountFormat) {
       super(binding.getRoot());
       this.binding = binding;
+      this.matchCountFormat = matchCountFormat;
     }
 
     private void bind(Guess guess) {
-      binding.exactMatches.setText(String.valueOf(guess.getExactMatches()));
-      binding.nearMatches.setText(String.valueOf(guess.getNearMatches()));
+      binding.exactMatches.setText(String.format(matchCountFormat, guess.getExactMatches()));
+      binding.nearMatches.setText(String.format(matchCountFormat, guess.getNearMatches()));
     }
 
   }
