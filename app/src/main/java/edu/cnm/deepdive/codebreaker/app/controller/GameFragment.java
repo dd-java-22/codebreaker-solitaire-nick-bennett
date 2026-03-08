@@ -48,7 +48,6 @@ public class GameFragment extends Fragment {
 
   private FragmentGameBinding binding;
   private GameViewModel gameViewModel;
-  private Game game;
 
   @Override
   public @Nullable View onCreateView(@NonNull LayoutInflater inflater,
@@ -77,18 +76,11 @@ public class GameFragment extends Fragment {
     super.onDestroyView();
   }
 
-  private void submitGuess() {
-    int[] guessCodePoints = IntStream.range(0, binding.guessControls.getChildCount())
-        .mapToObj((pos) -> binding.guessControls.getChildAt(pos))
-        .mapToInt((v) -> (Integer) v.getTag())
-        .toArray();
-    gameViewModel.submitGuess(new String(guessCodePoints, 0, guessCodePoints.length));
-  }
-
   private void handleGame(Game game) {
-    buildGuessControls(game);
-    buildPaletteControls(game);
     updateGuessList(game);
+    buildGuessControls(game, lastGuess(game));
+    buildPaletteControls(game);
+    binding.loading.setVisibility(View.GONE);
   }
 
   private void handleSolved(Boolean solved) {
@@ -119,18 +111,35 @@ public class GameFragment extends Fragment {
 
   private void updateGuessList(Game game) {
     List<Guess> guesses = game.getGuesses();
+    Game previousGame = (Game) binding.guesses.getTag();
+    int oldSize = adapter.getItemCount();
     //noinspection DataFlowIssue
-    if (guesses.size() < adapter.getItemCount() || game != this.game) {
+    int newSize = guesses.size();
+    if (newSize < oldSize || game != previousGame) {
       adapter.clear();
-      adapter.addAll(guesses);
-    } else if (guesses.size() > adapter.getItemCount()) {
-      adapter.addAll(guesses.subList(adapter.getItemCount(), guesses.size()));
+      oldSize = 0;
     }
-    this.game = game;
+    if (newSize > oldSize) {
+      adapter.addAll(guesses.subList(oldSize, newSize));
+      binding.guesses.scrollToPosition(newSize - 1);
+    }
+    binding.guesses.setTag(game);
+    adapter.setOnGuessClickListener((Boolean.FALSE.equals(game.getSolved()))
+        ? (guess) -> buildGuessControls(game, guess)
+        : null);
   }
 
-  private void buildGuessControls(Game game) {
-    int[] previousGuess = getLastGuessCodePoints(game);
+  private Guess lastGuess(Game game) {
+    //noinspection DataFlowIssue,SequencedCollectionMethodCanBeUsed
+    return game.getGuesses().isEmpty()
+        ? null
+        : game.getGuesses().get(game.getGuesses().size() - 1);
+  }
+
+  private void buildGuessControls(Game game, Guess baseGuess) {
+    int[] previousGuess = (baseGuess == null)
+        ? new int[game.getLength()]
+        : baseGuess.getText().codePoints().toArray();
     binding.guessControls.removeAllViews();
     IntStream.of(previousGuess)
         .mapToObj(this::buildGuessButton)
@@ -143,31 +152,17 @@ public class GameFragment extends Fragment {
 
   private void buildPaletteControls(Game game) {
     binding.palette.removeAllViews();
-    game.getPool()
+    game
+        .getPool()
         .codePoints()
         .mapToObj(this::buildPaletteButton)
         .forEach(binding.palette::addView);
   }
 
-  private static int[] getLastGuessCodePoints(Game game) {
-    List<Guess> guesses = game.getGuesses();
-    //noinspection DataFlowIssue,SequencedCollectionMethodCanBeUsed
-    return guesses.isEmpty()
-        ? new int[game.getLength()]
-        : guesses
-            .get(guesses.size() - 1)
-            .getText()
-            .codePoints()
-            .toArray();
-  }
-
-  private @NonNull CompoundButton buildGuessButton(int codePoint) {
-    CompoundButton guessControl = (CompoundButton) getLayoutInflater()
-        .inflate(R.layout.button_guess, binding.palette, false);
-    attachText(codePoint, guessControl);
-    attachBackground(codePoint, guessControl);
-    guessControl.setTag(codePoint);
-    return guessControl;
+  private boolean isGuessComplete() {
+    return IntStream.range(0, binding.guessControls.getChildCount())
+        .map((pos) -> (Integer) binding.guessControls.getChildAt(pos).getTag())
+        .allMatch(symbolMap::hasSymbol);
   }
 
   private @NonNull ImageView buildPaletteButton(int codePoint) {
@@ -181,6 +176,15 @@ public class GameFragment extends Fragment {
     paletteControl.setOnClickListener(this::handlePaletteClick);
     paletteControl.setTag(codePoint);
     return paletteControl;
+  }
+
+  private @NonNull CompoundButton buildGuessButton(int codePoint) {
+    CompoundButton guessControl = (CompoundButton) getLayoutInflater()
+        .inflate(R.layout.button_guess, binding.palette, false);
+    attachText(codePoint, guessControl);
+    attachBackground(codePoint, guessControl);
+    guessControl.setTag(codePoint);
+    return guessControl;
   }
 
   private void handlePaletteClick(View control) {
@@ -234,10 +238,13 @@ public class GameFragment extends Fragment {
     control.setBackground(stateListDrawable);
   }
 
-  private boolean isGuessComplete() {
-    return IntStream.range(0, binding.guessControls.getChildCount())
-        .map((pos) -> (Integer) binding.guessControls.getChildAt(pos).getTag())
-        .allMatch(symbolMap::hasSymbol);
+  private void submitGuess() {
+    int[] guessCodePoints = IntStream.range(0, binding.guessControls.getChildCount())
+        .mapToObj((pos) -> binding.guessControls.getChildAt(pos))
+        .mapToInt((v) -> (Integer) v.getTag())
+        .toArray();
+    binding.loading.setVisibility(View.VISIBLE);
+    gameViewModel.submitGuess(new String(guessCodePoints, 0, guessCodePoints.length));
   }
 
 }

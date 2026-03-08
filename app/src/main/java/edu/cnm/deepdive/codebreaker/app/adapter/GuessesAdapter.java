@@ -3,6 +3,7 @@ package edu.cnm.deepdive.codebreaker.app.adapter;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -16,16 +17,20 @@ import edu.cnm.deepdive.codebreaker.app.util.SymbolMap;
 import edu.cnm.deepdive.codebreaker.app.util.SymbolMap.SymbolAttributes;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
 
+  private static final Consumer<Guess> DEFAULT_ON_GUESS_CLICK_LISTENER = game -> {};
+  
   private final LayoutInflater inflater;
   private final SymbolMap symbolMap;
   private final String matchCountFormat;
   private final List<Guess> guesses;
 
+  private Consumer<Guess> onGuessClickListener = DEFAULT_ON_GUESS_CLICK_LISTENER;
+  
   @Inject
   public GuessesAdapter(@ActivityContext Context context, SymbolMap symbolMap) {
     inflater = LayoutInflater.from(context);
@@ -61,11 +66,22 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
     notifyItemRangeRemoved(0, size);
   }
 
+  public Consumer<Guess> getOnGuessClickListener() {
+    return onGuessClickListener;
+  }
+
+  public void setOnGuessClickListener(
+      Consumer<Guess> onGuessClickListener) {
+    this.onGuessClickListener = (onGuessClickListener != null) 
+        ? onGuessClickListener 
+        : DEFAULT_ON_GUESS_CLICK_LISTENER;
+  }
+
   private class GuessHolder extends RecyclerView.ViewHolder {
 
     private final ItemGuessBinding binding;
 
-    public GuessHolder(@NonNull ItemGuessBinding binding) {
+    private GuessHolder(@NonNull ItemGuessBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
@@ -77,16 +93,21 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
       guess
           .getText()
           .codePoints()
-          .forEach((codePoint) -> {
-            ImageView character = (ImageView) inflater.inflate(
-                R.layout.item_guess_character, binding.symbols, false);
-            SymbolAttributes attributes = symbolMap.getAttributes(codePoint);
-            character.setImageResource(attributes.getDrawableId());
-            character.setImageTintList(ColorStateList.valueOf(attributes.getColor()));
-            character.setContentDescription(attributes.getName());
-            character.setTooltipText(attributes.getName());
-            binding.symbols.addView(character);
-          });
+          .mapToObj(this::buildSymbolView)
+          .forEach(binding.symbols::addView);
+      binding
+          .container
+          .setOnClickListener((v) -> onGuessClickListener.accept(guess));
+    }
+
+    private View buildSymbolView(int codePoint) {
+      ImageView symbolView =
+          (ImageView) inflater.inflate(R.layout.item_guess_symbol, binding.symbols, false);
+      SymbolAttributes attributes = symbolMap.getAttributes(codePoint);
+      symbolView.setImageResource(attributes.getDrawableId());
+      symbolView.setImageTintList(ColorStateList.valueOf(attributes.getColor()));
+      symbolView.setContentDescription(attributes.getName());
+      return symbolView;
     }
 
   }

@@ -5,5 +5,8 @@
   android:layout_width="@dimen/button_size"
   android:layout_height="@dimen/button_size"
   android:layout_margin="@dimen/half_static_spacing"
+  android:padding="@dimen/half_static_spacing"
+  android:clickable="false"
+  android:focusable="false"
   tools:ignore="ContentDescription"
   tools:viewBindingIgnore="true"/>

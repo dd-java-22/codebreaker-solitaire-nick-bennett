@@ -7,9 +7,9 @@
   <item
     android:id="@+id/symbol_layer"
     android:drawable="@drawable/symbol"
-    android:top="@dimen/half_dynamic_spacing"
-    android:left="@dimen/half_dynamic_spacing"
-    android:bottom="@dimen/half_dynamic_spacing"
-    android:right="@dimen/half_dynamic_spacing"/>
+    android:top="@dimen/guess_symbol_padding"
+    android:left="@dimen/guess_symbol_padding"
+    android:bottom="@dimen/guess_symbol_padding"
+    android:right="@dimen/guess_symbol_padding"/>
 
 </layer-list>

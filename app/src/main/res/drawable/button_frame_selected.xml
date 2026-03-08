@@ -4,10 +4,9 @@
   android:shape="rectangle">
 
   <stroke
-    android:color="@android:color/black"
+    android:color="?attr/colorOutline"
     android:width="2dp"/>
-  <solid
-    android:color="#FFE0E0E0"/>
+
   <size
     android:width="@dimen/button_size"
     android:height="@dimen/button_size"/>

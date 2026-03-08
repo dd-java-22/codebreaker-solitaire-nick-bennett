@@ -1,0 +1,651 @@
+diff --git a/app/src/main/java/edu/cnm/deepdive/codebreaker/app/adapter/GuessesAdapter.java b/app/src/main/java/edu/cnm/deepdive/codebreaker/app/adapter/GuessesAdapter.java
+index c915d3e..fe9e510 100644
+--- a/app/src/main/java/edu/cnm/deepdive/codebreaker/app/adapter/GuessesAdapter.java
++++ b/app/src/main/java/edu/cnm/deepdive/codebreaker/app/adapter/GuessesAdapter.java
+@@ -3,6 +3,7 @@ package edu.cnm.deepdive.codebreaker.app.adapter;
+ import android.content.Context;
+ import android.content.res.ColorStateList;
+ import android.view.LayoutInflater;
++import android.view.View;
+ import android.widget.ImageView;
+ import android.view.ViewGroup;
+ import androidx.annotation.NonNull;
+@@ -16,16 +17,20 @@ import edu.cnm.deepdive.codebreaker.app.util.SymbolMap;
+ import edu.cnm.deepdive.codebreaker.app.util.SymbolMap.SymbolAttributes;
+ import jakarta.inject.Inject;
+ import java.util.ArrayList;
+-import java.util.Collection;
+ import java.util.List;
++import java.util.function.Consumer;
+
+ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
+
++  private static final Consumer<Guess> DEFAULT_ON_GUESS_CLICK_LISTENER = game -> {};
++
+   private final LayoutInflater inflater;
+   private final SymbolMap symbolMap;
+   private final String matchCountFormat;
+   private final List<Guess> guesses;
+
++  private Consumer<Guess> onGuessClickListener = DEFAULT_ON_GUESS_CLICK_LISTENER;
++
+   @Inject
+   public GuessesAdapter(@ActivityContext Context context, SymbolMap symbolMap) {
+     inflater = LayoutInflater.from(context);
+@@ -61,11 +66,22 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
+     notifyItemRangeRemoved(0, size);
+   }
+
++  public Consumer<Guess> getOnGuessClickListener() {
++    return onGuessClickListener;
++  }
++
++  public void setOnGuessClickListener(
++      Consumer<Guess> onGuessClickListener) {
++    this.onGuessClickListener = (onGuessClickListener != null)
++        ? onGuessClickListener
++        : DEFAULT_ON_GUESS_CLICK_LISTENER;
++  }
++
+   private class GuessHolder extends RecyclerView.ViewHolder {
+
+     private final ItemGuessBinding binding;
+
+-    public GuessHolder(@NonNull ItemGuessBinding binding) {
++    private GuessHolder(@NonNull ItemGuessBinding binding) {
+       super(binding.getRoot());
+       this.binding = binding;
+     }
+@@ -77,16 +93,21 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
+       guess
+           .getText()
+           .codePoints()
+-          .forEach((codePoint) -> {
+-            ImageView character = (ImageView) inflater.inflate(
+-                R.layout.item_guess_character, binding.symbols, false);
+-            SymbolAttributes attributes = symbolMap.getAttributes(codePoint);
+-            character.setImageResource(attributes.getDrawableId());
+-            character.setImageTintList(ColorStateList.valueOf(attributes.getColor()));
+-            character.setContentDescription(attributes.getName());
+-            character.setTooltipText(attributes.getName());
+-            binding.symbols.addView(character);
+-          });
++          .mapToObj(this::buildSymbolView)
++          .forEach(binding.symbols::addView);
++      binding
++          .container
++          .setOnClickListener((v) -> onGuessClickListener.accept(guess));
++    }
++
++    private View buildSymbolView(int codePoint) {
++      ImageView symbolView =
++          (ImageView) inflater.inflate(R.layout.item_guess_symbol, binding.symbols, false);
++      SymbolAttributes attributes = symbolMap.getAttributes(codePoint);
++      symbolView.setImageResource(attributes.getDrawableId());
++      symbolView.setImageTintList(ColorStateList.valueOf(attributes.getColor()));
++      symbolView.setContentDescription(attributes.getName());
++      return symbolView;
+     }
+
+   }
+
+diff --git a/app/src/main/java/edu/cnm/deepdive/codebreaker/app/controller/GameFragment.java b/app/src/main/java/edu/cnm/deepdive/codebreaker/app/controller/GameFragment.java
+index 7e6d6e0..c8e751e 100644
+--- a/app/src/main/java/edu/cnm/deepdive/codebreaker/app/controller/GameFragment.java
++++ b/app/src/main/java/edu/cnm/deepdive/codebreaker/app/controller/GameFragment.java
+@@ -48,7 +48,6 @@ public class GameFragment extends Fragment {
+
+   private FragmentGameBinding binding;
+   private GameViewModel gameViewModel;
+-  private Game game;
+
+   @Override
+   public @Nullable View onCreateView(@NonNull LayoutInflater inflater,
+@@ -77,18 +76,11 @@ public class GameFragment extends Fragment {
+     super.onDestroyView();
+   }
+
+-  private void submitGuess() {
+-    int[] guessCodePoints = IntStream.range(0, binding.guessControls.getChildCount())
+-        .mapToObj((pos) -> binding.guessControls.getChildAt(pos))
+-        .mapToInt((v) -> (Integer) v.getTag())
+-        .toArray();
+-    gameViewModel.submitGuess(new String(guessCodePoints, 0, guessCodePoints.length));
+-  }
+-
+   private void handleGame(Game game) {
+-    buildGuessControls(game);
+-    buildPaletteControls(game);
+     updateGuessList(game);
++    buildGuessControls(game, lastGuess(game));
++    buildPaletteControls(game);
++    binding.loading.setVisibility(View.GONE);
+   }
+
+   private void handleSolved(Boolean solved) {
+@@ -119,18 +111,35 @@ public class GameFragment extends Fragment {
+
+   private void updateGuessList(Game game) {
+     List<Guess> guesses = game.getGuesses();
++    Game previousGame = (Game) binding.guesses.getTag();
++    int oldSize = adapter.getItemCount();
+     //noinspection DataFlowIssue
+-    if (guesses.size() < adapter.getItemCount() || game != this.game) {
++    int newSize = guesses.size();
++    if (newSize < oldSize || game != previousGame) {
+       adapter.clear();
+-      adapter.addAll(guesses);
+-    } else if (guesses.size() > adapter.getItemCount()) {
+-      adapter.addAll(guesses.subList(adapter.getItemCount(), guesses.size()));
++      oldSize = 0;
+     }
+-    this.game = game;
++    if (newSize > oldSize) {
++      adapter.addAll(guesses.subList(oldSize, newSize));
++      binding.guesses.scrollToPosition(newSize - 1);
++    }
++    binding.guesses.setTag(game);
++    adapter.setOnGuessClickListener((Boolean.FALSE.equals(game.getSolved()))
++        ? (guess) -> buildGuessControls(game, guess)
++        : null);
+   }
+
+-  private void buildGuessControls(Game game) {
+-    int[] previousGuess = getLastGuessCodePoints(game);
++  private Guess lastGuess(Game game) {
++    //noinspection DataFlowIssue,SequencedCollectionMethodCanBeUsed
++    return game.getGuesses().isEmpty()
++        ? null
++        : game.getGuesses().get(game.getGuesses().size() - 1);
++  }
++
++  private void buildGuessControls(Game game, Guess baseGuess) {
++    int[] previousGuess = (baseGuess == null)
++        ? new int[game.getLength()]
++        : baseGuess.getText().codePoints().toArray();
+     binding.guessControls.removeAllViews();
+     IntStream.of(previousGuess)
+         .mapToObj(this::buildGuessButton)
+@@ -143,31 +152,17 @@ public class GameFragment extends Fragment {
+
+   private void buildPaletteControls(Game game) {
+     binding.palette.removeAllViews();
+-    game.getPool()
++    game
++        .getPool()
+         .codePoints()
+         .mapToObj(this::buildPaletteButton)
+         .forEach(binding.palette::addView);
+   }
+
+-  private static int[] getLastGuessCodePoints(Game game) {
+-    List<Guess> guesses = game.getGuesses();
+-    //noinspection DataFlowIssue,SequencedCollectionMethodCanBeUsed
+-    return guesses.isEmpty()
+-        ? new int[game.getLength()]
+-        : guesses
+-            .get(guesses.size() - 1)
+-            .getText()
+-            .codePoints()
+-            .toArray();
+-  }
+-
+-  private @NonNull CompoundButton buildGuessButton(int codePoint) {
+-    CompoundButton guessControl = (CompoundButton) getLayoutInflater()
+-        .inflate(R.layout.button_guess, binding.palette, false);
+-    attachText(codePoint, guessControl);
+-    attachBackground(codePoint, guessControl);
+-    guessControl.setTag(codePoint);
+-    return guessControl;
++  private boolean isGuessComplete() {
++    return IntStream.range(0, binding.guessControls.getChildCount())
++        .map((pos) -> (Integer) binding.guessControls.getChildAt(pos).getTag())
++        .allMatch(symbolMap::hasSymbol);
+   }
+
+   private @NonNull ImageView buildPaletteButton(int codePoint) {
+@@ -183,6 +178,15 @@ public class GameFragment extends Fragment {
+     return paletteControl;
+   }
+
++  private @NonNull CompoundButton buildGuessButton(int codePoint) {
++    CompoundButton guessControl = (CompoundButton) getLayoutInflater()
++        .inflate(R.layout.button_guess, binding.palette, false);
++    attachText(codePoint, guessControl);
++    attachBackground(codePoint, guessControl);
++    guessControl.setTag(codePoint);
++    return guessControl;
++  }
++
+   private void handlePaletteClick(View control) {
+     int codePoint = (Integer) control.getTag();
+     int selectedGuessWidgetId = binding.guessControls.getCheckedRadioButtonId();
+@@ -234,10 +238,13 @@ public class GameFragment extends Fragment {
+     control.setBackground(stateListDrawable);
+   }
+
+-  private boolean isGuessComplete() {
+-    return IntStream.range(0, binding.guessControls.getChildCount())
+-        .map((pos) -> (Integer) binding.guessControls.getChildAt(pos).getTag())
+-        .allMatch(symbolMap::hasSymbol);
++  private void submitGuess() {
++    int[] guessCodePoints = IntStream.range(0, binding.guessControls.getChildCount())
++        .mapToObj((pos) -> binding.guessControls.getChildAt(pos))
++        .mapToInt((v) -> (Integer) v.getTag())
++        .toArray();
++    binding.loading.setVisibility(View.VISIBLE);
++    gameViewModel.submitGuess(new String(guessCodePoints, 0, guessCodePoints.length));
+   }
+
+ }
+
+diff --git a/app/src/main/res/drawable/button_frame_selected.xml b/app/src/main/res/drawable/button_frame_selected.xml
+index 8ef79cb..e8561ff 100644
+--- a/app/src/main/res/drawable/button_frame_selected.xml
++++ b/app/src/main/res/drawable/button_frame_selected.xml
+@@ -4,10 +4,9 @@
+   android:shape="rectangle">
+
+   <stroke
+-    android:color="@android:color/black"
++    android:color="?attr/colorOutline"
+     android:width="2dp"/>
+-  <solid
+-    android:color="#FFE0E0E0"/>
++
+   <size
+     android:width="@dimen/button_size"
+     android:height="@dimen/button_size"/>
+
+diff --git a/app/src/main/res/drawable/button_frame_unselected.xml b/app/src/main/res/drawable/button_frame_unselected.xml
+index 7bf00e5..53a41d7 100644
+--- a/app/src/main/res/drawable/button_frame_unselected.xml
++++ b/app/src/main/res/drawable/button_frame_unselected.xml
+@@ -4,10 +4,11 @@
+   android:shape="rectangle">
+
+   <stroke
+-    android:color="@android:color/black"
+-    android:width="1dp"
+-    android:dashWidth="2dp"
+-    android:dashGap="2dp"/>
++    android:color="?attr/colorOutline"
++    android:width="@dimen/dash_thickness"
++    android:dashWidth="@dimen/dash_length"
++    android:dashGap="@dimen/dash_gap"/>
++
+   <size
+     android:width="@dimen/button_size"
+     android:height="@dimen/button_size"/>
+
+diff --git a/app/src/main/res/drawable/guess_symbol_selected.xml b/app/src/main/res/drawable/guess_symbol_selected.xml
+index c697c9a..ff3a8e8 100644
+--- a/app/src/main/res/drawable/guess_symbol_selected.xml
++++ b/app/src/main/res/drawable/guess_symbol_selected.xml
+@@ -4,12 +4,13 @@
+
+   <item
+     android:drawable="@drawable/button_frame_selected"/>
++
+   <item
+     android:id="@+id/symbol_layer"
+     android:drawable="@drawable/symbol"
+-    android:top="@dimen/half_dynamic_spacing"
+-    android:left="@dimen/half_dynamic_spacing"
+-    android:bottom="@dimen/half_dynamic_spacing"
+-    android:right="@dimen/half_dynamic_spacing"/>
++    android:top="@dimen/guess_symbol_padding"
++    android:left="@dimen/guess_symbol_padding"
++    android:bottom="@dimen/guess_symbol_padding"
++    android:right="@dimen/guess_symbol_padding"/>
+
+ </layer-list>
+\ No newline at end of file
+
+diff --git a/app/src/main/res/drawable/guess_symbol_unselected.xml b/app/src/main/res/drawable/guess_symbol_unselected.xml
+index 4beca2c..e1e7057 100644
+--- a/app/src/main/res/drawable/guess_symbol_unselected.xml
++++ b/app/src/main/res/drawable/guess_symbol_unselected.xml
+@@ -7,9 +7,9 @@
+   <item
+     android:id="@+id/symbol_layer"
+     android:drawable="@drawable/symbol"
+-    android:top="@dimen/half_dynamic_spacing"
+-    android:left="@dimen/half_dynamic_spacing"
+-    android:bottom="@dimen/half_dynamic_spacing"
+-    android:right="@dimen/half_dynamic_spacing"/>
++    android:top="@dimen/guess_symbol_padding"
++    android:left="@dimen/guess_symbol_padding"
++    android:bottom="@dimen/guess_symbol_padding"
++    android:right="@dimen/guess_symbol_padding"/>
+
+ </layer-list>
+\ No newline at end of file
+
+diff --git a/app/src/main/res/drawable/guess_toggle_symbol.xml b/app/src/main/res/drawable/guess_toggle_symbol.xml
+index 9d79116..bc6254e 100644
+--- a/app/src/main/res/drawable/guess_toggle_symbol.xml
++++ b/app/src/main/res/drawable/guess_toggle_symbol.xml
+@@ -4,6 +4,7 @@
+   <item
+     android:drawable="@drawable/guess_symbol_selected"
+     android:state_checked="true"/>
++
+   <item
+     android:drawable="@drawable/guess_symbol_unselected"
+     android:state_checked="false"/>
+
+diff --git a/app/src/main/res/drawable/item_guess_background.xml b/app/src/main/res/drawable/item_guess_background.xml
+index 8dd47ab..6a1a2f8 100644
+--- a/app/src/main/res/drawable/item_guess_background.xml
++++ b/app/src/main/res/drawable/item_guess_background.xml
+@@ -6,19 +6,20 @@
+   android:viewportWidth="24"
+   android:viewportHeight="24">
+
+-  <item>
+-    <shape android:shape="rectangle">
+-      <solid android:color="@android:color/transparent" />
+-    </shape>
+-  </item>
++  <item
++    android:top="-1dp"
++    android:left="-1dp"
++    android:right="-1dp">
+
+-  <item android:top="-1dp" android:left="-1dp" android:right="-1dp">
+     <shape android:shape="rectangle">
++
+       <stroke
+         android:width="1dp"
+         android:color="?attr/colorOutline" />
+       <solid android:color="@android:color/transparent" />
++
+     </shape>
++
+   </item>
+
+ </layer-list>
+
+diff --git a/app/src/main/res/drawable/match_count_separator.xml b/app/src/main/res/drawable/match_count_separator.xml
+index 20eb4ce..bf1b3ac 100644
+--- a/app/src/main/res/drawable/match_count_separator.xml
++++ b/app/src/main/res/drawable/match_count_separator.xml
+@@ -5,8 +5,10 @@
+   android:height="24dp"
+   android:viewportWidth="24"
+   android:viewportHeight="24">
++
+   <path
+     android:pathData="M 24,0 L 0,24"
+-    android:strokeWidth="0.5"
+-    android:strokeColor="@color/gray"/>
++    android:strokeWidth="0.25"
++    android:strokeColor="?attr/colorOutline"/>
++
+ </vector>
+
+diff --git a/app/src/main/res/drawable/send_button.xml b/app/src/main/res/drawable/send_button.xml
+index 3ef8998..4fd4061 100644
+--- a/app/src/main/res/drawable/send_button.xml
++++ b/app/src/main/res/drawable/send_button.xml
+@@ -1,4 +1,12 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <selector xmlns:android="http://schemas.android.com/apk/res/android">
+-
++
++  <item
++    android:state_enabled="false"
++    android:drawable="@drawable/send_disabled"/>
++
++  <item
++    android:state_enabled="true"
++    android:drawable="@drawable/send_enabled"/>
++
+ </selector>
+\ No newline at end of file
+
+diff --git a/app/src/main/res/drawable/send_disabled.xml b/app/src/main/res/drawable/send_disabled.xml
+index 82c4bca..86bfa3d 100644
+--- a/app/src/main/res/drawable/send_disabled.xml
++++ b/app/src/main/res/drawable/send_disabled.xml
+@@ -6,6 +6,6 @@
+   android:viewportHeight="24"
+   android:tint="?attr/colorSecondary">
+   <path
+-    android:fillColor="@android:color/black"
++    android:fillColor="#80000000"
+     android:pathData="M2.01,21 L 23,12 2.01,3 2,10 l 15,2 -15,2 z"/>
+ </vector>
+
+diff --git a/app/src/main/res/drawable/symbol.xml b/app/src/main/res/drawable/symbol.xml
+index bc8dedc..d35c5ce 100644
+--- a/app/src/main/res/drawable/symbol.xml
++++ b/app/src/main/res/drawable/symbol.xml
+@@ -3,7 +3,7 @@
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   android:shape="oval">
+   <solid
+-    android:color="#FFFF00C0" />
++    android:color="?attr/colorControlNormal" />
+   <size
+     android:width="@dimen/symbol_size"
+     android:height="@dimen/symbol_size" />
+
+diff --git a/app/src/main/res/layout/button_guess.xml b/app/src/main/res/layout/button_guess.xml
+index 95fb1ca..67557ad 100644
+--- a/app/src/main/res/layout/button_guess.xml
++++ b/app/src/main/res/layout/button_guess.xml
+@@ -3,6 +3,6 @@
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="@dimen/button_size"
+   android:layout_height="@dimen/button_size"
+-  android:layout_margin="@dimen/half_static_spacing"
++  android:layout_margin="@dimen/guess_button_margin"
+   android:padding="0dp"
+   android:button="@null"/>
+\ No newline at end of file
+
+diff --git a/app/src/main/res/layout/fragment_game.xml b/app/src/main/res/layout/fragment_game.xml
+index cbaffae..4ce79fc 100644
+--- a/app/src/main/res/layout/fragment_game.xml
++++ b/app/src/main/res/layout/fragment_game.xml
+@@ -38,7 +38,7 @@
+     android:contentDescription="@string/submit_guess"
+     android:tooltipText="@string/submit_guess"
+     android:background="?attr/selectableItemBackgroundBorderless"
+-    android:src="@drawable/ic_send"
++    android:src="@drawable/send_button"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintBottom_toTopOf="@id/palette"/>
+
+@@ -53,4 +53,15 @@
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintEnd_toEndOf="parent"/>
+
++  <com.google.android.material.progressindicator.CircularProgressIndicator
++    android:id="@+id/loading"
++    android:layout_width="wrap_content"
++    android:layout_height="wrap_content"
++    android:indeterminate="true"
++    android:visibility="gone"
++    app:layout_constraintTop_toTopOf="parent"
++    app:layout_constraintEnd_toEndOf="parent"
++    app:layout_constraintBottom_toBottomOf="parent"
++    app:layout_constraintStart_toStartOf="parent"/>
++
+ </androidx.constraintlayout.widget.ConstraintLayout>
+
+diff --git a/app/src/main/res/layout/item_guess.xml b/app/src/main/res/layout/item_guess.xml
+index 8fe341e..e5d5b89 100644
+--- a/app/src/main/res/layout/item_guess.xml
++++ b/app/src/main/res/layout/item_guess.xml
+@@ -4,46 +4,61 @@
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+-  android:background="@drawable/item_separator"
+-  android:baselineAligned="false"
+-  android:orientation="horizontal"
+-  android:padding="@dimen/half_static_spacing">
++  android:background="@drawable/item_guess_background">
+
+   <LinearLayout
+-    android:id="@+id/symbols"
+-    android:layout_width="0dp"
++    android:id="@+id/container"
++    android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+-    android:layout_weight="1"
+-    android:orientation="horizontal"/>
+-
+-  <LinearLayout
+-    android:id="@+id/results"
+-    android:layout_width="64dp"
+-    android:layout_height="match_parent"
+-    android:background="@drawable/separator_line"
++    android:baselineAligned="false"
+     android:orientation="horizontal"
+-    android:padding="@dimen/half_static_spacing">
++    android:paddingVertical="0dp"
++    android:paddingStart="@dimen/half_static_spacing"
++    android:paddingEnd="0dp"
++    android:background="?android:attr/selectableItemBackground"
++    android:focusable="true"
++    android:clickable="true">
+
+-    <TextView
+-      android:id="@+id/exact_matches"
++    <LinearLayout
++      android:id="@+id/symbols"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:layout_weight="1"
+-      android:layout_gravity="top|start"
+-      android:textAlignment="viewStart"
+-      android:includeFontPadding="false"
+-      tools:text="2"/>
++      android:layout_margin="@dimen/half_static_spacing"
++      android:orientation="horizontal"/>
+
+-    <TextView
+-      android:id="@+id/near_matches"
+-      android:layout_width="0dp"
+-      android:layout_height="wrap_content"
+-      android:layout_weight="1"
+-      android:layout_gravity="bottom|end"
+-      android:textAlignment="viewEnd"
+-      android:includeFontPadding="false"
+-      tools:text="2"/>
++    <LinearLayout
++      android:id="@+id/results"
++      android:layout_width="64dp"
++      android:layout_height="match_parent"
++      android:background="@drawable/match_count_separator"
++      android:orientation="horizontal"
++      android:paddingVertical="@dimen/half_dynamic_spacing"
++      android:paddingHorizontal="16dp">
+
+-  </LinearLayout>
++      <TextView
++        android:id="@+id/exact_matches"
++        android:layout_width="0dp"
++        android:layout_height="wrap_content"
++        android:layout_weight="1"
++        android:layout_gravity="top|start"
++        android:textAlignment="viewStart"
++        android:includeFontPadding="false"
++        style="?attr/textAppearanceBodyLarge"
++        tools:text="2"/>
++
++      <TextView
++        android:id="@+id/near_matches"
++        android:layout_width="0dp"
++        android:layout_height="wrap_content"
++        android:layout_weight="1"
++        android:layout_gravity="bottom|end"
++        android:textAlignment="viewEnd"
++        android:includeFontPadding="false"
++        style="?attr/textAppearanceBodyLarge"
++        tools:text="2"/>
+
++    </LinearLayout>
++
++  </LinearLayout>
+ </LinearLayout>
+
+diff --git a/app/src/main/res/layout/item_guess_symbol.xml b/app/src/main/res/layout/item_guess_symbol.xml
+index 174acdf..6039f45 100644
+--- a/app/src/main/res/layout/item_guess_symbol.xml
++++ b/app/src/main/res/layout/item_guess_symbol.xml
+@@ -6,7 +6,7 @@
+   android:layout_height="@dimen/button_size"
+   android:layout_margin="@dimen/half_static_spacing"
+   android:padding="@dimen/half_static_spacing"
+-  android:focusable="true"
+-  android:clickable="true"
++  android:clickable="false"
++  android:focusable="false"
+   tools:ignore="ContentDescription"
+   tools:viewBindingIgnore="true"/>
+
+diff --git a/app/src/main/res/values/colors.xml b/app/src/main/res/values/colors.xml
+index 81bdf2c..39bef65 100644
+--- a/app/src/main/res/values/colors.xml
++++ b/app/src/main/res/values/colors.xml
+@@ -1,12 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+-  <color name="red">#FFFF0000</color>
+-  <color name="orange">#FFFFA500</color>
+-  <color name="yellow">#FFFFFF00</color>
+-  <color name="green">#FF008000</color>
+-  <color name="blue">#FF0000FF</color>
+-  <color name="indigo">#FF4B0082</color>
+-  <color name="violet">#FFEE82EE</color>
++
+   <color name="gray">#FF808080</color>
+
+ </resources>
+
+diff --git a/app/src/main/res/values/dimens.xml b/app/src/main/res/values/dimens.xml
+index eac263b..25d0d30 100644
+--- a/app/src/main/res/values/dimens.xml
++++ b/app/src/main/res/values/dimens.xml
+@@ -1,8 +1,13 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+   <dimen name="symbol_size">36dp</dimen>
+-  <dimen name="symbol_border_width">4dp</dimen>
++  <dimen name="symbol_border_width">2dp</dimen>
+   <dimen name="half_dynamic_spacing">8dp</dimen>
+-  <dimen name="button_size">48dp</dimen>
+   <dimen name="half_static_spacing">4dp</dimen>
++  <dimen name="button_size">48dp</dimen>
++  <dimen name="guess_symbol_padding">6dp</dimen>
++  <dimen name="guess_button_margin">4dp</dimen>
++  <dimen name="dash_gap">2dp</dimen>
++  <dimen name="dash_length">3dp</dimen>
++  <dimen name="dash_thickness">1dp</dimen>
+ </resources>
+\ No newline at end of file
+
+diff --git a/app/src/main/res/values/symbols.xml b/app/src/main/res/values/symbols.xml
+index a13c9e5..3b644fa 100644
+--- a/app/src/main/res/values/symbols.xml
++++ b/app/src/main/res/values/symbols.xml
+@@ -21,6 +21,14 @@
+     <item>Violet</item>
+   </string-array>
+
++  <color name="red">#FFFF0000</color>
++  <color name="orange">#FFFFA500</color>
++  <color name="yellow">#FFFFFF00</color>
++  <color name="green">#FF008000</color>
++  <color name="blue">#FF0000FF</color>
++  <color name="indigo">#FF4B0082</color>
++  <color name="violet">#FFEE82EE</color>
++
+   <array name="symbol_colors">
+     <item>@color/red</item>
+     <item>@color/orange</item>

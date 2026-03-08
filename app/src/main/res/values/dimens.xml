@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <dimen name="symbol_size">36dp</dimen>
-  <dimen name="symbol_border_width">4dp</dimen>
+  <dimen name="symbol_border_width">2dp</dimen>
   <dimen name="half_dynamic_spacing">8dp</dimen>
-  <dimen name="button_size">48dp</dimen>
   <dimen name="half_static_spacing">4dp</dimen>
+  <dimen name="button_size">48dp</dimen>
+  <dimen name="guess_symbol_padding">6dp</dimen>
+  <dimen name="guess_button_margin">4dp</dimen>
+  <dimen name="dash_gap">2dp</dimen>
+  <dimen name="dash_length">3dp</dimen>
+  <dimen name="dash_thickness">1dp</dimen>
 </resources>

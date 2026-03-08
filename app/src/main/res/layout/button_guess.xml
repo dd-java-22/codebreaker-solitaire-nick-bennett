@@ -3,6 +3,6 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="@dimen/button_size"
   android:layout_height="@dimen/button_size"
-  android:layout_margin="@dimen/half_static_spacing"
+  android:layout_margin="@dimen/guess_button_margin"
   android:padding="0dp"
   android:button="@null"/>
