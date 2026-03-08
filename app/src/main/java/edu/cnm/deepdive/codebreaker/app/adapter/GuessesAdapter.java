@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class GuessesAdapter extends RecyclerView.Adapter<GuessesAdapter.GuessHolder> {
+public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
 
   private final LayoutInflater inflater;
   private final List<Guess> guesses;
@@ -26,13 +26,13 @@ public class GuessesAdapter extends RecyclerView.Adapter<GuessesAdapter.GuessHol
   }
 
   @Override
-  public @NonNull GuessHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+  public @NonNull ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     return new GuessHolder(ItemGuessBinding.inflate(inflater, parent, false));
   }
 
   @Override
-  public void onBindViewHolder(@NonNull GuessHolder holder, int position) {
-    throw new UnsupportedOperationException();
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    ((GuessHolder) holder).bind(guesses.get(position));
   }
 
   @Override
@@ -52,13 +52,18 @@ public class GuessesAdapter extends RecyclerView.Adapter<GuessesAdapter.GuessHol
     notifyItemRangeRemoved(0, size);
   }
 
-  static class GuessHolder extends RecyclerView.ViewHolder {
+  private static class GuessHolder extends RecyclerView.ViewHolder {
 
     private final ItemGuessBinding binding;
 
     public GuessHolder(@NonNull ItemGuessBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
+    }
+
+    private void bind(Guess guess) {
+      binding.exactMatches.setText(String.valueOf(guess.getExactMatches()));
+      binding.nearMatches.setText(String.valueOf(guess.getNearMatches()));
     }
 
   }
