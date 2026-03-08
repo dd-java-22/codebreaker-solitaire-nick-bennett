@@ -46,8 +46,9 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
   }
 
   public void clear() {
+    int size = guesses.size();
     guesses.clear();
-    notifyDataSetChanged();
+    notifyItemRangeRemoved(0, size);
   }
 
   private static class GuessHolder extends ViewHolder {
