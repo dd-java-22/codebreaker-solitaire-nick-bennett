@@ -219,9 +219,9 @@ public class GameFragment extends Fragment {
   @SuppressWarnings("DataFlowIssue")
   private void attachBackground(int codePoint, CompoundButton control) {
     LayerDrawable checkedState = (LayerDrawable) ResourcesCompat.getDrawable(
-        getResources(), R.drawable.guess_symbol_selected, null);
+        getResources(), R.drawable.guess_symbol_selected, null).mutate();
     LayerDrawable uncheckedState = (LayerDrawable) ResourcesCompat.getDrawable(
-        getResources(), R.drawable.guess_symbol_unselected, null);
+        getResources(), R.drawable.guess_symbol_unselected, null).mutate();
     if (symbolMap.hasSymbol(codePoint)) {
       Drawable drawable = ResourcesCompat.getDrawable(
           getResources(), symbolMap.getDrawableId(codePoint), null).mutate();

@@ -3,6 +3,9 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:shape="rectangle">
 
+  <solid
+    android:color="?attr/colorSurface"/>
+
   <stroke
     android:color="?attr/colorOutline"
     android:width="@dimen/outline_width_unselected"
