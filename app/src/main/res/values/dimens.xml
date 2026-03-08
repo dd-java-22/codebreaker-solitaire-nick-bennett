@@ -10,4 +10,5 @@
   <dimen name="dash_gap">2dp</dimen>
   <dimen name="dash_length">3dp</dimen>
   <dimen name="dash_thickness">1dp</dimen>
+  <dimen name="base_vector_size">24dp</dimen>
 </resources>

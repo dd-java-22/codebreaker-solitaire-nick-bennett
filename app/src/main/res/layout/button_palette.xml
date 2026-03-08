@@ -4,8 +4,9 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="@dimen/button_size"
   android:layout_height="@dimen/button_size"
-  android:layout_marginVertical="@dimen/half_dynamic_spacing"
-  android:background="?attr/selectableItemBackgroundBorderless"
+  android:layout_margin="@dimen/half_dynamic_spacing"
   android:layout_weight="1"
+  android:background="?attr/selectableItemBackgroundBorderless"
+  android:scaleType="fitCenter"
   tools:ignore="ContentDescription"
   tools:viewBindingIgnore="true"/>

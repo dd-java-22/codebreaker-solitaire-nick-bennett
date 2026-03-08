@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:width="24dp"
-  android:height="24dp"
-  android:viewportWidth="24"
-  android:viewportHeight="24">
+  android:width="@dimen/base_drawable_size"
+  android:height="@dimen/base_drawable_size"
+  android:viewportWidth="@integer/base_viewport_size"
+  android:viewportHeight="@integer/base_viewport_size">
 
   <item
     android:top="-1dp"
@@ -16,6 +16,7 @@
       <stroke
         android:width="1dp"
         android:color="?attr/colorOutline" />
+
       <solid android:color="@android:color/transparent" />
 
     </shape>

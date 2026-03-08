@@ -5,12 +5,12 @@
 
   <stroke
     android:color="?attr/colorOutline"
-    android:width="@dimen/dash_thickness"
+    android:width="@dimen/outline_width_unselected"
     android:dashWidth="@dimen/dash_length"
     android:dashGap="@dimen/dash_gap"/>
 
   <size
-    android:width="@dimen/button_size"
-    android:height="@dimen/button_size"/>
+    android:width="@dimen/control_size"
+    android:height="@dimen/control_size"/>
 
 </shape>

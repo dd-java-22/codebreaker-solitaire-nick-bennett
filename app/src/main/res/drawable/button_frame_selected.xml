@@ -5,10 +5,10 @@
 
   <stroke
     android:color="?attr/colorOutline"
-    android:width="2dp"/>
+    android:width="@dimen/outline_width_selected"/>
 
   <size
-    android:width="@dimen/button_size"
-    android:height="@dimen/button_size"/>
+    android:width="@dimen/control_size"
+    android:height="@dimen/control_size"/>
 
 </shape>

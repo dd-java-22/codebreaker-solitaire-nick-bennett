@@ -35,10 +35,11 @@
     android:layout_width="@dimen/button_size"
     android:layout_height="@dimen/button_size"
     android:layout_margin="@dimen/half_dynamic_spacing"
+    android:src="@drawable/send_button"
+    android:scaleType="fitXY"
+    android:background="?attr/selectableItemBackgroundBorderless"
     android:contentDescription="@string/submit_guess"
     android:tooltipText="@string/submit_guess"
-    android:background="?attr/selectableItemBackgroundBorderless"
-    android:src="@drawable/send_button"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintBottom_toTopOf="@id/palette"/>
 
