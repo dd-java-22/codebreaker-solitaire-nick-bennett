@@ -18,19 +18,20 @@ import java.util.List;
 public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
 
   private final LayoutInflater inflater;
-  private final List<Guess> guesses;
   private final String matchCountFormat;
+  private final List<Guess> guesses;
 
   @Inject
   public GuessesAdapter(@ActivityContext Context context) {
     inflater = LayoutInflater.from(context);
-    guesses = new ArrayList<>();
     matchCountFormat = context.getString(R.string.match_count_format);
+    guesses = new ArrayList<>();
   }
 
   @Override
   public @NonNull ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    return new GuessHolder(ItemGuessBinding.inflate(inflater, parent, false), matchCountFormat);
+    return new GuessHolder(
+        ItemGuessBinding.inflate(inflater, parent, false), matchCountFormat);
   }
 
   @Override
