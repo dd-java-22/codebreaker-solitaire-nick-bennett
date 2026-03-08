@@ -14,5 +14,7 @@
 
   <dimen name="dash_gap">2dp</dimen>
   <dimen name="dash_length">3dp</dimen>
+  <dimen name="guess_separator_width">1dp</dimen>
+  <dimen name="outside_viewport_offset">-2dp</dimen>
 
 </resources>
