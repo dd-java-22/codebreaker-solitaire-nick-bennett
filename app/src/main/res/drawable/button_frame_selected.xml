@@ -7,7 +7,7 @@
     android:color="?attr/colorSurface"/>
 
   <stroke
-    android:color="?attr/colorOutline"
+    android:color="?attr/colorPrimary"
     android:width="@dimen/outline_width_selected"/>
 
   <size

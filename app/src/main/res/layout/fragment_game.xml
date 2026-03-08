@@ -29,6 +29,7 @@
     android:layout_margin="@dimen/half_dynamic_spacing"
     android:orientation="horizontal"
     android:padding="@dimen/half_dynamic_spacing"
+    android:background="?attr/colorSurfaceVariant"
     app:layout_constraintBottom_toTopOf="@id/palette"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toStartOf="@id/submit"/>
