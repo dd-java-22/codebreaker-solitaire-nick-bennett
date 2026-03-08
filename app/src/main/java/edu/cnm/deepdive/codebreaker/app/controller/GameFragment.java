@@ -1,5 +1,6 @@
 package edu.cnm.deepdive.codebreaker.app.controller;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -13,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
@@ -218,13 +219,14 @@ public class GameFragment extends Fragment {
 
   @SuppressWarnings("DataFlowIssue")
   private void attachBackground(int codePoint, CompoundButton control) {
-    LayerDrawable checkedState = (LayerDrawable) ResourcesCompat.getDrawable(
-        getResources(), R.drawable.guess_symbol_selected, null).mutate();
-    LayerDrawable uncheckedState = (LayerDrawable) ResourcesCompat.getDrawable(
-        getResources(), R.drawable.guess_symbol_unselected, null).mutate();
+    Context context = requireContext();
+    LayerDrawable checkedState = (LayerDrawable) AppCompatResources.getDrawable(
+        context, R.drawable.guess_symbol_selected).mutate();
+    LayerDrawable uncheckedState = (LayerDrawable) AppCompatResources.getDrawable(
+        context, R.drawable.guess_symbol_unselected).mutate();
     if (symbolMap.hasSymbol(codePoint)) {
-      Drawable drawable = ResourcesCompat.getDrawable(
-          getResources(), symbolMap.getDrawableId(codePoint), null).mutate();
+      Drawable drawable = AppCompatResources.getDrawable(
+          context, symbolMap.getDrawableId(codePoint)).mutate();
       drawable.setTint(symbolMap.getColor(codePoint));
       checkedState.setDrawableByLayerId(R.id.symbol_layer, drawable);
       uncheckedState.setDrawableByLayerId(R.id.symbol_layer, drawable);

@@ -3,18 +3,21 @@
 
   <dimen name="half_dynamic_spacing">8dp</dimen>
   <dimen name="half_static_spacing">4dp</dimen>
-  <dimen name="guess_symbol_padding">6dp</dimen>
-  <dimen name="guess_button_margin">4dp</dimen>
+  <dimen name="full_dynamic_spacing">16dp</dimen>
+  <dimen name="outside_viewport_offset">-2dp</dimen>
 
   <dimen name="base_drawable_size">24dp</dimen>
   <dimen name="control_size">48dp</dimen>
 
-  <dimen name="outline_width_unselected">1dp</dimen>
   <dimen name="outline_width_selected">2dp</dimen>
+  <dimen name="outline_width_unselected">1dp</dimen>
 
-  <dimen name="dash_gap">2dp</dimen>
-  <dimen name="dash_length">3dp</dimen>
+  <dimen name="dash_gap">1dp</dimen>
+  <dimen name="dash_length">1dp</dimen>
+
   <dimen name="guess_separator_width">1dp</dimen>
-  <dimen name="outside_viewport_offset">-2dp</dimen>
+  <dimen name="guess_results_width">64dp</dimen>
+  <dimen name="guess_symbol_padding">6dp</dimen>
+  <dimen name="guess_button_margin">4dp</dimen>
 
 </resources>

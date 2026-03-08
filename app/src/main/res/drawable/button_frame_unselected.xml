@@ -4,10 +4,10 @@
   android:shape="rectangle">
 
   <solid
-    android:color="?attr/colorSurface"/>
+    android:color="@android:color/transparent"/>
 
   <stroke
-    android:color="?attr/colorOnSurfaceVariant"
+    android:color="?attr/colorOnPrimaryContainer"
     android:width="@dimen/outline_width_unselected"
     android:dashWidth="@dimen/dash_length"
     android:dashGap="@dimen/dash_gap"/>

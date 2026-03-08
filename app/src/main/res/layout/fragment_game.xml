@@ -17,36 +17,46 @@
     android:layout_marginBottom="@dimen/half_dynamic_spacing"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toTopOf="@id/submit"
+    app:layout_constraintBottom_toTopOf="@id/guess_container"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     tools:listitem="@layout/item_guess"/>
 
-  <RadioGroup
-    android:id="@+id/guess_controls"
+  <LinearLayout
+    android:id="@+id/guess_container"
     android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/half_dynamic_spacing"
     android:orientation="horizontal"
-    android:padding="@dimen/half_dynamic_spacing"
-    android:background="?attr/colorSurfaceVariant"
+    android:background="?attr/colorPrimaryContainer"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="0dp"
+    android:layout_marginVertical="@dimen/half_dynamic_spacing"
+    android:gravity="center_vertical"
+    android:paddingHorizontal="@dimen/half_dynamic_spacing"
     app:layout_constraintBottom_toTopOf="@id/palette"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toStartOf="@id/submit"/>
+    app:layout_constraintEnd_toEndOf="parent">
 
-  <ImageButton
-    android:id="@+id/submit"
-    android:layout_width="@dimen/control_size"
-    android:layout_height="@dimen/control_size"
-    android:layout_margin="@dimen/half_dynamic_spacing"
-    android:src="@drawable/send_button"
-    android:scaleType="fitXY"
-    android:background="?attr/selectableItemBackgroundBorderless"
-    android:contentDescription="@string/submit_guess"
-    android:tooltipText="@string/submit_guess"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="@id/guess_controls"
-    app:layout_constraintBottom_toBottomOf="@id/guess_controls"/>
+    <RadioGroup
+      android:id="@+id/guess_controls"
+      android:orientation="horizontal"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:layout_margin="0dp"
+      android:padding="@dimen/half_dynamic_spacing"/>
+
+    <ImageButton
+      android:id="@+id/submit"
+      android:layout_width="@dimen/control_size"
+      android:layout_height="@dimen/control_size"
+      android:layout_margin="@dimen/half_dynamic_spacing"
+      android:src="@drawable/send_button"
+      android:scaleType="fitXY"
+      android:background="?attr/selectableItemBackgroundBorderless"
+      android:contentDescription="@string/submit_guess"
+      android:tooltipText="@string/submit_guess"/>
+
+  </LinearLayout>
 
   <LinearLayout
     android:id="@+id/palette"
