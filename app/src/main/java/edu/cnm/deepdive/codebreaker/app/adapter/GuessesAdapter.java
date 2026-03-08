@@ -49,7 +49,7 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
     return guesses.size();
   }
 
-  public void addAll(Collection<Guess> guesses) {
+  public void addAll(List<Guess> guesses) {
     int startPosition = this.guesses.size();
     this.guesses.addAll(guesses);
     notifyItemRangeInserted(startPosition, guesses.size());
@@ -74,7 +74,8 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
       binding.exactMatches.setText(String.format(matchCountFormat, guess.getExactMatches()));
       binding.nearMatches.setText(String.format(matchCountFormat, guess.getNearMatches()));
       binding.symbols.removeAllViews();
-      guess.getText()
+      guess
+          .getText()
           .codePoints()
           .forEach((codePoint) -> {
             ImageView character = (ImageView) inflater.inflate(

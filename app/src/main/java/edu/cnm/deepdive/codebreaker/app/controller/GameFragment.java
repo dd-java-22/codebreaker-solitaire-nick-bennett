@@ -54,6 +54,7 @@ public class GameFragment extends Fragment {
   public @Nullable View onCreateView(@NonNull LayoutInflater inflater,
       @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     binding = FragmentGameBinding.inflate(inflater, container, false);
+    binding.guesses.setAdapter(adapter);
     binding.submit.setOnClickListener((v) -> submitGuess());
     return binding.getRoot();
   }
@@ -86,7 +87,8 @@ public class GameFragment extends Fragment {
 
   private void handleGame(Game game) {
     buildGuessControls(game);
-    buildPaletteControls(game);`n    updateGuessList(game);
+    buildPaletteControls(game);
+    updateGuessList(game);
   }
 
   private void handleSolved(Boolean solved) {
@@ -117,6 +119,7 @@ public class GameFragment extends Fragment {
 
   private void updateGuessList(Game game) {
     List<Guess> guesses = game.getGuesses();
+    //noinspection DataFlowIssue
     if (guesses.size() < adapter.getItemCount() || game != this.game) {
       adapter.clear();
       adapter.addAll(guesses);
