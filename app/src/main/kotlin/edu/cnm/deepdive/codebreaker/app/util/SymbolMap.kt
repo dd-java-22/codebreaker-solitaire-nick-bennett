@@ -3,8 +3,6 @@ package edu.cnm.deepdive.codebreaker.app.util
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.drawable.Drawable
-import androidx.core.content.ContextCompat
 import dagger.hilt.android.qualifiers.ActivityContext
 import edu.cnm.deepdive.codebreaker.app.R
 import jakarta.inject.Inject

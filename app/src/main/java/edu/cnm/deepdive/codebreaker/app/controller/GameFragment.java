@@ -18,22 +18,15 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.snackbar.Snackbar;
 import dagger.hilt.android.AndroidEntryPoint;
 import edu.cnm.deepdive.codebreaker.api.model.Game;
 import edu.cnm.deepdive.codebreaker.api.model.Guess;
 import edu.cnm.deepdive.codebreaker.app.R;
-import edu.cnm.deepdive.codebreaker.app.adapter.GuessesAdapter;
 import edu.cnm.deepdive.codebreaker.app.databinding.FragmentGameBinding;
 import edu.cnm.deepdive.codebreaker.app.util.SymbolMap;
 import edu.cnm.deepdive.codebreaker.app.util.SymbolMap.SymbolAttributes;
 import edu.cnm.deepdive.codebreaker.app.viewmodel.GameViewModel;
-import edu.cnm.deepdive.codebreaker.client.service.GameSolvedException;
-import edu.cnm.deepdive.codebreaker.client.service.InvalidPayloadException;
-import edu.cnm.deepdive.codebreaker.client.service.ResourceNotFoundException;
-import edu.cnm.deepdive.codebreaker.client.service.UnknownServiceException;
 import jakarta.inject.Inject;
-import java.util.List;
 import java.util.stream.IntStream;
 
 @AndroidEntryPoint
@@ -44,9 +37,6 @@ public class GameFragment extends Fragment {
   @Inject
   SymbolMap symbolMap;
 
-  @Inject
-  GuessesAdapter adapter;
-
   private FragmentGameBinding binding;
   private GameViewModel gameViewModel;
 
@@ -54,8 +44,7 @@ public class GameFragment extends Fragment {
   public @Nullable View onCreateView(@NonNull LayoutInflater inflater,
       @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     binding = FragmentGameBinding.inflate(inflater, container, false);
-    binding.guesses.setAdapter(adapter);
-    binding.submit.setOnClickListener((v) -> submitGuess());
+    // TODO: 2026-03-09 Attach onClickListener (for submitting a guess) to binding.submit.
     return binding.getRoot();
   }
 
@@ -78,56 +67,21 @@ public class GameFragment extends Fragment {
   }
 
   private void handleGame(Game game) {
-    updateGuessList(game);
     buildGuessControls(game, lastGuess(game));
     buildPaletteControls(game);
     binding.loading.setVisibility(View.GONE);
   }
 
   private void handleSolved(Boolean solved) {
-    boolean inProgress = Boolean.FALSE.equals(solved);
-    IntStream.range(0, binding.guessControls.getChildCount())
-        .mapToObj((pos) -> binding.guessControls.getChildAt(pos))
-        .forEach((v) -> v.setEnabled(inProgress));
-    IntStream.range(0, binding.palette.getChildCount())
-        .mapToObj((pos) -> binding.palette.getChildAt(pos))
-        .forEach((v) -> v.setEnabled(inProgress));
-    binding.submit.setEnabled(inProgress && isGuessComplete());
+    // TODO: 2026-03-09 Enable/disable buttons for solved state.
   }
 
   private void handleGuess(Guess guess) {
-    // TODO: 2026-03-06 Handle updates to the most recent guess.
+    // TODO: 2026-03-06 Handle display updates (if needed) for the most recent guess.
   }
 
   private void handleError(Throwable error) {
-    int messageId = switch (error) {
-      case GameSolvedException ignored -> R.string.game_solved;
-      case InvalidPayloadException ignored -> R.string.invalid_payload;
-      case ResourceNotFoundException ignored -> R.string.resource_not_found;
-      case UnknownServiceException ignored -> R.string.unknown_service_error;
-      default -> R.string.generic_error;
-    };
-    Snackbar.make(binding.getRoot(), messageId, Snackbar.LENGTH_LONG).show();
-  }
-
-  private void updateGuessList(Game game) {
-    List<Guess> guesses = game.getGuesses();
-    Game previousGame = (Game) binding.guesses.getTag();
-    int oldSize = adapter.getItemCount();
-    //noinspection DataFlowIssue
-    int newSize = guesses.size();
-    if (newSize < oldSize || game != previousGame) {
-      adapter.clear();
-      oldSize = 0;
-    }
-    if (newSize > oldSize) {
-      adapter.addAll(guesses.subList(oldSize, newSize));
-      binding.guesses.scrollToPosition(newSize - 1);
-    }
-    binding.guesses.setTag(game);
-    adapter.setOnGuessClickListener((Boolean.FALSE.equals(game.getSolved()))
-        ? (guess) -> buildGuessControls(game, guess)
-        : null);
+    // TODO: 2026-03-06 Display a Snackbar to the user, with message customized for the error type.
   }
 
   private Guess lastGuess(Game game) {
@@ -238,15 +192,6 @@ public class GameFragment extends Fragment {
     stateListDrawable.addState(new int[]{android.R.attr.state_checked}, checkedState);
     stateListDrawable.addState(new int[]{}, uncheckedState);
     control.setBackground(stateListDrawable);
-  }
-
-  private void submitGuess() {
-    int[] guessCodePoints = IntStream.range(0, binding.guessControls.getChildCount())
-        .mapToObj((pos) -> binding.guessControls.getChildAt(pos))
-        .mapToInt((v) -> (Integer) v.getTag())
-        .toArray();
-    binding.loading.setVisibility(View.VISIBLE);
-    gameViewModel.submitGuess(new String(guessCodePoints, 0, guessCodePoints.length));
   }
 
 }

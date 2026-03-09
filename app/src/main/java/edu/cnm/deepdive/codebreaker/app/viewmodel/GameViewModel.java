@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import edu.cnm.deepdive.codebreaker.api.model.Game;
 import edu.cnm.deepdive.codebreaker.api.model.Guess;
-import edu.cnm.deepdive.codebreaker.app.repository.SummaryRepository;
 import edu.cnm.deepdive.codebreaker.client.service.CodebreakerService;
 import jakarta.inject.Inject;
 
@@ -107,12 +106,6 @@ public class GameViewModel extends ViewModel {
 
   public LiveData<Throwable> getError() {
     return error;
-  }
-
-  @Override
-  protected void onCleared() {
-    gameService.shutdown();
-    super.onCleared();
   }
 
   private Void postThrowable(Throwable throwable) {
