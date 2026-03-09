@@ -1,8 +1,10 @@
 package edu.cnm.deepdive.codebreaker.app.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
@@ -11,6 +13,7 @@ import edu.cnm.deepdive.codebreaker.api.model.Guess;
 import edu.cnm.deepdive.codebreaker.app.R;
 import edu.cnm.deepdive.codebreaker.app.databinding.ItemGuessBinding;
 import edu.cnm.deepdive.codebreaker.app.util.SymbolMap;
+import edu.cnm.deepdive.codebreaker.app.util.SymbolMap.SymbolAttributes;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,9 +75,19 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder>{
     private void bind(int position) {
       Guess guess = guesses.get(position);
       binding.number.setText(String.format(guessNumberFormat, position + 1));
+      binding.symbols.removeAllViews();
+      guess.getText()
+          .codePoints()
+          .forEach((codePoint) -> {
+            ImageView symbolView = (ImageView) inflater.inflate(R.layout.item_guess_symbol, binding.symbols, false);
+            SymbolAttributes attributes = symbolMap.getAttributes(codePoint);
+            symbolView.setImageResource(attributes.getDrawableId());
+            symbolView.setImageTintList(ColorStateList.valueOf(attributes.getColor()));
+            symbolView.setContentDescription(attributes.getName());
+            binding.symbols.addView(symbolView);
+          });
       binding.exactMatches.setText(String.format(matchCountFormat, guess.getExactMatches()));
       binding.nearMatches.setText(String.format(matchCountFormat, guess.getNearMatches()));
-
     }
 
   }
