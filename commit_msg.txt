@@ -1,0 +1,5 @@
+Change by Junie: Implement MenuProvider in GameFragment for game options and settings navigation.
+
+Modified GameFragment to implement MenuProvider, inflating game_options.xml and handling menu item selections. Settings navigation is performed via NavController using the navigate_to_settings action. The MenuProvider is added in onViewCreated with a RESUMED lifecycle state restriction.
+
+Prompt: IMplement MenuProvider in game fragment, loading the game_options menu resource. If settings is selected, then the navigation component must be used to navigate to the settings fragment, using the action defined in the nav graph. If new game is selected, do nothing for now.
