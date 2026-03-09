@@ -22,11 +22,13 @@ import dagger.hilt.android.AndroidEntryPoint;
 import edu.cnm.deepdive.codebreaker.api.model.Game;
 import edu.cnm.deepdive.codebreaker.api.model.Guess;
 import edu.cnm.deepdive.codebreaker.app.R;
+import edu.cnm.deepdive.codebreaker.app.adapter.GuessesAdapter;
 import edu.cnm.deepdive.codebreaker.app.databinding.FragmentGameBinding;
 import edu.cnm.deepdive.codebreaker.app.util.SymbolMap;
 import edu.cnm.deepdive.codebreaker.app.util.SymbolMap.SymbolAttributes;
 import edu.cnm.deepdive.codebreaker.app.viewmodel.GameViewModel;
 import jakarta.inject.Inject;
+import java.util.List;
 import java.util.stream.IntStream;
 
 @AndroidEntryPoint
@@ -36,6 +38,8 @@ public class GameFragment extends Fragment {
 
   @Inject
   SymbolMap symbolMap;
+  @Inject
+  GuessesAdapter guessesAdapter;
 
   private FragmentGameBinding binding;
   private GameViewModel gameViewModel;
@@ -44,7 +48,7 @@ public class GameFragment extends Fragment {
   public @Nullable View onCreateView(@NonNull LayoutInflater inflater,
       @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     binding = FragmentGameBinding.inflate(inflater, container, false);
-    // TODO: 2026-03-09 Attach onClickListener (for submitting a guess) to binding.submit.
+    binding.guesses.setAdapter(guessesAdapter);
     binding.submit.setOnClickListener((v) -> submitGuess());
     return binding.getRoot();
   }
@@ -77,6 +81,19 @@ public class GameFragment extends Fragment {
   }
 
   private void handleGame(Game game) {
+    List<Guess> guesses = game.getGuesses();
+    Game previousGame = (Game) binding.guesses.getTag();
+    int oldSize = guessesAdapter.getItemCount();
+    int newSize = guesses.size();
+    if (newSize < oldSize || game != previousGame) {
+      guessesAdapter.clear();
+      oldSize = 0;
+    }
+    if (newSize > oldSize) {
+      guessesAdapter.addAll(guesses.subList(oldSize, newSize));
+      binding.guesses.scrollToPosition(newSize - 1);
+    }
+    binding.guesses.setTag(game);
     buildGuessControls(game, lastGuess(game));
     buildPaletteControls(game);
   }

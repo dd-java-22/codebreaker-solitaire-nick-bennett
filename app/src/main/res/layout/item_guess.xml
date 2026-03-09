@@ -24,6 +24,7 @@
     android:paddingVertical="0dp"
     android:includeFontPadding="false"
     android:textAlignment="viewEnd"
+    style="?attr/textAppearanceTitleMedium"
     tools:text="10"/>
 
   <LinearLayout
@@ -42,6 +43,27 @@
     android:paddingHorizontal="@dimen/full_dynamic_spacing"
     android:paddingVertical="@dimen/half_dynamic_spacing">
 
+    <TextView
+      android:id="@+id/exact_matches"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:layout_gravity="top|start"
+      android:includeFontPadding="false"
+      android:textAlignment="viewStart"
+      style="?attr/textAppearanceBodyLarge"
+      tools:text="2"/>
+
+    <TextView
+      android:id="@+id/near_matches"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:layout_gravity="bottom|end"
+      android:includeFontPadding="false"
+      android:textAlignment="viewEnd"
+      style="?attr/textAppearanceBodyLarge"
+      tools:text="1"/>
 
   </LinearLayout>
 
