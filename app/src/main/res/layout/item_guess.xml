@@ -6,9 +6,8 @@
   android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:paddingStart="@dimen/half_dynamic_spacing"
-  android:paddingEnd="0dp"
-  android:paddingVertical="0dp"
+  android:paddingHorizontal="@dimen/half_dynamic_spacing"
+  android:paddingVertical="@dimen/half_static_spacing"
   android:background="?attr/selectableItemBackground"
   android:baselineAligned="false"
   android:clickable="true"
@@ -24,7 +23,7 @@
     android:paddingVertical="0dp"
     android:includeFontPadding="false"
     android:textAlignment="viewEnd"
-    style="?attr/textAppearanceTitleMedium"
+    style="?attr/textAppearanceTitleLarge"
     tools:text="10"/>
 
   <LinearLayout
@@ -38,7 +37,8 @@
   <LinearLayout
     android:id="@+id/results"
     android:layout_width="@dimen/guess_results_width"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/match_count_separator"
     android:orientation="horizontal"
     android:paddingHorizontal="@dimen/full_dynamic_spacing"
     android:paddingVertical="@dimen/half_dynamic_spacing">

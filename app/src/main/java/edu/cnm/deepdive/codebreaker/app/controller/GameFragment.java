@@ -81,19 +81,7 @@ public class GameFragment extends Fragment {
   }
 
   private void handleGame(Game game) {
-    List<Guess> guesses = game.getGuesses();
-    Game previousGame = (Game) binding.guesses.getTag();
-    int oldSize = guessesAdapter.getItemCount();
-    int newSize = guesses.size();
-    if (newSize < oldSize || game != previousGame) {
-      guessesAdapter.clear();
-      oldSize = 0;
-    }
-    if (newSize > oldSize) {
-      guessesAdapter.addAll(guesses.subList(oldSize, newSize));
-      binding.guesses.scrollToPosition(newSize - 1);
-    }
-    binding.guesses.setTag(game);
+    updateGuessList(game);
     buildGuessControls(game, lastGuess(game));
     buildPaletteControls(game);
   }
@@ -108,6 +96,23 @@ public class GameFragment extends Fragment {
 
   private void handleError(Throwable error) {
     // TODO: 2026-03-06 Display a Snackbar to the user, with message customized for the error type.
+  }
+
+  private void updateGuessList(Game game) {
+    List<Guess> guesses = game.getGuesses();
+    Game previousGame = (Game) binding.guesses.getTag();
+    int oldSize = guessesAdapter.getItemCount();
+    //noinspection DataFlowIssue
+    int newSize = guesses.size();
+    if (newSize < oldSize || game != previousGame) {
+      guessesAdapter.clear();
+      oldSize = 0;
+    }
+    if (newSize > oldSize) {
+      guessesAdapter.addAll(guesses.subList(oldSize, newSize));
+      binding.guesses.scrollToPosition(newSize - 1);
+    }
+    binding.guesses.setTag(game);
   }
 
   private Guess lastGuess(Game game) {
@@ -129,6 +134,7 @@ public class GameFragment extends Fragment {
     if (binding.guessControls.getChildCount() > 0) {
       ((RadioButton) binding.guessControls.getChildAt(0)).setChecked(true);
     }
+    binding.submit.setEnabled(isGuessComplete());
   }
 
   private void buildPaletteControls(Game game) {

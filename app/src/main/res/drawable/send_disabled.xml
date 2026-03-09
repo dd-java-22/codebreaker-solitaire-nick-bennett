@@ -4,10 +4,10 @@
   android:height="@dimen/base_drawable_size"
   android:viewportWidth="24"
   android:viewportHeight="24"
-  android:tint="?attr/colorOnPrimaryContainer">
+  android:tint="?attr/colorPrimaryFixedDim">
 
   <path
-    android:fillColor="?attr/colorControlNormal"
+    android:fillColor="@android:color/black"
     android:pathData="M2.01,21 L 23,12 2.01,3 2,10 l 15,2 -15,2 z"/>
 
 </vector>

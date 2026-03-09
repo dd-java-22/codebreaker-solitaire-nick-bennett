@@ -74,7 +74,7 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder>{
       binding.number.setText(String.format(guessNumberFormat, position + 1));
       binding.exactMatches.setText(String.format(matchCountFormat, guess.getExactMatches()));
       binding.nearMatches.setText(String.format(matchCountFormat, guess.getNearMatches()));
-      // TODO: 2026-03-09 Populate the binding.symbols LinearLayout with the appropriate symbols.
+
     }
 
   }
