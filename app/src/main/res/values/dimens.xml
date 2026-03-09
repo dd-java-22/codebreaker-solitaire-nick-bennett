@@ -13,5 +13,9 @@
 
   <dimen name="guess_symbol_padding">6dp</dimen>
   <dimen name="guess_button_margin">4dp</dimen>
+  <dimen name="guess_number_width">32dp</dimen>
+  <dimen name="half_static_spacing">4dp</dimen>
+  <dimen name="guess_results_width">64dp</dimen>
+  <dimen name="full_dynamic_spacing">16dp</dimen>
 
 </resources>

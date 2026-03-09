@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/container"
+  android:orientation="horizontal"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:paddingStart="@dimen/half_dynamic_spacing"
+  android:paddingEnd="0dp"
+  android:paddingVertical="0dp"
+  android:background="?attr/selectableItemBackground"
+  android:baselineAligned="false"
+  android:clickable="true"
+  android:focusable="true"
+  android:gravity="center_vertical">
+
+  <TextView
+    android:id="@+id/number"
+    android:layout_width="@dimen/guess_number_width"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/half_dynamic_spacing"
+    android:paddingEnd="@dimen/half_static_spacing"
+    android:paddingVertical="0dp"
+    android:includeFontPadding="false"
+    android:textAlignment="viewEnd"
+    tools:text="10"/>
+
+  <LinearLayout
+    android:id="@+id/symbols"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:layout_margin="@dimen/half_static_spacing"
+    android:orientation="horizontal"/>
+
+  <LinearLayout
+    android:id="@+id/results"
+    android:layout_width="@dimen/guess_results_width"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/full_dynamic_spacing"
+    android:paddingVertical="@dimen/half_dynamic_spacing">
+
+
+  </LinearLayout>
+
+</LinearLayout>

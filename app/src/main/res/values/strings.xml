@@ -4,5 +4,7 @@
   <string name="submit_guess">Submit guess</string>
 
   <string name="no_symbol">No symbol</string>
+  <string name="guess_number_format">%d</string>
+  <string name="match_count_format">%d</string>
 
 </resources>
