@@ -9,11 +9,10 @@
   <dimen name="base_drawable_size">24dp</dimen>
   <dimen name="control_size">48dp</dimen>
 
-  <dimen name="outline_width_selected">2dp</dimen>
-  <dimen name="outline_width_unselected">1dp</dimen>
-
-  <dimen name="dash_gap">1dp</dimen>
-  <dimen name="dash_length">1dp</dimen>
+  <dimen name="outline_selected_width">2dp</dimen>
+  <dimen name="outline_unselected_width">1dp</dimen>
+  <dimen name="outline_unselected_dash_gap">1dp</dimen>
+  <dimen name="outline_unselected_dash_length">1dp</dimen>
 
   <dimen name="guess_separator_width">1dp</dimen>
   <dimen name="guess_results_width">64dp</dimen>

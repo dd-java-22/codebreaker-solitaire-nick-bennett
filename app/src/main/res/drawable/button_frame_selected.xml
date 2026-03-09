@@ -8,7 +8,7 @@
 
   <stroke
     android:color="?attr/colorOnPrimaryContainer"
-    android:width="@dimen/outline_width_selected"/>
+    android:width="@dimen/outline_selected_width"/>
 
   <size
     android:width="@dimen/control_size"
