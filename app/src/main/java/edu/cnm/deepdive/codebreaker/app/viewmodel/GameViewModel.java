@@ -1,15 +1,23 @@
 package edu.cnm.deepdive.codebreaker.app.viewmodel;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
+import androidx.preference.PreferenceManager;
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import edu.cnm.deepdive.codebreaker.api.model.Game;
 import edu.cnm.deepdive.codebreaker.api.model.Guess;
+import edu.cnm.deepdive.codebreaker.app.R;
 import edu.cnm.deepdive.codebreaker.client.service.CodebreakerService;
 import jakarta.inject.Inject;
+import java.util.LinkedHashSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @HiltViewModel
 public class GameViewModel extends ViewModel {
@@ -21,17 +29,34 @@ public class GameViewModel extends ViewModel {
   private final MutableLiveData<Guess> guess;
   private final LiveData<Boolean> solved;
   private final MutableLiveData<Throwable> error;
+  private final SharedPreferences prefs;
+  private final String codeLengthPrefKey;
+  private final int codeLengthPrefDefault;
+  private final String codePoolPrefKey;
+  private final String[] codePoolPrefDefault;
 
   @Inject
-  GameViewModel(CodebreakerService gameService) {
+  GameViewModel(@ApplicationContext Context context, CodebreakerService gameService) {
     this.gameService = gameService;
     game = new MutableLiveData<>();
     guess = new MutableLiveData<>();
     solved = Transformations.distinctUntilChanged(Transformations.map(game, Game::getSolved));
     error = new MutableLiveData<>();
+    prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    codeLengthPrefKey = context.getString(R.string.code_length_pref_key);
+    codeLengthPrefDefault = context.getResources().getInteger(R.integer.code_length_pref_default);
+    codePoolPrefKey = context.getString(R.string.code_pool_pref_key);
+    codePoolPrefDefault = context.getResources().getStringArray(R.array.symbols);
   }
 
-  public void startGame(String pool, int length) {
+  public void startGame() {
+    int length = prefs.getInt(codeLengthPrefKey, codeLengthPrefDefault);
+    String pool = prefs.getStringSet(codePoolPrefKey,
+        Stream.of(codePoolPrefDefault).collect(Collectors.toCollection(LinkedHashSet::new)))
+        .stream()
+        .mapToInt((symbol) -> symbol.codePointAt(0))
+        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+        .toString();
     Game game = new Game()
         .pool(pool)
         .length(length);
