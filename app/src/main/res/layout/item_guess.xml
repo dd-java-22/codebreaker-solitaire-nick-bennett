@@ -10,26 +10,26 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:baselineAligned="false"
-    android:orientation="horizontal"
-    android:paddingVertical="0dp"
     android:paddingStart="@dimen/half_static_spacing"
     android:paddingEnd="0dp"
     android:background="?android:attr/selectableItemBackground"
-    android:gravity="center_vertical"
+    android:baselineAligned="false"
+    android:clickable="true"
     android:focusable="true"
-    android:clickable="true">
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingVertical="0dp">
 
     <TextView
       android:id="@+id/number"
+      style="?attr/textAppearanceTitleLarge"
       android:layout_width="32dp"
       android:layout_height="wrap_content"
-      android:textAlignment="viewEnd"
       android:paddingStart="@dimen/half_dynamic_spacing"
       android:paddingEnd="@dimen/half_static_spacing"
       android:includeFontPadding="false"
-      style="?attr/textAppearanceTitleLarge"
-      tools:text="5"/>
+      android:textAlignment="viewEnd"
+      tools:text="10"/>
 
     <LinearLayout
       android:id="@+id/symbols"
@@ -45,32 +45,33 @@
       android:layout_height="match_parent"
       android:background="@drawable/match_count_separator"
       android:orientation="horizontal"
-      android:paddingVertical="@dimen/half_dynamic_spacing"
-      android:paddingHorizontal="@dimen/full_dynamic_spacing">
+      android:paddingHorizontal="@dimen/full_dynamic_spacing"
+      android:paddingVertical="@dimen/half_dynamic_spacing">
 
       <TextView
         android:id="@+id/exact_matches"
+        style="?attr/textAppearanceBodyLarge"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="top|start"
-        android:textAlignment="viewStart"
         android:includeFontPadding="false"
-        style="?attr/textAppearanceBodyLarge"
+        android:textAlignment="viewStart"
         tools:text="2"/>
 
       <TextView
         android:id="@+id/near_matches"
+        style="?attr/textAppearanceBodyLarge"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="bottom|end"
-        android:textAlignment="viewEnd"
         android:includeFontPadding="false"
-        style="?attr/textAppearanceBodyLarge"
+        android:textAlignment="viewEnd"
         tools:text="2"/>
 
     </LinearLayout>
 
   </LinearLayout>
+
 </LinearLayout>
