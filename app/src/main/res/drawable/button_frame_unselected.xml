@@ -8,7 +8,7 @@
 
   <stroke
     android:color="?attr/colorOnPrimaryContainer"
-    android:width="@dimen/outline_width_unselected"
+    android:width="@dimen/outline_unselected_width"
     android:dashWidth="@dimen/outline_unselected_dash_length"
     android:dashGap="@dimen/outline_unselected_dash_gap"/>
 

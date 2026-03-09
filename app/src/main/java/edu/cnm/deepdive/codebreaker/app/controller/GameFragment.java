@@ -69,7 +69,6 @@ public class GameFragment extends Fragment {
   private void handleGame(Game game) {
     buildGuessControls(game, lastGuess(game));
     buildPaletteControls(game);
-    binding.loading.setVisibility(View.GONE);
   }
 
   private void handleSolved(Boolean solved) {
