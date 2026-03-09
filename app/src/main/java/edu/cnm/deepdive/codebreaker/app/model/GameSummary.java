@@ -11,14 +11,14 @@ import java.time.Instant;
     tableName = "game_summary",
     indices = {
         @Index(value = "external_key", unique = true),
-        @Index(value = {"started", "solved", "last_played"}),
-        @Index(value = {"length", "guess_count"})
+        @Index(value = {"solved", "started", "last_played"}),
+        @Index(value = {"solved", "length(pool)", "length", "guess_count", "last_played - started"})
     }
 )
 public class GameSummary {
 
   @PrimaryKey(autoGenerate = true)
-  @ColumnInfo(name = "game_id")
+  @ColumnInfo(name = "game_summary_id")
   private long id;
 
   @ColumnInfo(name = "external_key")

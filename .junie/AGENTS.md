@@ -12,7 +12,7 @@
 
 ## Pre-Flight Checklist (Mandatory)
 
-Before performing any file modifications or running any build/test commands, you MUST check the current Git state of the working tree.
+When not in "Ask" mode, before performing any file modifications or running any build/test commands, you MUST check the current Git state of the working tree.
 
 1.  **Check Status:** Run `git status`.
 2.  **Commit if Needed:** If uncommitted changes exist (and weren't made by you during this session's current turn), commit them immediately using the **Prompted** format specified in the Team Guidelines (`../.junie/AGENTS.md`).
