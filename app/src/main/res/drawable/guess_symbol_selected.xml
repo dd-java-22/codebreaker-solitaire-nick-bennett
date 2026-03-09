@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item
+    android:drawable="@drawable/button_frame_selected"/>
+
+  <item
+    android:id="@+id/symbol_layer"
+    android:drawable="@drawable/symbol"
+    android:top="@dimen/guess_symbol_padding"
+    android:left="@dimen/guess_symbol_padding"
+    android:bottom="@dimen/guess_symbol_padding"
+    android:right="@dimen/guess_symbol_padding"/>
+
+</layer-list>

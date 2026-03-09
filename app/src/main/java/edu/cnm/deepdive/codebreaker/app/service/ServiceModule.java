@@ -1,4 +1,4 @@
-package edu.cnm.deepdive.codebreaker.app.hilt;
+package edu.cnm.deepdive.codebreaker.app.service;
 
 import dagger.Module;
 import dagger.Provides;
@@ -13,7 +13,7 @@ public class ServiceModule {
 
   @Provides
   @Singleton
-  public CodebreakerService provideCodebreakerService() {
+  CodebreakerService provideCodebreakerService() {
     return CodebreakerService.getInstance();
   }
 
