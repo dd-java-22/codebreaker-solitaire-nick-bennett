@@ -74,20 +74,32 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder>{
 
     private void bind(int position) {
       Guess guess = guesses.get(position);
+      setTextContent(position, guess);
+      buildGuessSymbols(guess);
+    }
+
+    private void setTextContent(int position, Guess guess) {
       binding.number.setText(String.format(guessNumberFormat, position + 1));
-      binding.symbols.removeAllViews();
-      guess.getText()
-          .codePoints()
-          .forEach((codePoint) -> {
-            ImageView symbolView = (ImageView) inflater.inflate(R.layout.item_guess_symbol, binding.symbols, false);
-            SymbolAttributes attributes = symbolMap.getAttributes(codePoint);
-            symbolView.setImageResource(attributes.getDrawableId());
-            symbolView.setImageTintList(ColorStateList.valueOf(attributes.getColor()));
-            symbolView.setContentDescription(attributes.getName());
-            binding.symbols.addView(symbolView);
-          });
       binding.exactMatches.setText(String.format(matchCountFormat, guess.getExactMatches()));
       binding.nearMatches.setText(String.format(matchCountFormat, guess.getNearMatches()));
+    }
+
+    private void buildGuessSymbols(Guess guess) {
+      binding.symbols.removeAllViews();
+      guess
+          .getText()
+          .codePoints()
+          .mapToObj(this::buildGuessSymbol)
+          .forEach(binding.symbols::addView);
+    }
+
+    private ImageView buildGuessSymbol(int codePoint) {
+      ImageView symbolView = (ImageView) inflater.inflate(R.layout.item_guess_symbol, binding.symbols, false);
+      SymbolAttributes attributes = symbolMap.getAttributes(codePoint);
+      symbolView.setImageResource(attributes.getDrawableId());
+      symbolView.setImageTintList(ColorStateList.valueOf(attributes.getColor()));
+      symbolView.setContentDescription(attributes.getName());
+      return symbolView;
     }
 
   }

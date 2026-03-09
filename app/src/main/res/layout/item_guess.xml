@@ -37,7 +37,7 @@
   <LinearLayout
     android:id="@+id/results"
     android:layout_width="@dimen/guess_results_width"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@drawable/match_count_separator"
     android:orientation="horizontal"
     android:paddingHorizontal="@dimen/full_dynamic_spacing"
