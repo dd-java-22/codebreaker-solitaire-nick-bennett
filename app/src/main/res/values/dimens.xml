@@ -17,5 +17,7 @@
   <dimen name="guess_button_margin">4dp</dimen>
   <dimen name="guess_number_width">40dp</dimen>
   <dimen name="guess_results_width">64dp</dimen>
+  <dimen name="outside_viewport_offset">-2dp</dimen>
+  <dimen name="guess_separator_width">0.5dp</dimen>
 
 </resources>

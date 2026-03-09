@@ -62,7 +62,7 @@ public class GameFragment extends Fragment {
     gameViewModel.getSolved().observe(lifecycleOwner, this::handleSolved);
     gameViewModel.getGuess().observe(lifecycleOwner, this::handleGuess);
     gameViewModel.getError().observe(lifecycleOwner, this::handleError);
-    gameViewModel.startGame("ROYGBIV", 4);
+    gameViewModel.startGame("ROYGBIV", 6);
   }
 
   @Override
