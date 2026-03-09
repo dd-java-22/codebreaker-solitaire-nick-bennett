@@ -1,4 +1,4 @@
-package edu.cnm.deepdive.codebreaker.app.service.database;
+package edu.cnm.deepdive.codebreaker.app.database;
 
 import android.content.Context;
 import androidx.annotation.Nullable;
@@ -7,18 +7,25 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
+import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
 import edu.cnm.deepdive.codebreaker.app.model.GameSummary;
-import edu.cnm.deepdive.codebreaker.app.service.database.GameDatabase.Converters;
+import edu.cnm.deepdive.codebreaker.app.database.GameDatabase.Converters;
 import jakarta.inject.Singleton;
 import java.time.Instant;
 
-@Database(entities = {GameSummary.class}, version = 1)
+@Database(
+    entities = {GameSummary.class},
+    version = GameDatabase.DATABASE_VERSION
+)
 @TypeConverters({Converters.class})
 public abstract class GameDatabase extends RoomDatabase {
+
+  static final int DATABASE_VERSION = 1;
+  static final String DATABASE_NAME = "game-db";
 
   public abstract GameSummaryDao getGameSummaryDao();
 
@@ -32,25 +39,6 @@ public abstract class GameDatabase extends RoomDatabase {
     @TypeConverter
     public static @Nullable Instant toInstant(@Nullable Long value) {
       return (value != null) ? Instant.ofEpochMilli(value) : null;
-    }
-
-  }
-
-  @dagger.Module
-  @InstallIn(SingletonComponent.class)
-  public static class Module {
-
-    @Provides
-    @Singleton
-    public GameDatabase provideDatabase(@ApplicationContext Context context) {
-      return Room.databaseBuilder(context, GameDatabase.class, "game-db")
-          .build();
-    }
-
-    @Provides
-    @Singleton
-    public GameSummaryDao provideGameSummaryDao(GameDatabase database) {
-      return database.getGameSummaryDao();
     }
 
   }

@@ -11,8 +11,8 @@ import java.time.Instant;
     tableName = "game_summary",
     indices = {
         @Index(value = "external_key", unique = true),
-        @Index(value = {"solved", "started", "last_played"}),
-        @Index(value = {"solved", "length(pool)", "length", "guess_count", "last_played - started"})
+        @Index({"solved", "started", "last_played"}),
+        @Index({"solved", "pool_size", "code_length", "guess_count", "last_played", "started"})
     }
 )
 public class GameSummary {
@@ -22,11 +22,15 @@ public class GameSummary {
   private long id;
 
   @ColumnInfo(name = "external_key")
-  private  @NonNull String externalKey = "";
+  private @NonNull String externalKey = "";
 
   private @NonNull String pool = "";
 
-  private int length;
+  @ColumnInfo(name = "pool_size")
+  private int poolSize;
+
+  @ColumnInfo(name = "code_length")
+  private int codeLength;
 
   private @NonNull Instant started = Instant.now();
 
@@ -68,12 +72,20 @@ public class GameSummary {
     this.pool = pool;
   }
 
-  public int getLength() {
-    return length;
+  public int getPoolSize() {
+    return poolSize;
   }
 
-  public void setLength(int length) {
-    this.length = length;
+  public void setPoolSize(int poolSize) {
+    this.poolSize = poolSize;
+  }
+
+  public int getCodeLength() {
+    return codeLength;
+  }
+
+  public void setCodeLength(int codeLength) {
+    this.codeLength = codeLength;
   }
 
   public @NonNull Instant getStarted() {

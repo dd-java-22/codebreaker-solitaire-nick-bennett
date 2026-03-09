@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import edu.cnm.deepdive.codebreaker.api.model.Game;
 import edu.cnm.deepdive.codebreaker.api.model.Guess;
+import edu.cnm.deepdive.codebreaker.app.repository.GameSummaryService;
 import edu.cnm.deepdive.codebreaker.client.service.CodebreakerService;
 import jakarta.inject.Inject;
 
@@ -16,15 +17,17 @@ public class GameViewModel extends ViewModel {
 
   private static final String TAG = GameViewModel.class.getSimpleName();
 
-  private final CodebreakerService service;
+  private final CodebreakerService gameService;
+  private final GameSummaryService summaryService;
   private final MutableLiveData<Game> game;
   private final MutableLiveData<Guess> guess;
   private final LiveData<Boolean> solved;
   private final MutableLiveData<Throwable> error;
 
   @Inject
-  GameViewModel(CodebreakerService service) {
-    this.service = service;
+  GameViewModel(CodebreakerService gameService, GameSummaryService summaryService) {
+    this.gameService = gameService;
+    this.summaryService = summaryService;
     game = new MutableLiveData<>();
     guess = new MutableLiveData<>();
     solved = Transformations.distinctUntilChanged(Transformations.map(game, Game::getSolved));
@@ -35,20 +38,20 @@ public class GameViewModel extends ViewModel {
     Game game = new Game()
         .pool(pool)
         .length(length);
-    service.startGame(game)
+    gameService.startGame(game)
         .thenAccept(this.game::postValue)
         .exceptionally(this::postThrowable);
   }
 
   public void fetchGame(String gameId) {
-    service
+    gameService
         .getGame(gameId)
         .thenAccept(this.game::postValue)
         .exceptionally(this::postThrowable);
   }
 
   public void deleteGame(String gameId) {
-    service
+    gameService
         .deleteGame(gameId)
         .exceptionally(this::postThrowable);
   }
@@ -58,7 +61,7 @@ public class GameViewModel extends ViewModel {
     this.game.setValue(null);
     if (game != null) {
       //noinspection DataFlowIssue
-      service
+      gameService
           .deleteGame(game.getId())
           .exceptionally(this::postThrowable);
     }
@@ -68,7 +71,7 @@ public class GameViewModel extends ViewModel {
   public void submitGuess(String text) {
     Guess guess = new Guess().text(text);
     Game game = this.game.getValue();
-    service
+    gameService
         .submitGuess(game, guess)
         .thenApply((g) -> {
           this.guess.postValue(g);
@@ -86,7 +89,7 @@ public class GameViewModel extends ViewModel {
 
   public void fetchGuess(String guessId) {
     //noinspection DataFlowIssue
-    service
+    gameService
         .getGuess(game.getValue().getId(), guessId)
         .thenAccept(guess::postValue)
         .exceptionally(this::postThrowable);
@@ -106,6 +109,12 @@ public class GameViewModel extends ViewModel {
 
   public LiveData<Throwable> getError() {
     return error;
+  }
+
+  @Override
+  protected void onCleared() {
+    gameService.shutdown();
+    super.onCleared();
   }
 
   private Void postThrowable(Throwable throwable) {
