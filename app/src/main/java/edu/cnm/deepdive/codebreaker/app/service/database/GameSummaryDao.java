@@ -1,4 +1,4 @@
-package edu.cnm.deepdive.codebreaker.app.service.dao;
+package edu.cnm.deepdive.codebreaker.app.service.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
