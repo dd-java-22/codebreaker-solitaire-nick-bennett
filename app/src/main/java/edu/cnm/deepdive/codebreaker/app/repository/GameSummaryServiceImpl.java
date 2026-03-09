@@ -2,7 +2,7 @@ package edu.cnm.deepdive.codebreaker.app.repository;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import dagger.hilt.android.scopes.ActivityScoped;
+import jakarta.inject.Singleton;
 import edu.cnm.deepdive.codebreaker.api.model.Game;
 import edu.cnm.deepdive.codebreaker.api.model.Guess;
 import edu.cnm.deepdive.codebreaker.app.database.GameSummaryDao;
@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@ActivityScoped
+@Singleton
 class GameSummaryServiceImpl implements GameSummaryService {
 
   private final GameSummaryDao dao;
