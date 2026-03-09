@@ -9,13 +9,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import dagger.hilt.android.AndroidEntryPoint;
+import edu.cnm.deepdive.codebreaker.app.R;
 import edu.cnm.deepdive.codebreaker.app.databinding.ActivityMainBinding;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
   private ActivityMainBinding binding;
+  private AppBarConfiguration appBarConfig;
+  private NavController navController;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
     EdgeToEdge.enable(this);
     ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), MainActivity::adjustInsets);
     setContentView(binding.getRoot());
+    setupNavigation();
+  }
+
+  @Override
+  public boolean onSupportNavigateUp() {
+    return NavigationUI.navigateUp(navController, appBarConfig);
   }
 
   private static @NonNull WindowInsetsCompat adjustInsets(
@@ -34,5 +47,13 @@ public class MainActivity extends AppCompatActivity {
     view.setLayoutParams(params);
     return WindowInsetsCompat.CONSUMED;
   }
+
+  private void setupNavigation() {
+    appBarConfig = new AppBarConfiguration.Builder(R.id.game_fragment).build();
+    NavHostFragment host = binding.navHostFragmentContainer.getFragment();
+    navController = host.getNavController();
+    NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig);
+  }
+
 
 }

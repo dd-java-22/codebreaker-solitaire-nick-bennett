@@ -6,11 +6,14 @@
   <string name="no_symbol">No symbol</string>
   <string name="guess_number_format">%d</string>
   <string name="match_count_format">%d</string>
-  <string name="code_length_pref_key">code_length</string>
+
+  <string name="code_length_pref_key">code_length_pref</string>
   <string name="code_length_pref_title">Code length</string>
   <string name="code_length_pref_summary">New games will use this value for the length of the generated secret code.</string>
+
   <string name="code_pool_pref_key">code_pool_pref</string>
   <string name="code_pool_pref_title">Code pool</string>
   <string name="code_pool_pref_summary">Selected items will be used as the pool of symbols available for code generation and guesses.</string>
+  <string name="settings_fragment_label">Codebreaker Settings</string>
 
 </resources>

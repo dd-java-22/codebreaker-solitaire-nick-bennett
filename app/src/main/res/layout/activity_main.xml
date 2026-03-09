@@ -2,8 +2,12 @@
 <androidx.fragment.app.FragmentContainerView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/main_fragment_container"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/nav_host_fragment_container"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:name="edu.cnm.deepdive.codebreaker.app.controller.GameFragment"
+  android:fitsSystemWindows="true"
+  android:name="androidx.navigation.fragment.NavHostFragment"
+  app:defaultNavHost="true"
+  app:navGraph="@navigation/nav_graph"
   tools:context=".controller.MainActivity"/>
