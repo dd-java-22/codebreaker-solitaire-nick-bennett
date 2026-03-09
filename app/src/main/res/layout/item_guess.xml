@@ -16,8 +16,20 @@
     android:paddingStart="@dimen/half_static_spacing"
     android:paddingEnd="0dp"
     android:background="?android:attr/selectableItemBackground"
+    android:gravity="center_vertical"
     android:focusable="true"
     android:clickable="true">
+
+    <TextView
+      android:id="@+id/number"
+      android:layout_width="32dp"
+      android:layout_height="wrap_content"
+      android:textAlignment="viewEnd"
+      android:paddingStart="@dimen/half_dynamic_spacing"
+      android:paddingEnd="@dimen/half_static_spacing"
+      android:includeFontPadding="false"
+      style="?attr/textAppearanceTitleLarge"
+      tools:text="5"/>
 
     <LinearLayout
       android:id="@+id/symbols"

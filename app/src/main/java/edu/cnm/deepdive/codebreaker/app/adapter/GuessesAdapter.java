@@ -26,6 +26,7 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
   
   private final LayoutInflater inflater;
   private final SymbolMap symbolMap;
+  private final String guessNumberFormat;
   private final String matchCountFormat;
   private final List<Guess> guesses;
 
@@ -35,6 +36,7 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
   public GuessesAdapter(@ActivityContext Context context, SymbolMap symbolMap) {
     inflater = LayoutInflater.from(context);
     this.symbolMap = symbolMap;
+    guessNumberFormat = context.getString(R.string.guess_number_format);
     matchCountFormat = context.getString(R.string.match_count_format);
     guesses = new ArrayList<>();
   }
@@ -46,7 +48,7 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-    ((GuessHolder) holder).bind(guesses.get(position));
+    ((GuessHolder) holder).bind(position);
   }
 
   @Override
@@ -86,7 +88,9 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder> {
       this.binding = binding;
     }
 
-    private void bind(Guess guess) {
+    private void bind(int position) {
+      Guess guess = guesses.get(position);
+      binding.number.setText(String.format(guessNumberFormat, position + 1));
       binding.exactMatches.setText(String.format(matchCountFormat, guess.getExactMatches()));
       binding.nearMatches.setText(String.format(matchCountFormat, guess.getNearMatches()));
       binding.symbols.removeAllViews();

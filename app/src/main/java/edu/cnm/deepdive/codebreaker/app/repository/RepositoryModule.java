@@ -9,7 +9,8 @@ import dagger.hilt.components.SingletonComponent;
 @InstallIn(SingletonComponent.class)
 public interface RepositoryModule {
 
+  @SuppressWarnings("ClassEscapesDefinedScope")
   @Binds
-  GameSummaryService bindGameSummaryService(GameSummaryServiceImpl implementation);
+  SummaryRepository bindSummaryService(SummaryRepositoryImpl implementation);
 
 }

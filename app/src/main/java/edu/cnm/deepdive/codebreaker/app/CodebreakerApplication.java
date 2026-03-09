@@ -2,14 +2,14 @@ package edu.cnm.deepdive.codebreaker.app;
 
 import android.app.Application;
 import dagger.hilt.android.HiltAndroidApp;
-import edu.cnm.deepdive.codebreaker.app.repository.GameSummaryService;
+import edu.cnm.deepdive.codebreaker.app.repository.SummaryRepository;
 import jakarta.inject.Inject;
 
 @HiltAndroidApp
 public class CodebreakerApplication extends Application {
 
   @Inject
-  GameSummaryService summaryService;
+  SummaryRepository summaryRepository;
 
   // Invoked when application loads.
   @Override
@@ -19,7 +19,7 @@ public class CodebreakerApplication extends Application {
 
   @Override
   public void onTerminate() {
-    summaryService.shutdown();
+    summaryRepository.shutdown();
     super.onTerminate();
   }
 

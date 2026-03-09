@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import edu.cnm.deepdive.codebreaker.api.model.Game;
 import edu.cnm.deepdive.codebreaker.api.model.Guess;
-import edu.cnm.deepdive.codebreaker.app.repository.GameSummaryService;
+import edu.cnm.deepdive.codebreaker.app.repository.SummaryRepository;
 import edu.cnm.deepdive.codebreaker.client.service.CodebreakerService;
 import jakarta.inject.Inject;
 
@@ -18,16 +18,14 @@ public class GameViewModel extends ViewModel {
   private static final String TAG = GameViewModel.class.getSimpleName();
 
   private final CodebreakerService gameService;
-  private final GameSummaryService summaryService;
   private final MutableLiveData<Game> game;
   private final MutableLiveData<Guess> guess;
   private final LiveData<Boolean> solved;
   private final MutableLiveData<Throwable> error;
 
   @Inject
-  GameViewModel(CodebreakerService gameService, GameSummaryService summaryService) {
+  GameViewModel(CodebreakerService gameService) {
     this.gameService = gameService;
-    this.summaryService = summaryService;
     game = new MutableLiveData<>();
     guess = new MutableLiveData<>();
     solved = Transformations.distinctUntilChanged(Transformations.map(game, Game::getSolved));

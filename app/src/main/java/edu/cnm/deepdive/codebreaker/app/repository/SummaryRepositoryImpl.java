@@ -15,13 +15,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Singleton
-class GameSummaryServiceImpl implements GameSummaryService {
+class SummaryRepositoryImpl implements SummaryRepository {
 
   private final GameSummaryDao dao;
   private final ExecutorService executor;
 
   @Inject
-  GameSummaryServiceImpl(GameSummaryDao dao) {
+  SummaryRepositoryImpl(GameSummaryDao dao) {
     this.dao = dao;
     executor = Executors.newSingleThreadExecutor();
   }

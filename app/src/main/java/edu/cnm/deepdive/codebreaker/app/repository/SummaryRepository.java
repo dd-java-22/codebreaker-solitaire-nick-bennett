@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public interface GameSummaryService {
+public interface SummaryRepository {
 
   CompletableFuture<GameSummary> summarize(Game game);
 
