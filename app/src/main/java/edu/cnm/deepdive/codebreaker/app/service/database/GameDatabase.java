@@ -18,14 +18,12 @@ public abstract class GameDatabase extends RoomDatabase {
   public static class Converters {
 
     @TypeConverter
-    @Nullable
-    public static Long toLong(@Nullable Instant value) {
+    public static @Nullable Long toLong(@Nullable Instant value) {
       return (value != null) ? value.toEpochMilli() : null;
     }
 
     @TypeConverter
-    @Nullable
-    public static Instant toInstant(@Nullable Long value) {
+    public static @Nullable Instant toInstant(@Nullable Long value) {
       return (value != null) ? Instant.ofEpochMilli(value) : null;
     }
 
