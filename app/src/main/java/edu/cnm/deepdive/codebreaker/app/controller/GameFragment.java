@@ -57,6 +57,7 @@ public class GameFragment extends Fragment implements MenuProvider {
     binding = FragmentGameBinding.inflate(inflater, container, false);
     binding.guesses.setAdapter(guessesAdapter);
     binding.submit.setOnClickListener((v) -> submitGuess());
+    binding.waitingIndicator.setVisibility(View.VISIBLE);
     return binding.getRoot();
   }
 
@@ -86,6 +87,7 @@ public class GameFragment extends Fragment implements MenuProvider {
       Navigation.findNavController(binding.getRoot())
           .navigate(GameFragmentDirections.navigateToSettings());
     } else if (itemId == R.id.new_game) {
+      binding.waitingIndicator.setVisibility(View.VISIBLE);
       gameViewModel.startGame();
     } else {
       handled = false;
@@ -100,6 +102,7 @@ public class GameFragment extends Fragment implements MenuProvider {
   }
 
   private void submitGuess() {
+    binding.waitingIndicator.setVisibility(View.VISIBLE);
     int[] guessCodePoints = IntStream.range(0, binding.guessControls.getChildCount())
         .mapToObj(binding.guessControls::getChildAt)
         .mapToInt((view) -> (Integer) view.getTag())
@@ -120,6 +123,12 @@ public class GameFragment extends Fragment implements MenuProvider {
         .mapToObj((pos) -> binding.palette.getChildAt(pos))
         .forEach((view) -> view.setEnabled(inProgress));
     binding.submit.setEnabled(inProgress && isGuessComplete());
+    guessesAdapter.setOnGuessClickListener(
+        inProgress
+            ? (guess) -> buildGuessControls(game, guess)
+            : null
+    );
+    binding.waitingIndicator.setVisibility(View.GONE);
   }
 
   private void handleSolved(Boolean solved) {

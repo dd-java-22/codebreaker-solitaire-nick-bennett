@@ -17,14 +17,19 @@ import edu.cnm.deepdive.codebreaker.app.util.SymbolMap.SymbolAttributes;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder>{
+
+  private static final Consumer<Guess> DEFAULT_ON_GUESS_CLICK_LISTENER = (guess) -> {};
 
   private final LayoutInflater inflater;
   private final SymbolMap symbolMap;
   private final String guessNumberFormat;
   private final String matchCountFormat;
   private final List<Guess> guesses;
+
+  private Consumer<Guess> onGuessClickListener;
 
   @Inject
   public GuessesAdapter(@ActivityContext Context context, SymbolMap symbolMap) {
@@ -33,6 +38,7 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder>{
     guessNumberFormat = context.getString(R.string.guess_number_format);
     matchCountFormat = context.getString(R.string.match_count_format);
     guesses = new ArrayList<>();
+    onGuessClickListener = DEFAULT_ON_GUESS_CLICK_LISTENER;
   }
 
   @NonNull
@@ -63,6 +69,16 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder>{
     notifyItemRangeInserted(startPosition, guesses.size());
   }
 
+  public Consumer<Guess> getOnGuessClickListener() {
+    return onGuessClickListener;
+  }
+
+  public void setOnGuessClickListener(Consumer<Guess> onGuessClickListener) {
+    this.onGuessClickListener = (onGuessClickListener != null)
+        ? onGuessClickListener
+        : DEFAULT_ON_GUESS_CLICK_LISTENER;
+  }
+
   private class GuessHolder extends ViewHolder {
 
     private final ItemGuessBinding binding;
@@ -76,6 +92,7 @@ public class GuessesAdapter extends RecyclerView.Adapter<ViewHolder>{
       Guess guess = guesses.get(position);
       setTextContent(position, guess);
       buildGuessSymbols(guess);
+      binding.container.setOnClickListener((v) -> onGuessClickListener.accept(guess));
     }
 
     private void setTextContent(int position, Guess guess) {
