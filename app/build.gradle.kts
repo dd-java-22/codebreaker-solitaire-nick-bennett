@@ -167,7 +167,7 @@ dependencies {
 
 roomDdl {
     source.set(project.file(
-        "$projectDir/schemas/edu.cnm.deepdive.codebreaker.app.service.CodebreakerDatabase/1.json"))
+        "$projectDir/schemas/edu.cnm.deepdive.codebreaker.app.service.database.CodebreakerDatabase/1.json"))
     destination.set(project.file("$projectDir/../docs/sql/ddl.sql"))
 }
 

@@ -14,6 +14,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 import edu.cnm.deepdive.codebreaker.api.model.Game;
 import edu.cnm.deepdive.codebreaker.api.model.Guess;
 import edu.cnm.deepdive.codebreaker.app.R;
+import edu.cnm.deepdive.codebreaker.app.service.GameService;
 import edu.cnm.deepdive.codebreaker.client.service.CodebreakerService;
 import jakarta.inject.Inject;
 import java.util.Comparator;
@@ -31,7 +32,7 @@ public class GameViewModel extends ViewModel {
 
   private static final String TAG = GameViewModel.class.getSimpleName();
 
-  private final CodebreakerService gameService;
+  private final GameService gameService;
   private final MutableLiveData<Game> game;
   private final MutableLiveData<Guess> guess;
   private final LiveData<Boolean> solved;
@@ -41,7 +42,7 @@ public class GameViewModel extends ViewModel {
   private final Supplier<String> codePoolSupplier;
 
   @Inject
-  GameViewModel(@ApplicationContext Context context, CodebreakerService gameService) {
+  GameViewModel(@ApplicationContext Context context, GameService gameService) {
     this.gameService = gameService;
     game = new MutableLiveData<>();
     guess = new MutableLiveData<>();
@@ -105,7 +106,6 @@ public class GameViewModel extends ViewModel {
           if (Boolean.TRUE.equals(g.getSolution())) {
             fetchGame(game.getId());
           } else {
-            game.getGuesses().add(g);
             this.game.postValue(game);
           }
         });

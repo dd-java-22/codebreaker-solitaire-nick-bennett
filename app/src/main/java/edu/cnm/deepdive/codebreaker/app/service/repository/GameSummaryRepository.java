@@ -11,6 +11,8 @@ public interface GameSummaryRepository {
 
   CompletableFuture<Void> summarize(Game game);
 
+  CompletableFuture<GameSummary> getByExternalKey(String externalKey);
+  
   CompletableFuture<Integer> remove(GameSummary summary);
 
   CompletableFuture<Integer> removeAll(Collection<GameSummary> summaries);
