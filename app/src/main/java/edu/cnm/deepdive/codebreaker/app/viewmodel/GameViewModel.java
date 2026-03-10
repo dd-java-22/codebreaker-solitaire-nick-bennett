@@ -2,6 +2,7 @@ package edu.cnm.deepdive.codebreaker.app.viewmodel;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -15,8 +16,12 @@ import edu.cnm.deepdive.codebreaker.api.model.Guess;
 import edu.cnm.deepdive.codebreaker.app.R;
 import edu.cnm.deepdive.codebreaker.client.service.CodebreakerService;
 import jakarta.inject.Inject;
-import java.util.LinkedHashSet;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @HiltViewModel
@@ -29,11 +34,8 @@ public class GameViewModel extends ViewModel {
   private final MutableLiveData<Guess> guess;
   private final LiveData<Boolean> solved;
   private final MutableLiveData<Throwable> error;
-  private final SharedPreferences prefs;
-  private final String codeLengthPrefKey;
-  private final int codeLengthPrefDefault;
-  private final String codePoolPrefKey;
-  private final String[] codePoolPrefDefault;
+  private final IntSupplier codeLengthSupplier;
+  private final Supplier<String> codePoolSupplier;
 
   @Inject
   GameViewModel(@ApplicationContext Context context, CodebreakerService gameService) {
@@ -42,21 +44,15 @@ public class GameViewModel extends ViewModel {
     guess = new MutableLiveData<>();
     solved = Transformations.distinctUntilChanged(Transformations.map(game, Game::getSolved));
     error = new MutableLiveData<>();
-    prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    codeLengthPrefKey = context.getString(R.string.code_length_pref_key);
-    codeLengthPrefDefault = context.getResources().getInteger(R.integer.code_length_pref_default);
-    codePoolPrefKey = context.getString(R.string.code_pool_pref_key);
-    codePoolPrefDefault = context.getResources().getStringArray(R.array.symbols);
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    codeLengthSupplier = buildCodeLengthSupplier(prefs, context.getResources());
+    codePoolSupplier = buildCodePoolSupplier(prefs, context.getResources());
+    startGame();
   }
 
   public void startGame() {
-    int length = prefs.getInt(codeLengthPrefKey, codeLengthPrefDefault);
-    String pool = prefs.getStringSet(codePoolPrefKey,
-        Stream.of(codePoolPrefDefault).collect(Collectors.toCollection(LinkedHashSet::new)))
-        .stream()
-        .mapToInt((symbol) -> symbol.codePointAt(0))
-        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-        .toString();
+    int length = codeLengthSupplier.getAsInt();
+    String pool = codePoolSupplier.get();
     Game game = new Game()
         .pool(pool)
         .length(length);
@@ -131,6 +127,29 @@ public class GameViewModel extends ViewModel {
 
   public LiveData<Throwable> getError() {
     return error;
+  }
+
+  private IntSupplier buildCodeLengthSupplier(SharedPreferences prefs, Resources res) {
+    String codeLengthPrefKey = res.getString(R.string.code_length_pref_key);
+    int codeLengthPrefDefault = res.getInteger(R.integer.code_length_pref_default);
+    return () -> prefs.getInt(codeLengthPrefKey, codeLengthPrefDefault);
+  }
+
+  private Supplier<String> buildCodePoolSupplier(SharedPreferences prefs, Resources res) {
+    String codePoolPrefKey = res.getString(R.string.code_pool_pref_key);
+    String[] codePoolPrefDefault = res.getStringArray(R.array.symbols);
+    Map<Integer, Integer> symbolPositions = IntStream.range(0, codePoolPrefDefault.length)
+        .boxed()
+        .collect(Collectors.toMap((pos) -> codePoolPrefDefault[pos].codePointAt(0), (pos) -> pos));
+    Comparator<Integer> symbolComparator = Comparator.comparing((symbol) ->
+        symbolPositions.getOrDefault(symbol, Integer.MAX_VALUE));
+    return () -> prefs.getStringSet(codePoolPrefKey,
+            Stream.of(codePoolPrefDefault).collect(Collectors.toSet()))
+        .stream()
+        .map((symbol) -> symbol.codePointAt(0))
+        .sorted(symbolComparator)
+        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+        .toString();
   }
 
   private Void postThrowable(Throwable throwable) {
