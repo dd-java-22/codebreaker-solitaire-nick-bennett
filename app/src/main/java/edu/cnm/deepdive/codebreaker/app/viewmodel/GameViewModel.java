@@ -45,8 +45,9 @@ public class GameViewModel extends ViewModel {
     solved = Transformations.distinctUntilChanged(Transformations.map(game, Game::getSolved));
     error = new MutableLiveData<>();
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    codeLengthSupplier = buildCodeLengthSupplier(prefs, context.getResources());
-    codePoolSupplier = buildCodePoolSupplier(prefs, context.getResources());
+    Resources res = context.getResources();
+    codeLengthSupplier = buildCodeLengthSupplier(prefs, res);
+    codePoolSupplier = buildCodePoolSupplier(prefs, res);
     startGame();
   }
 
