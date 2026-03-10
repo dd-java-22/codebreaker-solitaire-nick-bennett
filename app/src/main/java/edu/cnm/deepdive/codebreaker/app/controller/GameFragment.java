@@ -112,6 +112,14 @@ public class GameFragment extends Fragment implements MenuProvider {
     updateGuessList(game);
     buildGuessControls(game, lastGuess(game));
     buildPaletteControls(game);
+    boolean inProgress = !Boolean.TRUE.equals(game.getSolved());
+    IntStream.range(0, binding.guessControls.getChildCount())
+        .mapToObj((pos) -> binding.guessControls.getChildAt(pos))
+        .forEach((view) -> view.setEnabled(inProgress));
+    IntStream.range(0, binding.palette.getChildCount())
+        .mapToObj((pos) -> binding.palette.getChildAt(pos))
+        .forEach((view) -> view.setEnabled(inProgress));
+    binding.submit.setEnabled(inProgress && isGuessComplete());
   }
 
   private void handleSolved(Boolean solved) {
@@ -162,7 +170,6 @@ public class GameFragment extends Fragment implements MenuProvider {
     if (binding.guessControls.getChildCount() > 0) {
       ((RadioButton) binding.guessControls.getChildAt(0)).setChecked(true);
     }
-    binding.submit.setEnabled(isGuessComplete());
   }
 
   private void buildPaletteControls(Game game) {
