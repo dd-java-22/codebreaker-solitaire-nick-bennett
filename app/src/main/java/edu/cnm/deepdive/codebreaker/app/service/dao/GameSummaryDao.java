@@ -13,6 +13,14 @@ import java.util.List;
 @Dao
 public interface GameSummaryDao {
 
+  String GAME_KEY_QUERY = """
+      SELECT
+        *
+      FROM
+        game_summary
+      WHERE
+        external_key = :externalKey""";
+
   String IN_PROGRESS_QUERY = """
       SELECT
         *
@@ -35,7 +43,7 @@ public interface GameSummaryDao {
       ORDER BY
         guess_count ASC, 
         (last_played - started) ASC""";
-
+  
   @Insert
   long insert(GameSummary summary);
 
@@ -48,6 +56,9 @@ public interface GameSummaryDao {
   @Delete
   int deleteAll(Collection<GameSummary> summaries);
 
+  @Query(GAME_KEY_QUERY)
+  GameSummary selectByExternalKey(String externalKey);
+  
   @Query(IN_PROGRESS_QUERY)
   LiveData<List<GameSummary>> selectInProgress();
 
