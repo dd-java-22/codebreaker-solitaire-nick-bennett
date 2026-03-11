@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <item
+    android:id="@+id/game_fragment"
+    android:title="@string/game_nav_title"
+    android:icon="@drawable/play"/>
+
+  <item
+    android:id="@+id/in_progress_fragment"
+    android:title="@string/in_progress_nav_title"
+    android:icon="@drawable/cloud_download"/>
+
+</menu>
