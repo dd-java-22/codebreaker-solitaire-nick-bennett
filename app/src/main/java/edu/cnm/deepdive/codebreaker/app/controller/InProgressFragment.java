@@ -8,11 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.lifecycle.ViewModelProvider;
+import dagger.hilt.android.AndroidEntryPoint;
 import edu.cnm.deepdive.codebreaker.app.R;
+import edu.cnm.deepdive.codebreaker.app.adapter.GameSummariesAdapter;
 import edu.cnm.deepdive.codebreaker.app.databinding.FragmentInProgressBinding;
 import edu.cnm.deepdive.codebreaker.app.viewmodel.SummaryViewModel;
+import jakarta.inject.Inject;
 
+@AndroidEntryPoint
 public class InProgressFragment extends Fragment {
+
+  @Inject
+  GameSummariesAdapter adapter;
 
   private FragmentInProgressBinding binding;
 
@@ -20,7 +27,7 @@ public class InProgressFragment extends Fragment {
   public View onCreateView(
       @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     binding = FragmentInProgressBinding.inflate(inflater, container, false);
-    // TODO: 2026-03-11 Attach adapter to recyclerview.
+    binding.summaries.setAdapter(adapter);
     return binding.getRoot();
   }
 
@@ -31,7 +38,9 @@ public class InProgressFragment extends Fragment {
     viewModel
         .getInProgressSummaries()
         .observe(getViewLifecycleOwner(), (summaries) -> {
-          // TODO: 2026-03-11 Populate recyclerview adapter with summaries.
+          adapter.getSummaries().clear();
+          adapter.getSummaries().addAll(summaries);
+          adapter.notifyDataSetChanged();
         });
   }
 

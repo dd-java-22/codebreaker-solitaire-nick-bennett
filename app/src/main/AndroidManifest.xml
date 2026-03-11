@@ -9,6 +9,8 @@
     android:name=".CodebreakerApplication"
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
+    android:icon="@mipmap/codebreaker_launcher"
+    android:roundIcon="@mipmap/codebreaker_launcher_round"
     android:allowBackup="false"
     tools:ignore="AllowBackup,DataExtractionRules">
 

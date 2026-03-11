@@ -49,10 +49,12 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void setupNavigation() {
-    appBarConfig = new AppBarConfiguration.Builder(R.id.game_fragment).build();
+    appBarConfig = new AppBarConfiguration.Builder(
+        R.id.game_fragment, R.id.in_progress_fragment).build();
     NavHostFragment host = binding.navHostFragmentContainer.getFragment();
     navController = host.getNavController();
     NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig);
+    NavigationUI.setupWithNavController(binding.navView, navController);
   }
 
 
