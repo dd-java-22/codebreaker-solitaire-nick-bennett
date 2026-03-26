@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/header"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="horizontal"
+  android:layout_marginHorizontal="@dimen/half_static_spacing"
+  android:layout_marginBottom="@dimen/half_static_spacing"
+  android:layout_marginTop="@dimen/half_dynamic_spacing"
+  android:padding="@dimen/half_static_spacing"
+  android:gravity="center_vertical"
+  android:background="?attr/selectableItemBackground"
+  android:clickable="true"
+  android:focusable="true"
+  app:layout_constraintTop_toTopOf="parent">
+
+  <TextView
+    android:id="@+id/last_played"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="5"
+    android:layout_margin="@dimen/half_static_spacing"
+    tools:text="12:15 PM 3/17/26"/>
+
+  <TextView
+    android:id="@+id/pool_size"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="2"
+    android:layout_margin="@dimen/half_static_spacing"
+    android:textAlignment="textEnd"
+    tools:text="7"/>
+
+  <TextView
+    android:id="@+id/code_length"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="2"
+    android:layout_margin="@dimen/half_static_spacing"
+    android:textAlignment="textEnd"
+    tools:text="4"/>
+
+  <TextView
+    android:id="@+id/guess_count"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="3"
+    android:layout_margin="@dimen/half_static_spacing"
+    android:textAlignment="textEnd"
+    tools:text="6"/>
+
+</LinearLayout>

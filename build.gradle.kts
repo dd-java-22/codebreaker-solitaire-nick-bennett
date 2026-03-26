@@ -16,4 +16,11 @@
 plugins {
     alias(libs.plugins.openapi).apply(false)
     alias(libs.plugins.openjfx).apply(false)
+    alias(libs.plugins.android.application).apply(false)
+    kotlin("jvm").version(libs.versions.kotlin.get()).apply(false)
+    alias(libs.plugins.hilt).apply(false)
+    alias(libs.plugins.navigation.safeargs).apply(false)
+    alias(libs.plugins.schema.parser).apply(false)
+    alias(libs.plugins.junit).apply(false)
+    alias(libs.plugins.kotlin.android).apply(false)
 }

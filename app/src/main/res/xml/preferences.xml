@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <SeekBarPreference
+    android:key="@string/code_length_pref_key"
+    android:title="@string/code_length_pref_title"
+    android:summary="@string/code_length_pref_summary"
+    app:min="@integer/code_length_pref_min"
+    android:max="@integer/code_length_pref_max"
+    android:defaultValue="@integer/code_length_pref_default"
+    app:showSeekBarValue="true"/>
+
+  <MultiSelectListPreference
+    android:key="@string/code_pool_pref_key"
+    android:title="@string/code_pool_pref_title"
+    android:summary="@string/code_pool_pref_summary"
+    android:entries="@array/symbol_names"
+    android:entryValues="@array/symbols"
+    android:defaultValue="@array/symbols"/>
+
+</PreferenceScreen>
