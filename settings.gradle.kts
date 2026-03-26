@@ -35,7 +35,7 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("libs") {
-            from("edu.cnm.deepdive:catalog-jdk21:22.0.2")
+            from("edu.cnm.deepdive:catalog-jdk21:22.0.4")
         }
     }
 }

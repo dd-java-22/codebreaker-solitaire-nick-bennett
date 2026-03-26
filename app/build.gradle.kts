@@ -14,10 +14,8 @@
  *  limitations under the License.
  */
 import com.android.build.gradle.internal.tasks.factory.dependsOn
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
-import java.util.Locale
-import java.util.Properties
+import java.util.*
 
 plugins {
     alias(libs.plugins.android.application)
@@ -77,9 +75,7 @@ android {
     }
 
     kotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.valueOf("JVM_${libs.versions.java.get()}")
-        }
+        jvmToolchain(libs.versions.java.get().toInt())
     }
 
     buildFeatures {
@@ -131,8 +127,9 @@ dependencies {
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)
 
-    // Google Sign-in library
-    implementation(libs.play.auth)
+    // Android Credentials Manager libraries
+    implementation(libs.credentials)
+    implementation(libs.credentials.play.services)
 
     // Hilt dependency-injection library & annotation processor
     implementation(libs.hilt.android.core)

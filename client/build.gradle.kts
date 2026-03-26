@@ -16,7 +16,7 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-    kotlin("jvm").version(libs.versions.kotlin.get())
+    alias(libs.plugins.kotlin.jvm)
     jacoco
 }
 
@@ -34,13 +34,13 @@ java {
 
 dependencies {
     implementation(project(":api"))
-    implementation(kotlin("stdlib"))
+    implementation(libs.kotlin)
     implementation(libs.gson)
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
-    testImplementation(kotlin("test"))
+    testImplementation(libs.kotlin.test)
     testImplementation(libs.junit.aggregator)
     testRuntimeOnly(libs.junit.engine)
     testRuntimeOnly(libs.junit.platform)
