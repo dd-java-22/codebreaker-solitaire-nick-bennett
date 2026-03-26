@@ -1,0 +1,126 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "51efef0883abddfd443273a91fac2dea",
+    "entities": [
+      {
+        "tableName": "game_summary",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`game_summary_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `external_key` TEXT NOT NULL, `pool` TEXT NOT NULL, `pool_size` INTEGER NOT NULL, `code_length` INTEGER NOT NULL, `started` INTEGER NOT NULL, `guess_count` INTEGER NOT NULL, `solved` INTEGER NOT NULL, `last_played` INTEGER, `exact_matches` INTEGER NOT NULL, `near_matches` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "game_summary_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "externalKey",
+            "columnName": "external_key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pool",
+            "columnName": "pool",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "poolSize",
+            "columnName": "pool_size",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "codeLength",
+            "columnName": "code_length",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "started",
+            "columnName": "started",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "guessCount",
+            "columnName": "guess_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "solved",
+            "columnName": "solved",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastPlayed",
+            "columnName": "last_played",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "exactMatches",
+            "columnName": "exact_matches",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nearMatches",
+            "columnName": "near_matches",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "game_summary_id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_game_summary_external_key",
+            "unique": true,
+            "columnNames": [
+              "external_key"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_game_summary_external_key` ON `${TABLE_NAME}` (`external_key`)"
+          },
+          {
+            "name": "index_game_summary_solved_started_last_played",
+            "unique": false,
+            "columnNames": [
+              "solved",
+              "started",
+              "last_played"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_game_summary_solved_started_last_played` ON `${TABLE_NAME}` (`solved`, `started`, `last_played`)"
+          },
+          {
+            "name": "index_game_summary_solved_pool_size_code_length_guess_count_last_played_started",
+            "unique": false,
+            "columnNames": [
+              "solved",
+              "pool_size",
+              "code_length",
+              "guess_count",
+              "last_played",
+              "started"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_game_summary_solved_pool_size_code_length_guess_count_last_played_started` ON `${TABLE_NAME}` (`solved`, `pool_size`, `code_length`, `guess_count`, `last_played`, `started`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '51efef0883abddfd443273a91fac2dea')"
+    ]
+  }
+}

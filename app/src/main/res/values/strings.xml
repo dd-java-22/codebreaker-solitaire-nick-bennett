@@ -1,4 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="test_title">Test</string>
+
+  <string name="submit_guess">Submit guess</string>
+
+  <string name="no_symbol">No symbol</string>
+  <string name="guess_number_format">%d</string>
+  <string name="match_count_format">%d</string>
+
+  <string name="code_length_pref_key">code_length_pref</string>
+  <string name="code_length_pref_title">Code length</string>
+  <string name="code_length_pref_summary">New games will use this value for the length of the generated secret code.</string>
+
+  <string name="code_pool_pref_key">code_pool_pref</string>
+  <string name="code_pool_pref_title">Code pool</string>
+  <string name="code_pool_pref_summary">Selected items will be used as the pool of symbols available for code generation and guesses.</string>
+
+  <string name="game_fragment_label">@string/app_name</string>
+  <string name="settings_fragment_label">Codebreaker Settings</string>
+
+  <string name="new_game">New Game</string>
+  <string name="settings">Settings</string>
+  <string name="game_nav_title">Play</string>
+  <string name="in_progress_nav_title">Load Game</string>
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
+  <string name="last_played">Last Played</string>
+  <string name="pool_size">Pool Size</string>
+  <string name="code_length">Code Length</string>
+  <string name="guess_count">Guess Count</string>
+
 </resources>

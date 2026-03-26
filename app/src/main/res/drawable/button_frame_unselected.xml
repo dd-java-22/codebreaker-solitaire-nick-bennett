@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:shape="rectangle">
+
+  <solid
+    android:color="@android:color/transparent"/>
+
+  <stroke
+    android:color="?attr/colorOnPrimaryContainer"
+    android:width="@dimen/outline_unselected_width"
+    android:dashWidth="@dimen/outline_unselected_dash_length"
+    android:dashGap="@dimen/outline_unselected_dash_gap"/>
+
+  <size
+    android:width="@dimen/control_size"
+    android:height="@dimen/control_size"/>
+
+</shape>

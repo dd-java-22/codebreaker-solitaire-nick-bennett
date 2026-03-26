@@ -14,6 +14,7 @@
  *  limitations under the License.
  */
 import com.android.build.gradle.internal.tasks.factory.dependsOn
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Locale
 import java.util.Properties
@@ -24,6 +25,7 @@ plugins {
     alias(libs.plugins.navigation.safeargs)
     alias(libs.plugins.schema.parser)
     alias(libs.plugins.junit)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -74,6 +76,12 @@ android {
         targetCompatibility = JavaVersion.valueOf("VERSION_${libs.versions.java.get()}")
     }
 
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.valueOf("JVM_${libs.versions.java.get()}")
+        }
+    }
+
     buildFeatures {
         viewBinding = true
         // Enable dataBinding if desired.
@@ -116,6 +124,9 @@ dependencies {
     // Material Design components
     implementation(libs.material)
 
+    // Kotlin standard library (optional but recommended for clarity)
+    implementation(libs.kotlin)
+
     // Room annotation processor, runtime library
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)
@@ -156,7 +167,7 @@ dependencies {
 
 roomDdl {
     source.set(project.file(
-        "$projectDir/schemas/edu.cnm.deepdive.codebreaker.app.service.CodebreakerDatabase/1.json"))
+        "$projectDir/schemas/edu.cnm.deepdive.codebreaker.app.service.database.CodebreakerDatabase/1.json"))
     destination.set(project.file("$projectDir/../docs/sql/ddl.sql"))
 }
 
